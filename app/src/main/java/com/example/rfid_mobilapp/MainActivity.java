@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -73,8 +74,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         tagContentTextView.setText("");
-
-        tagContentTextView.setText(getPayload(intent));
+        String payload= getPayload(intent);
+        tagContentTextView.setText(payload);
+       //  https://aml-abbas.github.io/RFID-Pages/
+         intent= new Intent(Intent.ACTION_VIEW);
+         intent.setData(Uri.parse("https://aml-abbas.github.io/RFID-Pages/"));
+        Intent chooser = Intent.createChooser(intent, "Open webbsite for item:" + payload);
+         if (intent.resolveActivity(getPackageManager())!= null){
+             startActivity(chooser);
+         }
     }
 
     private String getPayload(Intent intent) {
