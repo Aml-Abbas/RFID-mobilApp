@@ -85,48 +85,74 @@ public class MainActivity extends AppCompatActivity {
             NfcV nfcV = NfcV.get(tag);
 
             boolean inAlternativeItemId = false;
-            boolean noId = false;
+            boolean noId = true;
 
             try {
                 nfcV.connect();
 
                 byte[] tagId = tag.getId();
-                int blockAddress = 0;
+
+                int offset = 0;  // offset of first block to read
+                int blocks = 0;  // number of blocks to read
                 byte[] cmd = new byte[] {
-                        (byte)0x20,  // FLAGS
-                        (byte)0x20,  // READ_SINGLE_BLOCK
-                        0, 0, 0, 0, 0, 0, 0, 0,
-                        (byte)(blockAddress & 0x0ff)
+                        (byte) 0x60,  // flags: addressed (= UID field present)
+                        (byte) 0x23, // command: READ MULTIPLE BLOCKS
+                        (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,  // placeholder for tag UID
+                        (byte) (offset & 0x0ff),  // first block number
+                        (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
                 };
                 System.arraycopy(tagId, 0, cmd, 2, 8);
 
                 byte[] response = nfcV.transceive(cmd);
+               // byte[] response2 = nfcV.transceive(new byte[] {(byte)0x00,(byte)0x32,(byte)0x00,(byte)0x01});
 
-/*                byte[] primeItemId = new byte[16];
+                byte[] primeItemId = new byte[16];
                 byte[] primeItemId2 = new byte[16];
+                System.out.println();
+                System.out.println();
+                System.out.println();
+                System.out.println();
 
-                for (int i = 0; i < 16; i++) {
+                System.out.println("the respons size is: " + response.length);
+              //  System.out.println("the respons2 size is: " + response2.length);
+                System.out.println();
+                System.out.println();
+                System.out.println();
+                System.out.println();
+
+                for (int i = 0; i < 6; i++) {
                     primeItemId[i] = response[i + 3];
-                }*/
+                }
 
-                /*
-                if (primeItemId[0] == 0) {
+
+                if (primeItemId[0] == 1) {
                     inAlternativeItemId = true;
 
+                     offset = 32;  // offset of first block to read
+                     blocks = 0;  // number of blocks to read
+                    cmd = new byte[] {
+                            (byte) 0x60,  // flags: addressed (= UID field present)
+                            (byte) 0x23, // command: READ MULTIPLE BLOCKS
+                            (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,  // placeholder for tag UID
+                            (byte) (offset & 0x0ff),  // first block number
+                            (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
+                    };
+                    System.arraycopy(tagId, 0, cmd, 2, 8);
                     byte[] OptionalBlock = nfcV.transceive(cmd);
 
 
                     for (int k = 0; k < 16; k++) {
                         primeItemId2[k] = OptionalBlock[k + 5];
                     }
+                    noId= false;
                 } else {
                     for (int i = 0; i < primeItemId.length; i++) {
                         if (primeItemId[i] != 0) {
-                            noId = true;
+                            noId = false;
                         }
                     }
                 }
-/*
+
                 if (noId){
                     payloadString= new String("NO ID");
                 }else if (primeItemId2.length ==0){
@@ -149,7 +175,8 @@ public class MainActivity extends AppCompatActivity {
                     buffer.order(ByteOrder.LITTLE_ENDIAN);  // if you want little-endian
                     int result = buffer.getShort();
                     payloadString= String.valueOf(result);
-                }*/
+                }
+
 
                 nfcV.close();
 
