@@ -7,21 +7,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcV;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.security.SecureRandom;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 
 public class MainActivity extends AppCompatActivity {
