@@ -29,13 +29,6 @@ public class MainActivity extends AppCompatActivity {
     NfcAdapter mNfcAdapter;
     Context mainActivityContext;
     PendingIntent mPendingIntent;
-    public static byte[] GET_RANDOM = {
-            (byte) 0x00, // CLA Class
-            (byte) 0x84, // INS Instruction
-            (byte) 0x00, // P1  Parameter 1
-            (byte) 0x00, // P2  Parameter 2
-            (byte) 0x08  // LE  maximal number of bytes expected in result
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
