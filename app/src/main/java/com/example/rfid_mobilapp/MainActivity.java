@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NfcV nfcV = NfcV.get(tag);
 
-            boolean inAlternativeItemId = false;
             boolean noId = true;
 
             try {
@@ -95,21 +94,14 @@ public class MainActivity extends AppCompatActivity {
 
                 System.out.println("the respons size is: " + response.length);
 
-
-                for (int i = 0; i < 6; i++) {
-                    primeItemId[i] = response[i + 3];
-                }
+                primeItemId= copyByteArray(response, 3);
 
 
                 if (primeItemId[0] == 1) {
-                    inAlternativeItemId = true;
 
                     byte[] OptionalBlock = nfcV.transceive(getCommand(tagId, 32, 0));
+                    primeItemId2= copyByteArray(OptionalBlock, 5);
 
-
-                    for (int k = 0; k < 16; k++) {
-                        primeItemId2[k] = OptionalBlock[k + 5];
-                    }
                     noId = false;
                 } else {
                     noId= isEmtpy(primeItemId);
@@ -124,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     byte[] newPrimeItemId = new byte[16 * 2];
+
                     for (int i = 0; i < 16; i++) {
                         newPrimeItemId[i] = primeItemId[i];
                     }
@@ -172,6 +165,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    private byte[] copyByteArray(byte[] fromArray, int fromIndex){
+        byte[] toArray= new byte[16];
+        for (int i = 0; i < 6; i++) {
+            toArray[i] = fromArray[i + fromIndex];
+        }
+        return toArray;
     }
 
 }
