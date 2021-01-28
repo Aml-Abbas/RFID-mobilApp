@@ -86,18 +86,9 @@ public class MainActivity extends AppCompatActivity {
 
                 byte[] tagId = tag.getId();
 
-                int offset = 0;  // offset of first block to read
-                int blocks = 0;  // number of blocks to read
-                byte[] cmd = new byte[]{
-                        (byte) 0x60,  // flags: addressed (= UID field present)
-                        (byte) 0x23, // command: READ MULTIPLE BLOCKS
-                        (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,  // placeholder for tag UID
-                        (byte) (offset & 0x0ff),  // first block number
-                        (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
-                };
-                System.arraycopy(tagId, 0, cmd, 2, 8);
 
-                byte[] response = nfcV.transceive(cmd);
+
+                byte[] response = nfcV.transceive(getCommand(tagId, 0,0));
 
                 byte[] primeItemId = new byte[16];
                 byte[] primeItemId2 = new byte[16];
@@ -113,17 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 if (primeItemId[0] == 1) {
                     inAlternativeItemId = true;
 
-                    offset = 32;  // offset of first block to read
-                    blocks = 0;  // number of blocks to read
-                    cmd = new byte[]{
-                            (byte) 0x60,  // flags: addressed (= UID field present)
-                            (byte) 0x23, // command: READ MULTIPLE BLOCKS
-                            (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,  // placeholder for tag UID
-                            (byte) (offset & 0x0ff),  // first block number
-                            (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
-                    };
-                    System.arraycopy(tagId, 0, cmd, 2, 8);
-                    byte[] OptionalBlock = nfcV.transceive(cmd);
+                    byte[] OptionalBlock = nfcV.transceive(getCommand(tagId, 32, 0));
 
 
                     for (int k = 0; k < 16; k++) {
@@ -172,6 +153,19 @@ public class MainActivity extends AppCompatActivity {
         }
         return payloadString;
 
+    }
+
+    private byte[] getCommand(byte[] tagId, int offset, int blocks){
+
+        byte[] cmd = new byte[]{
+                (byte) 0x60,  // flags: addressed (= UID field present)
+                (byte) 0x23, // command: READ MULTIPLE BLOCKS
+                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,  // placeholder for tag UID
+                (byte) (offset & 0x0ff),  // first block number
+                (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
+        };
+        System.arraycopy(tagId, 0, cmd, 2, 8);
+        return cmd;
     }
 
 }
