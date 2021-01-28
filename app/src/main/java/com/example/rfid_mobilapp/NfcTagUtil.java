@@ -102,6 +102,9 @@ public class NfcTagUtil {
 
     private static byte[] getCommand(byte[] tagId, int offset, int blocks){
 
+        /* the code is taken from
+        https://stackoverflow.com/questions/33046261/access-nfc-tag-memory-over-2kbytes?rq=1*/
+
         byte[] cmd = new byte[]{
                 (byte) 0x60,  // flags: addressed (= UID field present)
                 (byte) 0x23, // command: READ MULTIPLE BLOCKS
