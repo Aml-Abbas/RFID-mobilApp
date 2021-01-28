@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     TextView tagContentTextView;
     NfcAdapter mNfcAdapter;
     Context mainActivityContext;
-    PendingIntent mPendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         tagContentTextView = findViewById(R.id.tagContentTextView);
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         mainActivityContext = this;
-        mPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
     }
 
