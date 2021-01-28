@@ -123,10 +123,7 @@ public class MainActivity extends AppCompatActivity {
                     payloadString = new String("NO ID");
                 } else if (primeItemId2.length == 0) {
 
-                    ByteBuffer buffer = ByteBuffer.wrap(primeItemId);
-                    buffer.order(ByteOrder.LITTLE_ENDIAN);  // if you want little-endian
-                    int result = buffer.getShort();
-                    payloadString = String.valueOf(result);
+                    payloadString = String.valueOf(getResult(primeItemId));
 
                 } else {
                     byte[] newPrimeItemId = new byte[16 * 2];
@@ -137,10 +134,7 @@ public class MainActivity extends AppCompatActivity {
                         newPrimeItemId[i + 16] = primeItemId[i];
                     }
 
-                    ByteBuffer buffer = ByteBuffer.wrap(newPrimeItemId);
-                    buffer.order(ByteOrder.LITTLE_ENDIAN);  // if you want little-endian
-                    int result = buffer.getShort();
-                    payloadString = String.valueOf(result);
+                    payloadString = String.valueOf(getResult(newPrimeItemId));
                 }
 
 
@@ -166,6 +160,13 @@ public class MainActivity extends AppCompatActivity {
         };
         System.arraycopy(tagId, 0, cmd, 2, 8);
         return cmd;
+    }
+
+    private int getResult(byte[] primeItemId){
+        ByteBuffer buffer = ByteBuffer.wrap(primeItemId);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);  // if you want little-endian
+        int result = buffer.getShort();
+        return result;
     }
 
 }
