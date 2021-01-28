@@ -112,11 +112,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     noId = false;
                 } else {
-                    for (int i = 0; i < primeItemId.length; i++) {
-                        if (primeItemId[i] != 0) {
-                            noId = false;
-                        }
-                    }
+                    noId= isEmtpy(primeItemId);
+
                 }
 
                 if (noId) {
@@ -136,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
 
                     payloadString = String.valueOf(getResult(newPrimeItemId));
                 }
-
 
                 nfcV.close();
 
@@ -167,6 +163,15 @@ public class MainActivity extends AppCompatActivity {
         buffer.order(ByteOrder.LITTLE_ENDIAN);  // if you want little-endian
         int result = buffer.getShort();
         return result;
+    }
+
+    private boolean isEmtpy(byte[] primeItemId){
+        for (int i = 0; i < primeItemId.length; i++) {
+            if (primeItemId[i] != 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
