@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         tagContentTextView.setText(payload);
 
         intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("https://aml-abbas.github.io/RFID-Pages/"));
+        intent.setData(Uri.parse("https://aml-abbas.github.io/RFID-Pages/?itemId={"+payload+"} "));
         Intent chooser = Intent.createChooser(intent, "Open webbsite for item:" + payload);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(chooser);
