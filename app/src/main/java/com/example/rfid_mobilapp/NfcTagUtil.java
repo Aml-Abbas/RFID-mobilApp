@@ -108,7 +108,7 @@ public class NfcTagUtil {
     private static int getResult(byte[] primeItemId) {
         ByteBuffer buffer = ByteBuffer.wrap(primeItemId);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
-        return buffer.getShort();;
+        return buffer.getShort();
     }
 
     private static boolean isEmtpy(byte[] primeItemId) {
