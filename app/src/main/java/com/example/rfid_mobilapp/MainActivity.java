@@ -1,6 +1,7 @@
 package com.example.rfid_mobilapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         tagContentTextView.setText(payload);
 
         intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("https://aml-abbas.github.io/rfid-pages/?itemId="+payload));
+        intent.setData(Uri.parse("https://aml-abbas.github.io/rfid-pages/?itemId=" + payload));
         Intent chooser = Intent.createChooser(intent, "Open webbsite for item:" + payload);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(chooser);

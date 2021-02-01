@@ -37,7 +37,6 @@ public class NfcTagUtil {
 
                 primeItemId = copyByteArray(response, 3);
 
-
                 if (primeItemId[0] == 1) {
 
                     byte[] OptionalBlock = nfcV.transceive(getCommand(tagId, 32, 0));
@@ -92,7 +91,8 @@ public class NfcTagUtil {
     private static byte[] getCommand(byte[] tagId, int offset, int blocks) {
 
         /* the code is taken from
-        https://stackoverflow.com/questions/55856674/writing-single-block-command-fails-over-nfcv*/
+        https://stackoverflow.com/questions/55856674/writing-single-block-command-fails-over-nfcv
+        */
 
         byte[] cmd = new byte[]{
                 (byte) 0x60,  // flags: addressed (= UID field present)
@@ -123,7 +123,7 @@ public class NfcTagUtil {
 
     private static byte[] copyByteArray(byte[] fromArray, int fromIndex) {
         byte[] toArray = new byte[16];
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 16; i++) {
             toArray[i] = fromArray[i + fromIndex];
         }
         return toArray;
