@@ -29,7 +29,7 @@ public class NfcTagUtil {
                 nfcV.connect();
 
                 byte[] tagId = tag.getId();
-                byte[] response = nfcV.transceive(getCommand(tagId, 0, 0));
+                byte[] response = nfcV.transceive(getCommandReadMultipleBlock(tagId, 0, 0));
                 byte[] primeItemId;
                 byte[] primeItemId2 = new byte[16];
 
@@ -39,7 +39,7 @@ public class NfcTagUtil {
 
                 if (primeItemId[0] == 1) {
 
-                    byte[] OptionalBlock = nfcV.transceive(getCommand(tagId, 32, 0));
+                    byte[] OptionalBlock = nfcV.transceive(getCommandReadMultipleBlock(tagId, 32, 0));
                     primeItemId2 = copyByteArray(OptionalBlock, 5);
                     noId = false;
                 } else {
@@ -88,7 +88,7 @@ public class NfcTagUtil {
         nfcAdapter.disableForegroundDispatch(activity);
     }
 
-    private static byte[] getCommand(byte[] tagId, int offset, int blocks) {
+    private static byte[] getCommandReadMultipleBlock(byte[] tagId, int offset, int blocks) {
 
         /* the code is taken from
         https://stackoverflow.com/questions/55856674/writing-single-block-command-fails-over-nfcv
