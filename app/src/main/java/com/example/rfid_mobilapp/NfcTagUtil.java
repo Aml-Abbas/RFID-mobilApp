@@ -105,10 +105,22 @@ public class NfcTagUtil {
         return cmd;
     }
 
-    private static int getResult(byte[] primeItemId) {
-        ByteBuffer buffer = ByteBuffer.wrap(primeItemId);
-        buffer.order(ByteOrder.LITTLE_ENDIAN);
-        return buffer.getShort();
+   /* private static byte[] getCommandWriteSingleBlock(byte[] tagId, int offset, int blocks) {
+
+        // https://e2e.ti.com/support/wireless-connectivity/other-wireless/f/667/t/488725?RF430FRL152H-Write-Single-Block-with-Android
+        final byte[] WRITE_SINGLE_BLOCK_OPTION = new byte[] { (byte)0x40, (byte)0x21, (byte)0x01, (byte)0x01, (byte)0x01, (byte)0x00, (byte)0x00 };
+
+        return WRITE_SINGLE_BLOCK_OPTION;
+    }*/
+
+    private static String getResult(byte[] primeItemId) {
+
+        String text="";
+        if(null == primeItemId)return text; // dont puke on null
+        for (byte  element : primeItemId) {
+            text=text.concat(String.format("%02x", element));
+        }
+        return text;
     }
 
     private static boolean isEmtpy(byte[] primeItemId) {
