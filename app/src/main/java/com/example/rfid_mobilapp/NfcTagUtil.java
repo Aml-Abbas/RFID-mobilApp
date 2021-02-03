@@ -50,7 +50,7 @@ public class NfcTagUtil {
                     payloadString = new String("NO ID");
                 } else if (primeItemId2.length == 0) {
 
-                    payloadString = String.valueOf(getResult(primeItemId));
+                    payloadString = getResult(primeItemId);
                 } else {
                     byte[] newPrimeItemId = new byte[16 * 2];
 
@@ -60,7 +60,7 @@ public class NfcTagUtil {
                     for (int i = 0; i < 16; i++) {
                         newPrimeItemId[i + 16] = primeItemId[i];
                     }
-                    payloadString = String.valueOf(getResult(newPrimeItemId));
+                    payloadString = getResult(newPrimeItemId);
                 }
                 nfcV.close();
 
