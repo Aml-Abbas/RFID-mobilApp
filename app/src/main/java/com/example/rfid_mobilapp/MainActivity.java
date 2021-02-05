@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
             Uri uri = intent.getData();
             String itemId = uri.getQueryParameter("itemid");
             Log.d("MainActivity", "Item id = " + itemId);
+            tagContentTextView.setText(itemId);
         }
     }
 
@@ -60,5 +61,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // start to write to the tag
 }
