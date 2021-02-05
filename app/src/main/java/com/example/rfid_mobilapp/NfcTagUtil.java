@@ -58,7 +58,7 @@ public class NfcTagUtil {
                         newPrimeItemId[i] = primeItemId[i];
                     }
                     for (int i = 0; i < 16; i++) {
-                        newPrimeItemId[i + 16] = primeItemId[i];
+                        newPrimeItemId[i + 16] = primeItemId2[i];
                     }
                     payloadString = getResult(newPrimeItemId);
                 }
@@ -114,11 +114,10 @@ public class NfcTagUtil {
     }*/
 
     private static String getResult(byte[] primeItemId) {
-
-        String text="";
-        if(null == primeItemId)return text; // dont puke on null
-        for (byte  element : primeItemId) {
-            text=text.concat(String.format("%02x", element));
+        String text = "";
+        if (null == primeItemId) return text;
+        for (byte element : primeItemId) {
+            text += String.valueOf((char) element);
         }
         return text;
     }
