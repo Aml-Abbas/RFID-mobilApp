@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
             String itemId = uri.getQueryParameter("itemid");
             Log.d("MainActivity", "Item id = " + itemId);
             tagContentTextView.setText("tag new itemId is: " + itemId);
+            NfcTagUtil.writeNewItemId(itemId);
         }
     }
 

@@ -71,6 +71,10 @@ public class NfcTagUtil {
         return payloadString;
     }
 
+    public static void writeNewItemId(String itemId){
+
+    }
+
 
     public static <T> void enableNFCInForeground(NfcAdapter nfcAdapter, Activity activity, Class<T> classType) {
         PendingIntent pendingIntent = PendingIntent.getActivity(
