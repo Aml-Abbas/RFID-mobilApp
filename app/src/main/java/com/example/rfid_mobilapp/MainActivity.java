@@ -62,5 +62,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // start to write to the tag
 }
