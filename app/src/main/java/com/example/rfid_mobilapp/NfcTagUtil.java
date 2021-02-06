@@ -30,17 +30,22 @@ public class NfcTagUtil {
 
                 byte[] tagId = tag.getId();
                 byte[] response = nfcV.transceive(getCommandReadMultipleBlock(tagId, 0, 0));
+                System.out.println("the respons array is : ");
+                printByteArray(response);
+
                 byte[] primeItemId;
                 byte[] primeItemId2 = new byte[16];
-
-                System.out.println("the respons size is: " + response.length);
-
                 primeItemId = copyByteArray(response, 3);
+                System.out.println("the primeItemId array is : ");
+                printByteArray(primeItemId);
 
                 if (primeItemId[0] == 1) {
 
                     byte[] OptionalBlock = nfcV.transceive(getCommandReadMultipleBlock(tagId, 32, 0));
                     primeItemId2 = copyByteArray(OptionalBlock, 5);
+                    System.out.println("the primeItemId2 array is : ");
+                    printByteArray(primeItemId2);
+
                     noId = false;
                 } else {
                     noId = isEmtpy(primeItemId);
@@ -48,8 +53,7 @@ public class NfcTagUtil {
 
                 if (noId) {
                     payloadString = new String("NO ID");
-                } else if (primeItemId2.length == 0) {
-
+                } else if (primeItemId[0] == 1) {
                     payloadString = getResult(primeItemId);
                 } else {
                     byte[] newPrimeItemId = new byte[16 * 2];
@@ -61,6 +65,9 @@ public class NfcTagUtil {
                         newPrimeItemId[i + 16] = primeItemId2[i];
                     }
                     payloadString = getResult(newPrimeItemId);
+                    System.out.println("the newPrimeItemId array is : ");
+                    printByteArray(newPrimeItemId);
+
                 }
                 nfcV.close();
 
@@ -71,8 +78,24 @@ public class NfcTagUtil {
         return payloadString;
     }
 
-    public static void writeNewItemId(String itemId){
+    public static void writeNewItemId(String itemId, Intent intent, Activity activity){
+        if (intent != null) {
+           Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            NfcV nfcV = NfcV.get(tag);
 
+            try {
+                nfcV.connect();
+                byte[] tagId = tag.getId();
+                byte[] response = nfcV.transceive(getCommandWriteSingleBlock(tagId, itemId));
+                System.out.println("the respons array to write to the tag is : ");
+                printByteArray(response);
+
+                nfcV.close();
+            } catch (IOException ioException) {
+                Toast.makeText(activity, "Failed to write to the tag", Toast.LENGTH_LONG).show();
+            }
+        }
+        Toast.makeText(activity, "Success to writye to the tag. The new itemId is "+itemId , Toast.LENGTH_LONG).show();
     }
 
 
@@ -97,7 +120,6 @@ public class NfcTagUtil {
         /* the code is taken from
         https://stackoverflow.com/questions/55856674/writing-single-block-command-fails-over-nfcv
         */
-
         byte[] cmd = new byte[]{
                 (byte) 0x60,  // flags: addressed (= UID field present)
                 (byte) 0x23, // command: READ MULTIPLE BLOCKS
@@ -106,16 +128,42 @@ public class NfcTagUtil {
                 (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
         };
         System.arraycopy(tagId, 0, cmd, 2, 8);
+        System.out.println("the cmd array is : ");
+        printByteArray(cmd);
+
         return cmd;
     }
 
-   /* private static byte[] getCommandWriteSingleBlock(byte[] tagId, int offset, int blocks) {
+     private static byte[] getCommandWriteSingleBlock(byte[] tagId, String itemId) {
 
         // https://e2e.ti.com/support/wireless-connectivity/other-wireless/f/667/t/488725?RF430FRL152H-Write-Single-Block-with-Android
-        final byte[] WRITE_SINGLE_BLOCK_OPTION = new byte[] { (byte)0x40, (byte)0x21, (byte)0x01, (byte)0x01, (byte)0x01, (byte)0x00, (byte)0x00 };
+         // flag 22
+         byte[] data= toByteArray(itemId);
+         byte[] WRITE_SINGLE_BLOCK_OPTION = new byte[46];
+        WRITE_SINGLE_BLOCK_OPTION[0]= (byte)0x22; // FLAGS
+         WRITE_SINGLE_BLOCK_OPTION[1]= (byte)0x21; // WRITE SINGLE COMMAND
+         WRITE_SINGLE_BLOCK_OPTION[2]= (byte)0x00;
+         WRITE_SINGLE_BLOCK_OPTION[3]= (byte)0x00;
+         WRITE_SINGLE_BLOCK_OPTION[4]= (byte)0x00;
+         WRITE_SINGLE_BLOCK_OPTION[5]= (byte)0x00;
+         WRITE_SINGLE_BLOCK_OPTION[6]= (byte)0x00;
+         WRITE_SINGLE_BLOCK_OPTION[7]= (byte)0x00;
+         WRITE_SINGLE_BLOCK_OPTION[8]= (byte)0x00;
+         WRITE_SINGLE_BLOCK_OPTION[9]= (byte)0x00; // UID
+         WRITE_SINGLE_BLOCK_OPTION[10]= (byte)0x00; // OFFSET
+         WRITE_SINGLE_BLOCK_OPTION[11]= (byte)0x00;
+         WRITE_SINGLE_BLOCK_OPTION[12]= (byte)0x00;
+         WRITE_SINGLE_BLOCK_OPTION[13]= (byte)0x00;
 
-        return WRITE_SINGLE_BLOCK_OPTION;
-    }*/
+       for (int i=0; i<16;i++){
+             WRITE_SINGLE_BLOCK_OPTION[i+14]= data[i];
+         }
+         System.arraycopy(tagId, 0, WRITE_SINGLE_BLOCK_OPTION, 2, 8);
+         System.out.println("the WRITE_SINGLE_BLOCK_OPTION array is : ");
+         printByteArray(WRITE_SINGLE_BLOCK_OPTION);
+
+         return WRITE_SINGLE_BLOCK_OPTION;
+    }
 
     private static String getResult(byte[] primeItemId) {
         String text = "";
@@ -142,4 +190,19 @@ public class NfcTagUtil {
         }
         return toArray;
     }
+
+    private static byte[] toByteArray(String itemId){
+        byte[] data= new byte[16];
+        for (int i=0; i< itemId.length(); i++){
+            data[0]= (byte) itemId.charAt(i);
+        }
+        return data;
+    }
+
+    private static void printByteArray(byte[] array){
+        for (int i=0; i<array.length;i++){
+            System.out.println("the byte nymber"+ i+" is: " + array[i]);
+        }
+    }
+
 }
