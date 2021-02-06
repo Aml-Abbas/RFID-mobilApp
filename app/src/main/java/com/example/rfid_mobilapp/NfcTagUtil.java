@@ -91,11 +91,11 @@ public class NfcTagUtil {
                 printByteArray(response);
 
                 nfcV.close();
+                Toast.makeText(activity, "Success to writye to the tag. The new itemId is "+itemId , Toast.LENGTH_LONG).show();
             } catch (IOException ioException) {
                 Toast.makeText(activity, "Failed to write to the tag", Toast.LENGTH_LONG).show();
             }
         }
-        Toast.makeText(activity, "Success to writye to the tag. The new itemId is "+itemId , Toast.LENGTH_LONG).show();
     }
 
 
