@@ -187,9 +187,4 @@ public class NfcTagUtil {
         return itemId.getBytes();
     }
 
-    private static void printByteArray(byte[] array){
-        for (int i=0; i<array.length;i++){
-            System.out.println("the byte nymber"+ i+" is: " + array[i]);
-        }
-    }
 }
