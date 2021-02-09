@@ -131,8 +131,6 @@ public class NfcTagUtil {
                 (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
         };
         System.arraycopy(tagId, 0, cmd, 2, 8);
-        System.out.println("the cmd array is : ");
-        printByteArray(cmd);
 
         return cmd;
     }
