@@ -90,9 +90,6 @@ public class NfcTagUtil {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
                 byte[] response = nfcV.transceive(getCommandWriteSingleBlock(tagId, itemId));
-
-                Log.d("I am after respons", "Item id = " + itemId);
-
                 nfcV.close();
                 Toast.makeText(activity, "Success to write to the tag. The new itemId is "+itemId , Toast.LENGTH_LONG).show();
             } catch (IOException ioException) {
