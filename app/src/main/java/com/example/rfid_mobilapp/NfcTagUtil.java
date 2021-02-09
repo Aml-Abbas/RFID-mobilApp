@@ -68,9 +68,6 @@ public class NfcTagUtil {
                         newPrimeItemId[i + 16] = primeItemId2[i];
                     }
                     payloadString = getResult(newPrimeItemId);
-                    System.out.println("the newPrimeItemId array is : ");
-                    printByteArray(newPrimeItemId);
-
                 }
                 nfcV.close();
 
