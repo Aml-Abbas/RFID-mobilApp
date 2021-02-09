@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             Uri uri = intent.getData();
             String itemId = uri.getQueryParameter("itemid");
-            tagContentTextView.setText("tag's new itemId is: " + itemId);
+            tagContentTextView.setText("tag's new itemId: " + itemId);
             newItemId= itemId;
         }
     }
