@@ -13,6 +13,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class NfcTagUtil {
@@ -164,12 +165,7 @@ public class NfcTagUtil {
     }
 
     private static String getResult(byte[] primeItemId) {
-        String text = "";
-        if (null == primeItemId) return text;
-        for (byte element : primeItemId) {
-            text += String.valueOf((char) element);
-        }
-        return text;
+        return new String(primeItemId, StandardCharsets.UTF_8);
     }
 
     private static boolean isEmtpy(byte[] primeItemId) {
