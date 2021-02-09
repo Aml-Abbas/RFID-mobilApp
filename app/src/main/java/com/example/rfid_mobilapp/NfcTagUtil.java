@@ -33,21 +33,15 @@ public class NfcTagUtil {
 
                 byte[] tagId = tag.getId();
                 byte[] response = nfcV.transceive(getCommandReadMultipleBlock(tagId, 0, 0));
-                System.out.println("the respons array is : ");
-                printByteArray(response);
 
                 byte[] primeItemId;
                 byte[] primeItemId2 = new byte[16];
                 primeItemId = copyByteArray(response, 3);
-                System.out.println("the primeItemId array is : ");
-                printByteArray(primeItemId);
 
                 if (primeItemId[0] == 1) {
 
                     byte[] OptionalBlock = nfcV.transceive(getCommandReadMultipleBlock(tagId, 32, 0));
                     primeItemId2 = copyByteArray(OptionalBlock, 5);
-                    System.out.println("the primeItemId2 array is : ");
-                    printByteArray(primeItemId2);
 
                     noId = false;
                 } else {
