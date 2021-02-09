@@ -33,21 +33,15 @@ public class NfcTagUtil {
 
                 byte[] tagId = tag.getId();
                 byte[] response = nfcV.transceive(getCommandReadMultipleBlock(tagId, 0, 0));
-                System.out.println("the respons array is : ");
-                printByteArray(response);
 
                 byte[] primeItemId;
                 byte[] primeItemId2 = new byte[16];
                 primeItemId = copyByteArray(response, 3);
-                System.out.println("the primeItemId array is : ");
-                printByteArray(primeItemId);
 
                 if (primeItemId[0] == 1) {
 
                     byte[] OptionalBlock = nfcV.transceive(getCommandReadMultipleBlock(tagId, 32, 0));
                     primeItemId2 = copyByteArray(OptionalBlock, 5);
-                    System.out.println("the primeItemId2 array is : ");
-                    printByteArray(primeItemId2);
 
                     noId = false;
                 } else {
@@ -68,9 +62,6 @@ public class NfcTagUtil {
                         newPrimeItemId[i + 16] = primeItemId2[i];
                     }
                     payloadString = getResult(newPrimeItemId);
-                    System.out.println("the newPrimeItemId array is : ");
-                    printByteArray(newPrimeItemId);
-
                 }
                 nfcV.close();
 
@@ -90,13 +81,8 @@ public class NfcTagUtil {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
                 byte[] response = nfcV.transceive(getCommandWriteSingleBlock(tagId, itemId));
-
-                Log.d("I am after respons", "Item id = " + itemId);
-                System.out.println("the respons array to write to the tag is : ");
-                printByteArray(response);
-
                 nfcV.close();
-                Toast.makeText(activity, "Success to writye to the tag. The new itemId is "+itemId , Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, "Success to write to the tag. The new itemId is "+itemId , Toast.LENGTH_LONG).show();
             } catch (IOException ioException) {
                 Toast.makeText(activity, "Failed to write to the tag", Toast.LENGTH_LONG).show();
             }
@@ -133,8 +119,6 @@ public class NfcTagUtil {
                 (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
         };
         System.arraycopy(tagId, 0, cmd, 2, 8);
-        System.out.println("the cmd array is : ");
-        printByteArray(cmd);
 
         return cmd;
     }
@@ -189,9 +173,4 @@ public class NfcTagUtil {
         return itemId.getBytes();
     }
 
-    private static void printByteArray(byte[] array){
-        for (int i=0; i<array.length;i++){
-            System.out.println("the byte nymber"+ i+" is: " + array[i]);
-        }
-    }
 }
