@@ -7,11 +7,13 @@ import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcV;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Arrays;
 
 public class NfcTagUtil {
 
@@ -87,6 +89,8 @@ public class NfcTagUtil {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
                 byte[] response = nfcV.transceive(getCommandWriteSingleBlock(tagId, itemId));
+
+                Log.d("I am after respons", "Item id = " + itemId);
                 System.out.println("the respons array to write to the tag is : ");
                 printByteArray(response);
 
@@ -137,32 +141,26 @@ public class NfcTagUtil {
      private static byte[] getCommandWriteSingleBlock(byte[] tagId, String itemId) {
 
         // https://e2e.ti.com/support/wireless-connectivity/other-wireless/f/667/t/488725?RF430FRL152H-Write-Single-Block-with-Android
-         // flag 22
          byte[] data= toByteArray(itemId);
-         byte[] WRITE_SINGLE_BLOCK_OPTION = new byte[46];
-        WRITE_SINGLE_BLOCK_OPTION[0]= (byte)0x22; // FLAGS
-         WRITE_SINGLE_BLOCK_OPTION[1]= (byte)0x21; // WRITE SINGLE COMMAND
-         WRITE_SINGLE_BLOCK_OPTION[2]= (byte)0x00;
-         WRITE_SINGLE_BLOCK_OPTION[3]= (byte)0x00;
-         WRITE_SINGLE_BLOCK_OPTION[4]= (byte)0x00;
-         WRITE_SINGLE_BLOCK_OPTION[5]= (byte)0x00;
-         WRITE_SINGLE_BLOCK_OPTION[6]= (byte)0x00;
-         WRITE_SINGLE_BLOCK_OPTION[7]= (byte)0x00;
-         WRITE_SINGLE_BLOCK_OPTION[8]= (byte)0x00;
-         WRITE_SINGLE_BLOCK_OPTION[9]= (byte)0x00; // UID
-         WRITE_SINGLE_BLOCK_OPTION[10]= (byte)0x00; // OFFSET
-         WRITE_SINGLE_BLOCK_OPTION[11]= (byte)0x00;
-         WRITE_SINGLE_BLOCK_OPTION[12]= (byte)0x00;
-         WRITE_SINGLE_BLOCK_OPTION[13]= (byte)0x00;
+         int offset = 0;
+         int blocks = 1;
+         data = Arrays.copyOfRange(data, 0, 4 * blocks );
 
-       for (int i=0; i<16;i++){
-             WRITE_SINGLE_BLOCK_OPTION[i+14]= data[i];
+         byte[] cmd = new byte[] {
+                 /* FLAGS   */ (byte)0x20,
+                 /* COMMAND */ (byte)0x21,
+                 /* UID     */ (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
+                 /* OFFSET  */ (byte)0x00,
+                 /* DATA    */ (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00
+         };
+         System.arraycopy(tagId, 0, cmd, 2, 8);
+
+         for (int i = 0; i < blocks; ++i) {
+             cmd[10] = (byte) ((offset + i) & 0x0ff);
+             System.arraycopy(data, 4 * i, cmd, 11, 4);
          }
-         System.arraycopy(tagId, 0, WRITE_SINGLE_BLOCK_OPTION, 2, 8);
-         System.out.println("the WRITE_SINGLE_BLOCK_OPTION array is : ");
-         printByteArray(WRITE_SINGLE_BLOCK_OPTION);
 
-         return WRITE_SINGLE_BLOCK_OPTION;
+         return cmd;
     }
 
     private static String getResult(byte[] primeItemId) {
@@ -194,7 +192,11 @@ public class NfcTagUtil {
     private static byte[] toByteArray(String itemId){
         byte[] data= new byte[16];
         for (int i=0; i< itemId.length(); i++){
-            data[0]= (byte) itemId.charAt(i);
+            data[i]= (byte) itemId.charAt(i);
+        }
+        for (int i=itemId.length(); i<16;i++){
+            data[i]= (byte)0x00;
+
         }
         return data;
     }
