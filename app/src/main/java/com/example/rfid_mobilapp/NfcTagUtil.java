@@ -161,6 +161,13 @@ public class NfcTagUtil {
         return true;
     }
 
+    private static byte[] copyByteArray(byte[] fromArray, int fromIndex) {
+        byte[] toArray = new byte[16];
+        for (int i = 0; i < 16; i++) {
+            toArray[i] = fromArray[i + fromIndex];
+        }
+        return toArray;
+    }
 
     private static byte[] toByteArray(String itemId){
         return itemId.getBytes();
