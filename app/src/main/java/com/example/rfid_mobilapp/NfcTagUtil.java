@@ -51,7 +51,7 @@ public class NfcTagUtil {
                 if (noId) {
                     payloadString = new String("NO ID");
                 } else if (primeItemId[0] == 1) {
-                    payloadString = getResult(primeItemId);
+                    payloadString = new String(primeItemId, StandardCharsets.UTF_8);
                 } else {
                     byte[] newPrimeItemId = new byte[16 * 2];
 
@@ -61,7 +61,7 @@ public class NfcTagUtil {
                     for (int i = 0; i < 16; i++) {
                         newPrimeItemId[i + 16] = primeItemId2[i];
                     }
-                    payloadString = getResult(newPrimeItemId);
+                    payloadString = new String(newPrimeItemId, StandardCharsets.UTF_8);
                 }
                 nfcV.close();
 
@@ -148,9 +148,6 @@ public class NfcTagUtil {
          return cmd;
     }
 
-    private static String getResult(byte[] primeItemId) {
-        return new String(primeItemId, StandardCharsets.UTF_8);
-    }
 
     private static boolean isEmtpy(byte[] primeItemId) {
         for (int i = 0; i < primeItemId.length; i++) {
