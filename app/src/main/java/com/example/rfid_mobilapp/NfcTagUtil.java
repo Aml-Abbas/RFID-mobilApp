@@ -78,7 +78,7 @@ public class NfcTagUtil {
                 byte[] data= itemId.getBytes();
                 byte[] newData;
                 newData= copyByteArray(data, 2);
-                newData = Arrays.copyOfRange(newData, 0, 4 * 19 );
+                newData = Arrays.copyOfRange(newData, 0, 4 * 8 );
 
                 byte[] cmd = new byte[] {
                         (byte)0x20,
@@ -89,7 +89,7 @@ public class NfcTagUtil {
                 };
                 System.arraycopy(tagId, 0, cmd, 2, 8);
 
-                for (int i = 0; i < 19; ++i) {
+                for (int i = 0; i < 8; ++i) {
                     cmd[10] = (byte)((0 + i) & 0x0ff);
                     System.arraycopy(newData, 4 * i, cmd, 11, 4);
 
