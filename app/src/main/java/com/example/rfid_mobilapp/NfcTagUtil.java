@@ -108,11 +108,11 @@ public class NfcTagUtil {
         https://stackoverflow.com/questions/55856674/writing-single-block-command-fails-over-nfcv
         */
         byte[] cmd = new byte[]{
-                (byte) 0x60,  // flags: addressed (= UID field present)
-                (byte) 0x23, // command: READ MULTIPLE BLOCKS
-                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,  // placeholder for tag UID
-                (byte) (offset & 0x0ff),  // first block number
-                (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
+                (byte) 0x60,
+                (byte) 0x23,
+                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                (byte) (offset & 0x0ff),
+                (byte) ((blocks - 1) & 0x0ff)
         };
         System.arraycopy(tagId, 0, cmd, 2, 8);
 
@@ -128,11 +128,11 @@ public class NfcTagUtil {
          data = Arrays.copyOfRange(data, 0, 4 * blocks );
 
          byte[] cmd = new byte[] {
-                 /* FLAGS   */ (byte)0x20,
-                 /* COMMAND */ (byte)0x21,
-                 /* UID     */ (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
-                 /* OFFSET  */ (byte)0x00,
-                 /* DATA    */ (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00
+                             (byte)0x20,
+                             (byte)0x21,
+                             (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
+                             (byte)0x00,
+                             (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00
          };
          System.arraycopy(tagId, 0, cmd, 2, 8);
 
@@ -140,7 +140,6 @@ public class NfcTagUtil {
              cmd[10] = (byte) ((offset + i) & 0x0ff);
              System.arraycopy(data, 4 * i, cmd, 11, 4);
          }
-
          return cmd;
     }
 
