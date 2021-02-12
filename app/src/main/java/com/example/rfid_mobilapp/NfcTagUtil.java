@@ -32,12 +32,12 @@ public class NfcTagUtil {
 
                 byte[] primeItemId;
                 byte[] primeItemId2 = new byte[16];
-                primeItemId = copyByteArray(response, 3);
+                primeItemId = copyByteArray(response, 2);
 
                 if (primeItemId[0] == 1) {
 
                     byte[] OptionalBlock = nfcV.transceive(getCommandReadMultipleBlock(tagId, 32, 0));
-                    primeItemId2 = copyByteArray(OptionalBlock, 5);
+                    primeItemId2 = copyByteArray(OptionalBlock, 4);
 
                     noId = false;
                 } else {
