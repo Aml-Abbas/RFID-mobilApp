@@ -76,7 +76,7 @@ public class NfcTagUtil {
             try {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
-                byte[] response = nfcV.transceive(getCommandWriteSingleBlock(tagId, itemId));
+                byte[] response = nfcV.transceive(getCommandWriteSingleBlock(tagId, itemId, 0));
                 nfcV.close();
                 Toast.makeText(activity, "Success to write to the tag. The new itemId is "+itemId , Toast.LENGTH_LONG).show();
             } catch (IOException ioException) {
@@ -119,27 +119,21 @@ public class NfcTagUtil {
         return cmd;
     }
 
-     private static byte[] getCommandWriteSingleBlock(byte[] tagId, String itemId) {
+     private static byte[] getCommandWriteSingleBlock(byte[] tagId, String itemId, int offset) {
 
         // https://e2e.ti.com/support/wireless-connectivity/other-wireless/f/667/t/488725?RF430FRL152H-Write-Single-Block-with-Android
          byte[] data= itemId.getBytes();
-         int offset = 0;
-         int blocks = 1;
-         data = Arrays.copyOfRange(data, 0, 4 * blocks );
-
          byte[] cmd = new byte[] {
                              (byte)0x20,
                              (byte)0x21,
                              (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
-                             (byte)0x00,
+                             (byte) (offset & 0x0ff),
                              (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00
          };
          System.arraycopy(tagId, 0, cmd, 2, 8);
 
-         for (int i = 0; i < blocks; ++i) {
-             cmd[10] = (byte) ((offset + i) & 0x0ff);
-             System.arraycopy(data, 4 * i, cmd, 11, 4);
-         }
+         System.arraycopy(data, 0, cmd, 11, 4);
+
          return cmd;
     }
 
