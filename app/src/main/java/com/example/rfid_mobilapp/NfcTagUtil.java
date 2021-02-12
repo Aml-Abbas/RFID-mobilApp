@@ -46,7 +46,7 @@ public class NfcTagUtil {
 
                 if (noId) {
                     payloadString = new String("NO ID");
-                } else if (primeItemId[0] == 1) {
+                } else if (primeItemId[0] != 1) {
                     payloadString = new String(primeItemId, StandardCharsets.UTF_8);
                 } else {
                     byte[] newPrimeItemId = new byte[16 * 2];
