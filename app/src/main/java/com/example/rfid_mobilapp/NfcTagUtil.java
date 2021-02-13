@@ -137,27 +137,7 @@ public class NfcTagUtil {
 
         return cmd;
     }
-     /*private static byte[] getCommandWriteSingleBlock(byte[] tagId, String itemId, int offset) {
-         byte[] data= itemId.getBytes();
-         data = Arrays.copyOfRange(data, 0, 4 * 19 );
 
-         byte[] cmd = new byte[] {
-                 (byte)0x20,
-                 (byte)0x21,
-                 (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
-                 (byte)(offset & 0x0ff),
-                 *//* DATA    *//* (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00
-         };
-         System.arraycopy(tagId, 0, cmd, 2, 8);
-
-         for (int i = 0; i < 19; ++i) {
-             cmd[10] = (byte)((offset + i) & 0x0ff);
-             System.arraycopy(data, 4 * i, cmd, 11, 4);
-
-             byte[] response = nfcvTag.transceive(cmd);
-         }
-         return cmd_plus_data;
-     }*/
 /*     private static byte[] getCommandWriteSingleBlock(byte[] tagId, String itemId, int offset) {
 
         // https://e2e.ti.com/support/wireless-connectivity/other-wireless/f/667/t/488725?RF430FRL152H-Write-Single-Block-with-Android
