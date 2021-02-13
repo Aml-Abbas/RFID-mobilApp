@@ -157,12 +157,6 @@ public class NfcTagUtil {
          return cmd;
     }*/
 
-    private static void printArrayByte(byte[] cmd) {
-        for (int i = 0; i < cmd.length; i++) {
-            System.out.println("cmd byte "+i+ "is: "+ cmd[i]);
-        }
-
-    }
 
 
     private static boolean isEmtpy(byte[] primeItemId) {
