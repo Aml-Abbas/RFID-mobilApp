@@ -138,27 +138,6 @@ public class NfcTagUtil {
         return cmd;
     }
 
-/*     private static byte[] getCommandWriteSingleBlock(byte[] tagId, String itemId, int offset) {
-
-        // https://e2e.ti.com/support/wireless-connectivity/other-wireless/f/667/t/488725?RF430FRL152H-Write-Single-Block-with-Android
-         byte[] data= itemId.getBytes();
-         data = Arrays.copyOfRange(data, 0, 16);
-        byte[] cmd = new byte[] {
-                             (byte)0x20,
-                             (byte)0x21,
-                             (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
-                             (byte) (offset & 0x0ff),
-                             (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00
-         };
-         System.arraycopy(tagId, 0, cmd, 2, 8);
-         System.arraycopy(data, 0, cmd, 11, 4);
-
-
-         return cmd;
-    }*/
-
-
-
     private static boolean isEmtpy(byte[] primeItemId) {
         for (int i = 0; i < primeItemId.length; i++) {
             if (primeItemId[i] != 0) {
