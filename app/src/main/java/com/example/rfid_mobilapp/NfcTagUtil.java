@@ -36,17 +36,11 @@ public class NfcTagUtil {
                     cmdRead[10] = (byte)((offset + i) & 0x0ff);
                     byte[] response = nfcV.transceive(cmdRead);
                     copyByteArray(response, 1, oldData, i* 4, 4);
-                    for (int k=0; k<response.length;k++){
-                        Log.d("respons is getItem:" , String.valueOf(response[k]));
-                    }
                 }
 
                 byte[] primeItemId= new byte[16];
                 byte[] primeItemId2 = new byte[16];
                 copyByteArray(oldData, 2, primeItemId, 0, 16);
-                for (int i=0; i<primeItemId.length;i++){
-                    Log.d("primeId is:" , String.valueOf(primeItemId[i]));
-                }
                 if (primeItemId[0] == 1) {
 
                     byte[] OptionalBlock = nfcV.transceive(getCommandReadSingleBlock(tagId));
