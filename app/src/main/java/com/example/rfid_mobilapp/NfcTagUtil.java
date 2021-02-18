@@ -30,9 +30,7 @@ public class NfcTagUtil {
 
                 byte[] tagId = tag.getId();
                 byte[] response = nfcV.transceive(getCommandReadMultipleBlock(tagId, 0, 0));
-                //for (int i=0; i<response.length;i++){
-                //    Log.d("respons is:" , String.valueOf(response[i]));
-                //}
+
                 byte[] primeItemId;
                 byte[] primeItemId2 = new byte[16];
                 primeItemId = copyByteArray(response, 2);
@@ -92,19 +90,6 @@ public class NfcTagUtil {
                 byte[] newDataToWrite = new String(newDataWithBarcode).getBytes(StandardCharsets.UTF_8);
                 int blocks = newDataToWrite.length / blockSize;
 
-//                for (int i=0; i<data.length;i++){
-//                    Log.d("data is:" , String.valueOf(data[i]));
-//                }
-//                for ( int i=0; i<data.length;i++){
-//                    newData[i+2]= data[i];
-//                }
-//                for (int i=0; i<newData.length;i++){
-//                    Log.d("newData is:" , String.valueOf(newData[i]));
-//                }
-                //newData = Arrays.copyOfRange(newData, 0, 4 * 8 );
-                //for (int i=0; i<newData.length;i++){
-                //    Log.d("new newData is:" , String.valueOf(newData[i]));
-                //}
                 byte[] cmd = getCommandWriteSingleBlock(tagId);
                 for (int i = 0; i < blocks; ++i) {
                     cmd[10] = (byte)((offset + i) & 0x0ff);
@@ -182,7 +167,6 @@ public class NfcTagUtil {
                 (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00 /* DATA placeholder */
         };
         System.arraycopy(tagId, 0, cmd, 2, 8);
-
         return cmd;
     }
 
