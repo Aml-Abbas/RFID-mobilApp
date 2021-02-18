@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         if (newItemId==""){
             tagContentTextView.setText("");
-            String payload = NfcTagUtil.getPayload(intent, this);
+            String payload = NfcTagUtil.getItemId(intent, this);
             tagContentTextView.setText(payload);
 
             intent = new Intent(Intent.ACTION_VIEW);

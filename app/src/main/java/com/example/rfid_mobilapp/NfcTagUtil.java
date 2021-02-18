@@ -11,12 +11,11 @@ import android.util.Log;
 import android.widget.Toast;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 public class NfcTagUtil {
 
 
-    public static String getPayload(Intent intent, Activity activity) {
+    public static String getItemId(Intent intent, Activity activity) {
         String payloadString = "test";
 
         if (intent != null) {
@@ -29,18 +28,29 @@ public class NfcTagUtil {
                 nfcV.connect();
 
                 byte[] tagId = tag.getId();
-                byte[] response = nfcV.transceive(getCommandReadMultipleBlock(tagId, 0, 0));
 
-                byte[] primeItemId;
+                int offset = 0;
+                byte[] oldData = new byte[34];
+                byte[] cmdRead = getCommandReadSingleBlock(tagId);
+                for (int i = 0; i < 8; i++) {
+                    cmdRead[10] = (byte)((offset + i) & 0x0ff);
+                    byte[] response = nfcV.transceive(cmdRead);
+                    copyByteArray(response, 1, oldData, i* 4, 4);
+                    for (int k=0; k<response.length;k++){
+                        Log.d("respons is getItem:" , String.valueOf(response[k]));
+                    }
+                }
+
+                byte[] primeItemId= new byte[16];
                 byte[] primeItemId2 = new byte[16];
-                primeItemId = copyByteArray(response, 2);
+                copyByteArray(oldData, 2, primeItemId, 0, 16);
                 for (int i=0; i<primeItemId.length;i++){
-                    Log.d("prime is:" , String.valueOf(primeItemId[i]));
+                    Log.d("primeId is:" , String.valueOf(primeItemId[i]));
                 }
                 if (primeItemId[0] == 1) {
 
-                    byte[] OptionalBlock = nfcV.transceive(getCommandReadMultipleBlock(tagId, 32, 0));
-                    primeItemId2 = copyByteArray(OptionalBlock, 4);
+                    byte[] OptionalBlock = nfcV.transceive(getCommandReadSingleBlock(tagId));
+                   copyByteArray(OptionalBlock, 4, primeItemId2, 0, 16);
 
                     noId = false;
                 } else {
@@ -84,19 +94,27 @@ public class NfcTagUtil {
                 int amountOfBlocksToRead = maxDataAmount / blockSize;
                 int offset = 0;
                 amountOfBlocksToRead = 8; // original amountOfBlocksToRead might be 63 (253/4), but lets settle with 8 blocks since we know the barcode fits well within.
-                byte[] oldData = nfcV.transceive(getCommandReadMultipleBlock(tagId, 0, amountOfBlocksToRead));
+                byte[] oldData = new byte[34];
+
+                byte[] cmdRead = getCommandReadSingleBlock(tagId);
+                for (int i = 0; i < amountOfBlocksToRead; i++) {
+                    cmdRead[10] = (byte)((offset + i) & 0x0ff);
+                    byte[] response = nfcV.transceive(cmdRead);
+                    copyByteArray(response, 0, oldData, i* 4, 4);
+                }
+
                 char[] newData = NfcTagUtil.initdata(oldData);
                 char[] newDataWithBarcode = NfcTagUtil.setBarcode(itemId, newData);
                 byte[] newDataToWrite = new String(newDataWithBarcode).getBytes(StandardCharsets.UTF_8);
+
                 int blocks = newDataToWrite.length / blockSize;
 
                 byte[] cmd = getCommandWriteSingleBlock(tagId);
-                for (int i = 0; i < blocks; ++i) {
+                for (int i = 0; i < blocks; i++) {
                     cmd[10] = (byte)((offset + i) & 0x0ff);
                     System.arraycopy(newDataToWrite, blockSize * i, cmd, 11, blockSize);
 
                     byte[] response = nfcV.transceive(cmd);
-                    Log.d("NfcTagUtil", "Write response: " + response);
                 }
                 nfcV.close();
                 Toast.makeText(activity, "Success to write to the tag. The new itemId is "+itemId , Toast.LENGTH_LONG).show();
@@ -123,17 +141,16 @@ public class NfcTagUtil {
         nfcAdapter.disableForegroundDispatch(activity);
     }
 
-    private static byte[] getCommandReadMultipleBlock(byte[] tagId, int offset, int blocks) {
+    private static byte[] getCommandReadSingleBlock(byte[] tagId) {
 
         /* the code is taken from
         https://stackoverflow.com/questions/55856674/writing-single-block-command-fails-over-nfcv
         */
         byte[] cmd = new byte[]{
-                (byte) 0x60,
-                (byte) 0x23,
+                (byte) 0x22,
+                (byte) 0x20,
                 (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-                (byte) (offset & 0x0ff),
-                (byte) ((blocks - 1) & 0x0ff)
+                (byte)0x00, /* OFFSET  */
         };
         System.arraycopy(tagId, 0, cmd, 2, 8);
         return cmd;
@@ -149,12 +166,12 @@ public class NfcTagUtil {
         return true;
     }
 
-    private static byte[] copyByteArray(byte[] fromArray, int fromIndex) {
-        byte[] toArray = new byte[16];
-        for (int i = 0; i < 16; i++) {
-            toArray[i] = fromArray[i + fromIndex];
+    private static void copyByteArray(byte[] fromArray, int fromIndex,
+                                      byte[] toArray, int fromIndexTo, int length) {
+
+        for (int i = 0 ; i < length; i++) {
+            toArray[fromIndexTo+i] = fromArray[i + fromIndex];
         }
-        return toArray;
     }
 
     private static byte[] getCommandWriteSingleBlock(byte[] tagId) {
@@ -181,7 +198,7 @@ public class NfcTagUtil {
     }
 
     private static char[] setBarcode(String barcode, char[] currentData) {
-        return replaceStringAt(barcode, 3, 16, currentData);
+        return replaceStringAt(barcode, 2, 17, currentData);
     }
 
     private static char[] replaceStringAt(String stringValue, int start, int len, char[] currentData) {
