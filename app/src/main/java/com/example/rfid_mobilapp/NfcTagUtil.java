@@ -118,8 +118,53 @@ public class NfcTagUtil {
         }
     }
 
+    public static void checkIn(Intent intent, Activity activity){
+        if (intent != null) {
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            NfcV nfcV = NfcV.get(tag);
 
-    public static <T> void enableNFCInForeground(NfcAdapter nfcAdapter, Activity activity, Class<T> classType) {
+            try {
+                nfcV.connect();
+                byte[] tagId = tag.getId();
+                byte[] cmd= getSystemInformation(tagId);
+                byte[] oldData= nfcV.transceive(cmd);
+                cmd= getCommandCheckIn(tagId);
+                byte[] response = nfcV.transceive(cmd);
+
+                nfcV.close();
+                Toast.makeText(activity, "Success to check in." , Toast.LENGTH_LONG).show();
+            } catch (IOException ioException) {
+                Toast.makeText(activity, "Failed to check in", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
+    public static void checkOut(Intent intent, Activity activity){
+        if (intent != null) {
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            NfcV nfcV = NfcV.get(tag);
+
+            try {
+                nfcV.connect();
+                byte[] tagId = tag.getId();
+                byte[] cmd= getSystemInformation(tagId);
+
+                byte[] oldData= nfcV.transceive(cmd);
+
+                cmd= getCommandCheckOut(tagId);
+
+                nfcV.transceive(cmd);
+
+                nfcV.close();
+                Toast.makeText(activity, "Success to check out." , Toast.LENGTH_LONG).show();
+            } catch (IOException ioException) {
+                Toast.makeText(activity, "Failed to check out", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+        public static <T> void enableNFCInForeground(NfcAdapter nfcAdapter, Activity activity, Class<T> classType) {
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 activity, 0,
                 new Intent(activity, classType).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0
@@ -137,9 +182,6 @@ public class NfcTagUtil {
 
     private static byte[] getCommandReadSingleBlock(byte[] tagId) {
 
-        /* the code is taken from
-        https://stackoverflow.com/questions/55856674/writing-single-block-command-fails-over-nfcv
-        */
         byte[] cmd = new byte[]{
                 (byte) 0x22,
                 (byte) 0x20,
@@ -150,6 +192,41 @@ public class NfcTagUtil {
         return cmd;
     }
 
+
+    private static byte[] getSystemInformation(byte[] tagId) {
+
+        byte[] cmd = new byte[]{
+                (byte) 0x20,
+                (byte) 0x2B,
+                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+        };
+        System.arraycopy(tagId, 0, cmd, 2, 8);
+        return cmd;
+    }
+    private static byte[] getCommandCheckIn(byte[] tagId) {
+
+        byte[] cmd = new byte[]{
+                (byte) 0x20,
+                (byte) 0x27,
+                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                (byte) 0x07,
+
+        };
+        System.arraycopy(tagId, 0, cmd, 2, 8);
+        return cmd;
+    }
+    private static byte[] getCommandCheckOut(byte[] tagId) {
+
+        byte[] cmd = new byte[]{
+                (byte) 0x20,
+                (byte) 0x27,
+                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                (byte) 0xC2,
+
+        };
+        System.arraycopy(tagId, 0, cmd, 2, 8);
+        return cmd;
+    }
 
     private static boolean isEmtpy(byte[] primeItemId) {
         for (int i = 0; i < primeItemId.length; i++) {
@@ -205,5 +282,6 @@ public class NfcTagUtil {
         }
         return currentData;
     }
+
 
 }
