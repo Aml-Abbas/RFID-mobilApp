@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 
@@ -14,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     NfcAdapter mNfcAdapter;
     Context mainActivityContext;
     String newItemId;
+    String checkValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +33,9 @@ public class MainActivity extends AppCompatActivity {
             String itemId = uri.getQueryParameter("itemid");
             tagContentTextView.setText("tag's new itemId: " + itemId);
             newItemId= itemId;
+            checkValue = uri.getQueryParameter("checkValue");
         }
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -49,7 +51,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (newItemId==""){
+        if (checkValue!= null){
+            if (checkValue.equals("false")){
+                NfcTagUtil.checkOut(intent, this);
+                checkValue=null;
+            }else {
+                NfcTagUtil.checkIn(intent, this);
+                checkValue= null;
+            }
+
+        }else if(newItemId!= ""){
+            NfcTagUtil.writeNewItemId(newItemId, intent, this);
+            newItemId="";
+        }else {
             tagContentTextView.setText("");
             String payload = NfcTagUtil.getItemId(intent, this);
             tagContentTextView.setText(payload);
@@ -60,9 +74,6 @@ public class MainActivity extends AppCompatActivity {
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(chooser);
             }
-        }else {
-            NfcTagUtil.writeNewItemId(newItemId, intent, this);
-            newItemId="";
         }
 
     }
