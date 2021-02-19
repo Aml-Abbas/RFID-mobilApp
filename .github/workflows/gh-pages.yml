@@ -1,0 +1,16 @@
+      
+- name: Deploy
+  on:
+    push:
+      branches:
+        - master
+jobs:
+  deploy:
+    runs-on: ubuntu:20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run deploy to Github pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./[your_directory_for_static_files_like_HTML_here]
