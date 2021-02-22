@@ -34,20 +34,20 @@ public class NfcTagUtil {
                 for (int i = 0; i < 8; i++) {
                     cmdRead[10] = (byte)((offset + i) & 0x0ff);
                     byte[] response = nfcV.transceive(cmdRead);
-                    copyByteArray(response, 1, oldData, i* 4, 4);
+                    Utilities.copyByteArray(response, 1, oldData, i* 4, 4);
                 }
 
                 byte[] primeItemId= new byte[16];
                 byte[] primeItemId2 = new byte[16];
-                copyByteArray(oldData, 2, primeItemId, 0, 16);
+                Utilities.copyByteArray(oldData, 2, primeItemId, 0, 16);
                 if (primeItemId[0] == 1) {
 
                     byte[] OptionalBlock = nfcV.transceive(getCommandReadSingleBlock(tagId));
-                   copyByteArray(OptionalBlock, 4, primeItemId2, 0, 16);
+                   Utilities.copyByteArray(OptionalBlock, 4, primeItemId2, 0, 16);
 
                     noId = false;
                 } else {
-                    noId = isEmpty(primeItemId);
+                    noId = Utilities.isEmpty(primeItemId);
                 }
 
                 if (noId) {
@@ -91,10 +91,10 @@ public class NfcTagUtil {
                 for (int i = 0; i < amountOfBlocksToRead; i++) {
                     cmdRead[10] = (byte)((offset + i) & 0x0ff);
                     byte[] response = nfcV.transceive(cmdRead);
-                    copyByteArray(response, 0, oldData, i* 4, 4);
+                    Utilities.copyByteArray(response, 0, oldData, i* 4, 4);
                 }
 
-                char[] newData = NfcTagUtil.initdata(oldData);
+                char[] newData = Utilities.initdata(oldData);
                 char[] newDataWithBarcode = NfcTagUtil.setBarcode(itemId, newData);
                 byte[] newDataToWrite = new String(newDataWithBarcode).getBytes(StandardCharsets.UTF_8);
 
@@ -219,22 +219,6 @@ public class NfcTagUtil {
         return cmd;
     }
 
-    private static boolean isEmpty(byte[] primeItemId) {
-        for (int i = 0; i < primeItemId.length; i++) {
-            if (primeItemId[i] != 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static void copyByteArray(byte[] fromArray, int fromIndex,
-                                      byte[] toArray, int fromIndexTo, int length) {
-
-        for (int i = 0 ; i < length; i++) {
-            toArray[fromIndexTo+i] = fromArray[i + fromIndex];
-        }
-    }
 
     private static byte[] getCommandWriteSingleBlock(byte[] tagId) {
 
@@ -247,16 +231,6 @@ public class NfcTagUtil {
         };
         System.arraycopy(tagId, 0, cmd, 2, 8);
         return cmd;
-    }
-
-    private static char[] initdata(byte[] in) {
-
-        char[] userdata = new char[in.length];
-
-        for (int i = 0; i < in.length; i++) {
-            userdata[i]=(char)in[i];
-        }
-        return userdata;
     }
 
     private static char[] setBarcode(String barcode, char[] currentData) {
