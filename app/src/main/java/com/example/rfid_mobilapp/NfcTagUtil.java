@@ -223,11 +223,11 @@ public class NfcTagUtil {
     private static byte[] getCommandWriteSingleBlock(byte[] tagId) {
 
         byte[] cmd = new byte[] {
-                (byte)0x20, /* FLAGS   */
-                (byte)0x21, /* COMMAND */
-                (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, /* UID     */
-                (byte)0x00, /* OFFSET  */
-                (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00 /* DATA placeholder */
+                (byte)0x20,
+                (byte)0x21,
+                (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
+                (byte)0x00,
+                (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00
         };
         System.arraycopy(tagId, 0, cmd, 2, 8);
         return cmd;
