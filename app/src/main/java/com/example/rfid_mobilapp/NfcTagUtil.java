@@ -31,58 +31,55 @@ public class NfcTagUtil {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NfcV nfcV = NfcV.get(tag);
 
-            boolean noId = true;
+            byte[] tagId = tag.getId();
 
-            try {
-                nfcV.connect();
-
-                byte[] tagId = tag.getId();
-
-                int offset = 0;
-                byte[] oldData = new byte[34];
-                byte[] cmdRead = getCommand(tagId, readSingleBlockCommand, (byte) 0x00);
-                for (int i = 0; i < 8; i++) {
-                    cmdRead[10] = (byte) ((offset + i) & 0x0ff);
-                    byte[] response = nfcV.transceive(cmdRead);
-                    Utilities.copyByteArray(response, 1, oldData, i * 4, 4);
-                }
+                byte[] oldData = readFirstBlock(tagId, nfcV, activity);
 
                 byte[] primeItemId = new byte[16];
+                boolean alternativItemId= false;
+
                 byte[] primeItemId2 = new byte[16];
                 Utilities.copyByteArray(oldData, 2, primeItemId, 0, 16);
-                if (primeItemId[0] == 1) {
+                if (Utilities.isEmpty(primeItemId)){
+                    return "No Id";
+                }
+                String stringOfPrimaryId = new String(primeItemId, StandardCharsets.UTF_8);
 
+                if (stringOfPrimaryId.charAt(0) == '1') {
+                    alternativItemId= true;
                   //  byte[] OptionalBlock = nfcV.transceive(getCommandReadSingleBlock(tagId));
                 //    Utilities.copyByteArray(OptionalBlock, 4, primeItemId2, 0, 16);
 
-                    noId = false;
-                } else {
-                    noId = Utilities.isEmpty(primeItemId);
                 }
-
-                if (noId) {
-                    payloadString = "NO ID";
-                } else if (primeItemId[0] != 1) {
+                if (!alternativItemId) {
                     payloadString = new String(primeItemId, StandardCharsets.UTF_8);
                 } else {
-                    byte[] newPrimeItemId = new byte[16 * 2];
-
-                    for (int i = 0; i < 16; i++) {
-                        newPrimeItemId[i] = primeItemId[i];
-                    }
-                    for (int i = 0; i < 16; i++) {
-                        newPrimeItemId[i + 16] = primeItemId2[i];
-                    }
-                    payloadString = new String(newPrimeItemId, StandardCharsets.UTF_8);
+                    payloadString = new String(primeItemId, StandardCharsets.UTF_8)+
+                            new String(primeItemId2, StandardCharsets.UTF_8);
                 }
-                nfcV.close();
 
-            } catch (IOException ioException) {
-                Toast.makeText(activity, "Failed to read tag", Toast.LENGTH_LONG).show();
-            }
         }
         return payloadString;
     }
+
+    private static byte[] readFirstBlock(byte[] tagId, NfcV nfcV, Activity activity) {
+        byte[] oldData = new byte[34];
+        try {
+           nfcV.connect();
+           int offset = 0;
+           byte[] cmdRead = getCommand(tagId, readSingleBlockCommand, (byte) 0x00);
+           for (int i = 0; i < 8; i++) {
+               cmdRead[10] = (byte) ((offset + i) & 0x0ff);
+               byte[] response = nfcV.transceive(cmdRead);
+               Utilities.copyByteArray(response, 1, oldData, i * 4, 4);
+           }
+           nfcV.close();
+       }catch (IOException ioException){
+           Toast.makeText(activity , "Failed to read the first block", Toast.LENGTH_LONG).show();
+       }
+        return oldData;
+    }
+
 
     public static void writeNewItemId(String itemId, Intent intent, Activity activity) {
         if (intent != null) {
