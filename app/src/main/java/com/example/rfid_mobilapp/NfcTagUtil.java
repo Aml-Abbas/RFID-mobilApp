@@ -86,17 +86,7 @@ public class NfcTagUtil {
             try {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
-                int blockSize = 4;
-                int amountOfBlocksToRead = 8;
-                int offset = 0;
-                byte[] oldData = new byte[34];
-
-                byte[] cmdRead = getCommand(tagId, readSingleBlockCommand, (byte) 0x00);
-                for (int i = 0; i < amountOfBlocksToRead; i++) {
-                    cmdRead[10] = (byte) ((offset + i) & 0x0ff);
-                    byte[] response = nfcV.transceive(cmdRead);
-                    Utilities.copyByteArray(response, 0, oldData, i * 4, 4);
-                }
+                byte[] oldData = readBlocks(tagId, nfcV, activity, 0, 8);;
 
                 char[] newData = Utilities.initdata(oldData);
                 char[] newDataWithBarcode = NfcTagUtil.setBarcode(itemId, newData);
