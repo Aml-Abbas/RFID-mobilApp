@@ -82,11 +82,10 @@ public class NfcTagUtil {
             try {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
-                int maxDataAmount = nfcV.getMaxTransceiveLength(); // Using one of my tags this results in 253
-                int blockSize = 4; // This can be fetched/identified for some ISO15693 tags using system info.
-                int amountOfBlocksToRead = maxDataAmount / blockSize;
+                int maxDataAmount = nfcV.getMaxTransceiveLength();
+                int blockSize = 4;
+                int amountOfBlocksToRead =8;
                 int offset = 0;
-                amountOfBlocksToRead = 8; // original amountOfBlocksToRead might be 63 (253/4), but lets settle with 8 blocks since we know the barcode fits well within.
                 byte[] oldData = new byte[34];
 
                 byte[] cmdRead = getCommandReadSingleBlock(tagId);
