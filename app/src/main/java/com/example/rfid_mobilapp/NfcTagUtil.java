@@ -268,19 +268,10 @@ public class NfcTagUtil {
     }
 
     private static char[] setBarcode(String barcode, char[] currentData) {
-        return replaceStringAt(barcode, 2, 17, currentData);
+        return Utilities.replaceStringAt(barcode, 2, 17, currentData);
     }
 
-    private static char[] replaceStringAt(String stringValue, int start, int len, char[] currentData) {
-        for (int i = 0; i < len; i++) {
-            if (i >= stringValue.length()) {
-                currentData[start+i]='\0';
-            } else {
-                currentData[start+i]=stringValue.charAt(i);
-            }
-        }
-        return currentData;
-    }
+
 
 
 }
