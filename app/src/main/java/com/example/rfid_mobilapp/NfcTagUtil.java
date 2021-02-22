@@ -107,7 +107,7 @@ public class NfcTagUtil {
                     cmd[10] = (byte)((offset + i) & 0x0ff);
                     System.arraycopy(newDataToWrite, blockSize * i, cmd, 11, blockSize);
 
-                    byte[] response = nfcV.transceive(cmd);
+                    nfcV.transceive(cmd);
                 }
                 nfcV.close();
                 Toast.makeText(activity, "Success to write to the tag. The new itemId is "+itemId , Toast.LENGTH_LONG).show();
@@ -126,7 +126,7 @@ public class NfcTagUtil {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
                 byte[] cmd= getCommandCheckIn(tagId);
-                byte[] response = nfcV.transceive(cmd);
+                nfcV.transceive(cmd);
 
                 nfcV.close();
                 Toast.makeText(activity, "Success to check in." , Toast.LENGTH_LONG).show();
