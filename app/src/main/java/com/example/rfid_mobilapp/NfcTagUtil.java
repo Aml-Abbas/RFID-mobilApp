@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcV;
-import android.util.Log;
 import android.widget.Toast;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -48,7 +47,7 @@ public class NfcTagUtil {
 
                     noId = false;
                 } else {
-                    noId = isEmtpy(primeItemId);
+                    noId = isEmpty(primeItemId);
                 }
 
                 if (noId) {
@@ -228,7 +227,7 @@ public class NfcTagUtil {
         return cmd;
     }
 
-    private static boolean isEmtpy(byte[] primeItemId) {
+    private static boolean isEmpty(byte[] primeItemId) {
         for (int i = 0; i < primeItemId.length; i++) {
             if (primeItemId[i] != 0) {
                 return false;
