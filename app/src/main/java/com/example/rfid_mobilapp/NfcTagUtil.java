@@ -196,8 +196,8 @@ public class NfcTagUtil {
     private static byte[] getSystemInformation(byte[] tagId) {
 
         byte[] cmd = new byte[]{
-                (byte) 0x20,
-                (byte) 0x2B,
+                flag,
+                getSystemInfoCommand,
                 (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
         };
         System.arraycopy(tagId, 0, cmd, 2, 8);
