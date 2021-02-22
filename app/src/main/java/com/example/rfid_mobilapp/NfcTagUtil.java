@@ -33,10 +33,10 @@ public class NfcTagUtil {
 
             byte[] tagId = tag.getId();
 
-                byte[] oldData = readFirstBlock(tagId, nfcV, activity);
+                byte[] oldData = readBlocks(tagId, nfcV, activity, 0, 8);
 
                 byte[] primeItemId = new byte[16];
-                boolean alternativItemId= false;
+                boolean alternativeItemId= false;
 
                 byte[] primeItemId2 = new byte[16];
                 Utilities.copyByteArray(oldData, 2, primeItemId, 0, 16);
@@ -46,12 +46,11 @@ public class NfcTagUtil {
                 String stringOfPrimaryId = new String(primeItemId, StandardCharsets.UTF_8);
 
                 if (stringOfPrimaryId.charAt(0) == '1') {
-                    alternativItemId= true;
-                  //  byte[] OptionalBlock = nfcV.transceive(getCommandReadSingleBlock(tagId));
-                //    Utilities.copyByteArray(OptionalBlock, 4, primeItemId2, 0, 16);
-
+                    alternativeItemId= true;
+                    byte[] OptionalBlock = readBlocks(tagId, nfcV, activity, 8, 6);
+                    Utilities.copyByteArray(OptionalBlock, 4, primeItemId2, 0, 16);
                 }
-                if (!alternativItemId) {
+                if (!alternativeItemId) {
                     payloadString = new String(primeItemId, StandardCharsets.UTF_8);
                 } else {
                     payloadString = new String(primeItemId, StandardCharsets.UTF_8)+
@@ -62,24 +61,22 @@ public class NfcTagUtil {
         return payloadString;
     }
 
-    private static byte[] readFirstBlock(byte[] tagId, NfcV nfcV, Activity activity) {
-        byte[] oldData = new byte[34];
+    private static byte[] readBlocks(byte[] tagId, NfcV nfcV, Activity activity, int offset, int blocks) {
+        byte[] oldData = new byte[4* blocks];
         try {
-           nfcV.connect();
-           int offset = 0;
-           byte[] cmdRead = getCommand(tagId, readSingleBlockCommand, (byte) 0x00);
-           for (int i = 0; i < 8; i++) {
-               cmdRead[10] = (byte) ((offset + i) & 0x0ff);
-               byte[] response = nfcV.transceive(cmdRead);
-               Utilities.copyByteArray(response, 1, oldData, i * 4, 4);
-           }
-           nfcV.close();
-       }catch (IOException ioException){
-           Toast.makeText(activity , "Failed to read the first block", Toast.LENGTH_LONG).show();
-       }
+            nfcV.connect();
+            byte[] cmdRead = getCommand(tagId, readSingleBlockCommand, (byte) offset);
+            for (int i = 0; i < blocks; i++) {
+                cmdRead[10] = (byte) ((offset + i) & 0x0ff);
+                byte[] response = nfcV.transceive(cmdRead);
+                Utilities.copyByteArray(response, 1, oldData, i * 4, 4);
+            }
+            nfcV.close();
+        }catch (IOException ioException){
+            Toast.makeText(activity , "Failed to read the tag", Toast.LENGTH_LONG).show();
+        }
         return oldData;
     }
-
 
     public static void writeNewItemId(String itemId, Intent intent, Activity activity) {
         if (intent != null) {
