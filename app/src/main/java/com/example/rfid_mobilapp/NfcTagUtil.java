@@ -82,7 +82,6 @@ public class NfcTagUtil {
             try {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
-                int maxDataAmount = nfcV.getMaxTransceiveLength();
                 int blockSize = 4;
                 int amountOfBlocksToRead =8;
                 int offset = 0;
