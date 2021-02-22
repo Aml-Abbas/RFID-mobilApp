@@ -125,6 +125,14 @@ public class NfcTagUtil {
         }
     }
 
+    public static void check(Intent intent, Activity activity, String checkValue) {
+        if (checkValue.equals("false")){
+            checkIn(intent, activity);
+        }else {
+            checkOut(intent, activity);
+        }
+    }
+
     public static void checkIn(Intent intent, Activity activity) {
         if (intent != null) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
