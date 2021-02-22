@@ -126,14 +126,7 @@ public class NfcTagUtil {
     }
 
     public static void check(Intent intent, Activity activity, String checkValue) {
-        if (checkValue.equals("false")){
-            checkIn(intent, activity);
-        }else {
-            checkOut(intent, activity);
-        }
-    }
 
-    public static void checkIn(Intent intent, Activity activity) {
         if (intent != null) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NfcV nfcV = NfcV.get(tag);
@@ -141,37 +134,31 @@ public class NfcTagUtil {
             try {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
-                byte[] cmd = getCommand(tagId, writeAFICommand, checkInValue);
+                byte[] cmd;
+                if (checkValue.equals("false")){
+                    cmd = getCommand(tagId, writeAFICommand, checkOutValue);
+                }else {
+                   cmd = getCommand(tagId, writeAFICommand, checkInValue);
+                }
                 nfcV.transceive(cmd);
 
                 nfcV.close();
-                Toast.makeText(activity, "Success to check in.", Toast.LENGTH_LONG).show();
+                if (checkValue.equals("false")) {
+                    Toast.makeText(activity, "Success to check out.", Toast.LENGTH_LONG).show();
+
+                }else {
+                    Toast.makeText(activity, "Success to check in.", Toast.LENGTH_LONG).show();
+                }
             } catch (IOException ioException) {
-                Toast.makeText(activity, "Failed to check in", Toast.LENGTH_LONG).show();
+                if (checkValue.equals("false")) {
+                    Toast.makeText(activity, "Failed to check out.", Toast.LENGTH_LONG).show();
+                }else {
+                    Toast.makeText(activity, "Failed to check in", Toast.LENGTH_LONG).show();
+                }
             }
         }
     }
 
-
-    public static void checkOut(Intent intent, Activity activity) {
-        if (intent != null) {
-            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            NfcV nfcV = NfcV.get(tag);
-
-            try {
-                nfcV.connect();
-                byte[] tagId = tag.getId();
-                byte[] cmd = getCommand(tagId, writeAFICommand, checkOutValue);
-
-                nfcV.transceive(cmd);
-
-                nfcV.close();
-                Toast.makeText(activity, "Success to check out.", Toast.LENGTH_LONG).show();
-            } catch (IOException ioException) {
-                Toast.makeText(activity, "Failed to check out", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 
     public static <T> void enableNFCInForeground(NfcAdapter nfcAdapter, Activity activity, Class<T> classType) {
         PendingIntent pendingIntent = PendingIntent.getActivity(
