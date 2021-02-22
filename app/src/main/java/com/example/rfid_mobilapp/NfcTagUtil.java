@@ -125,9 +125,7 @@ public class NfcTagUtil {
             try {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
-                byte[] cmd= getSystemInformation(tagId);
-                byte[] oldData= nfcV.transceive(cmd);
-                cmd= getCommandCheckIn(tagId);
+                byte[] cmd= getCommandCheckIn(tagId);
                 byte[] response = nfcV.transceive(cmd);
 
                 nfcV.close();
@@ -147,11 +145,7 @@ public class NfcTagUtil {
             try {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
-                byte[] cmd= getSystemInformation(tagId);
-
-                byte[] oldData= nfcV.transceive(cmd);
-
-                cmd= getCommandCheckOut(tagId);
+                byte[] cmd= getCommandCheckOut(tagId);
 
                 nfcV.transceive(cmd);
 
