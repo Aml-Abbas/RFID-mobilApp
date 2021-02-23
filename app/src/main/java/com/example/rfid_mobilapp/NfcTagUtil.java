@@ -112,7 +112,7 @@ public class NfcTagUtil {
         }
     }
 
-    public static void check(Intent intent, Activity activity, String checkValue) {
+    public static void check(Intent intent, Activity activity, boolean checkValue) {
 
         if (intent != null) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -122,7 +122,7 @@ public class NfcTagUtil {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
                 byte[] cmd;
-                if (checkValue.equals("false")) {
+                if (!checkValue) {
                     cmd = getCommand(tagId, writeAFICommand, checkOutValue);
                 } else {
                     cmd = getCommand(tagId, writeAFICommand, checkInValue);
@@ -130,14 +130,14 @@ public class NfcTagUtil {
                 nfcV.transceive(cmd);
 
                 nfcV.close();
-                if (checkValue.equals("false")) {
+                if (!checkValue) {
                     Toast.makeText(activity, "Success to check out.", Toast.LENGTH_LONG).show();
 
                 } else {
                     Toast.makeText(activity, "Success to check in.", Toast.LENGTH_LONG).show();
                 }
             } catch (IOException ioException) {
-                if (checkValue.equals("false")) {
+                if (!checkValue) {
                     Toast.makeText(activity, "Failed to check out.", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(activity, "Failed to check in", Toast.LENGTH_LONG).show();
