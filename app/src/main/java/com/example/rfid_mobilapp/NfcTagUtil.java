@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcV;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -62,20 +63,20 @@ public class NfcTagUtil {
     }
 
     private static byte[] readBlocks(byte[] tagId, NfcV nfcV, Activity activity, int offset, int blocks) {
-        byte[] oldData = new byte[4 * blocks];
+        byte[] resultData = new byte[4 * blocks];
         try {
             nfcV.connect();
             byte[] cmdRead = getCommand(tagId, readSingleBlockCommand, (byte) offset);
             for (int i = 0; i < blocks; i++) {
                 cmdRead[10] = (byte) ((offset + i) & 0x0ff);
                 byte[] response = nfcV.transceive(cmdRead);
-                Utilities.copyByteArray(response, 1, oldData, i * 4, 4);
+                Utilities.copyByteArray(response, 1, resultData, i * 4, 4);
             }
             nfcV.close();
         } catch (IOException ioException) {
             Toast.makeText(activity, "Failed to read the tag", Toast.LENGTH_LONG).show();
         }
-        return oldData;
+        return resultData;
     }
 
     public static void writeNewItemId(String itemId, Intent intent, Activity activity) {
@@ -85,11 +86,7 @@ public class NfcTagUtil {
             byte[] tagId = tag.getId();
 
             byte[] oldData = readBlocks(tagId, nfcV, activity, 0, 8);
-            ;
-
-            char[] newData = Utilities.initdata(oldData);
-            char[] newDataWithBarcode = NfcTagUtil.setBarcode(itemId, newData);
-            byte[] newDataToWrite = new String(newDataWithBarcode).getBytes(StandardCharsets.UTF_8);
+            byte[] newDataToWrite = NfcTagUtil.setBarcode(itemId, oldData);
 
             writeBlocks(tagId, nfcV, activity, 0, 8, newDataToWrite);
         }
@@ -106,13 +103,13 @@ public class NfcTagUtil {
                 nfcV.transceive(cmd);
             }
             nfcV.close();
-            Toast.makeText(activity, "Success to write to the tag. The new itemId is ", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, "Success to write to the tag.", Toast.LENGTH_LONG).show();
         } catch (IOException ioException) {
             Toast.makeText(activity, "Failed to write to the tag", Toast.LENGTH_LONG).show();
         }
     }
 
-    public static void check(Intent intent, Activity activity, String checkValue) {
+    public static void check(Intent intent, Activity activity, boolean checkValue) {
 
         if (intent != null) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -122,7 +119,7 @@ public class NfcTagUtil {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
                 byte[] cmd;
-                if (checkValue.equals("false")) {
+                if (!checkValue) {
                     cmd = getCommand(tagId, writeAFICommand, checkOutValue);
                 } else {
                     cmd = getCommand(tagId, writeAFICommand, checkInValue);
@@ -130,14 +127,14 @@ public class NfcTagUtil {
                 nfcV.transceive(cmd);
 
                 nfcV.close();
-                if (checkValue.equals("false")) {
+                if (!checkValue) {
                     Toast.makeText(activity, "Success to check out.", Toast.LENGTH_LONG).show();
 
                 } else {
                     Toast.makeText(activity, "Success to check in.", Toast.LENGTH_LONG).show();
                 }
             } catch (IOException ioException) {
-                if (checkValue.equals("false")) {
+                if (!checkValue) {
                     Toast.makeText(activity, "Failed to check out.", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(activity, "Failed to check in", Toast.LENGTH_LONG).show();
@@ -199,8 +196,8 @@ public class NfcTagUtil {
         return cmd;
     }
 
-    private static char[] setBarcode(String barcode, char[] currentData) {
-        return Utilities.replaceStringAt(barcode, 2, 17, currentData);
+    private static byte[] setBarcode(String barcode, byte[] currentData) {
+        return Utilities.replaceByteAt(barcode, 2, 16, currentData);
     }
 
 }
