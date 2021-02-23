@@ -62,20 +62,20 @@ public class NfcTagUtil {
     }
 
     private static byte[] readBlocks(byte[] tagId, NfcV nfcV, Activity activity, int offset, int blocks) {
-        byte[] oldData = new byte[4 * blocks];
+        byte[] resultData = new byte[4 * blocks];
         try {
             nfcV.connect();
             byte[] cmdRead = getCommand(tagId, readSingleBlockCommand, (byte) offset);
             for (int i = 0; i < blocks; i++) {
                 cmdRead[10] = (byte) ((offset + i) & 0x0ff);
                 byte[] response = nfcV.transceive(cmdRead);
-                Utilities.copyByteArray(response, 1, oldData, i * 4, 4);
+                Utilities.copyByteArray(response, 1, resultData, i * 4, 4);
             }
             nfcV.close();
         } catch (IOException ioException) {
             Toast.makeText(activity, "Failed to read the tag", Toast.LENGTH_LONG).show();
         }
-        return oldData;
+        return resultData;
     }
 
     public static void writeNewItemId(String itemId, Intent intent, Activity activity) {
