@@ -31,101 +31,89 @@ public class NfcTagUtil {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NfcV nfcV = NfcV.get(tag);
 
-            boolean noId = true;
+            byte[] tagId = tag.getId();
 
-            try {
-                nfcV.connect();
+            byte[] oldData = readBlocks(tagId, nfcV, activity, 0, 8);
 
-                byte[] tagId = tag.getId();
+            byte[] primeItemId = new byte[16];
+            boolean alternativeItemId = false;
 
-                int offset = 0;
-                byte[] oldData = new byte[34];
-                byte[] cmdRead = getCommand(tagId, readSingleBlockCommand, (byte) 0x00);
-                for (int i = 0; i < 8; i++) {
-                    cmdRead[10] = (byte) ((offset + i) & 0x0ff);
-                    byte[] response = nfcV.transceive(cmdRead);
-                    Utilities.copyByteArray(response, 1, oldData, i * 4, 4);
-                }
-
-                byte[] primeItemId = new byte[16];
-                byte[] primeItemId2 = new byte[16];
-                Utilities.copyByteArray(oldData, 2, primeItemId, 0, 16);
-                if (primeItemId[0] == 1) {
-
-                  //  byte[] OptionalBlock = nfcV.transceive(getCommandReadSingleBlock(tagId));
-                //    Utilities.copyByteArray(OptionalBlock, 4, primeItemId2, 0, 16);
-
-                    noId = false;
-                } else {
-                    noId = Utilities.isEmpty(primeItemId);
-                }
-
-                if (noId) {
-                    payloadString = "NO ID";
-                } else if (primeItemId[0] != 1) {
-                    payloadString = new String(primeItemId, StandardCharsets.UTF_8);
-                } else {
-                    byte[] newPrimeItemId = new byte[16 * 2];
-
-                    for (int i = 0; i < 16; i++) {
-                        newPrimeItemId[i] = primeItemId[i];
-                    }
-                    for (int i = 0; i < 16; i++) {
-                        newPrimeItemId[i + 16] = primeItemId2[i];
-                    }
-                    payloadString = new String(newPrimeItemId, StandardCharsets.UTF_8);
-                }
-                nfcV.close();
-
-            } catch (IOException ioException) {
-                Toast.makeText(activity, "Failed to read tag", Toast.LENGTH_LONG).show();
+            byte[] primeItemId2 = new byte[16];
+            Utilities.copyByteArray(oldData, 2, primeItemId, 0, 16);
+            if (Utilities.isEmpty(primeItemId)) {
+                return "No Id";
             }
+            String stringOfPrimaryId = new String(primeItemId, StandardCharsets.UTF_8);
+
+            if (stringOfPrimaryId.charAt(0) == '1') {
+                alternativeItemId = true;
+                byte[] OptionalBlock = readBlocks(tagId, nfcV, activity, 8, 6);
+                Utilities.copyByteArray(OptionalBlock, 4, primeItemId2, 0, 16);
+            }
+            if (!alternativeItemId) {
+                payloadString = new String(primeItemId, StandardCharsets.UTF_8);
+            } else {
+                payloadString = new String(primeItemId, StandardCharsets.UTF_8) +
+                        new String(primeItemId2, StandardCharsets.UTF_8);
+            }
+
         }
         return payloadString;
+    }
+
+    private static byte[] readBlocks(byte[] tagId, NfcV nfcV, Activity activity, int offset, int blocks) {
+        byte[] oldData = new byte[4 * blocks];
+        try {
+            nfcV.connect();
+            byte[] cmdRead = getCommand(tagId, readSingleBlockCommand, (byte) offset);
+            for (int i = 0; i < blocks; i++) {
+                cmdRead[10] = (byte) ((offset + i) & 0x0ff);
+                byte[] response = nfcV.transceive(cmdRead);
+                Utilities.copyByteArray(response, 1, oldData, i * 4, 4);
+            }
+            nfcV.close();
+        } catch (IOException ioException) {
+            Toast.makeText(activity, "Failed to read the tag", Toast.LENGTH_LONG).show();
+        }
+        return oldData;
     }
 
     public static void writeNewItemId(String itemId, Intent intent, Activity activity) {
         if (intent != null) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NfcV nfcV = NfcV.get(tag);
+            byte[] tagId = tag.getId();
 
-            try {
-                nfcV.connect();
-                byte[] tagId = tag.getId();
-                int blockSize = 4;
-                int amountOfBlocksToRead = 8;
-                int offset = 0;
-                byte[] oldData = new byte[34];
+            byte[] oldData = readBlocks(tagId, nfcV, activity, 0, 8);
+            ;
 
-                byte[] cmdRead = getCommand(tagId, readSingleBlockCommand, (byte) 0x00);
-                for (int i = 0; i < amountOfBlocksToRead; i++) {
-                    cmdRead[10] = (byte) ((offset + i) & 0x0ff);
-                    byte[] response = nfcV.transceive(cmdRead);
-                    Utilities.copyByteArray(response, 0, oldData, i * 4, 4);
-                }
+            char[] newData = Utilities.initdata(oldData);
+            char[] newDataWithBarcode = NfcTagUtil.setBarcode(itemId, newData);
+            byte[] newDataToWrite = new String(newDataWithBarcode).getBytes(StandardCharsets.UTF_8);
 
-                char[] newData = Utilities.initdata(oldData);
-                char[] newDataWithBarcode = NfcTagUtil.setBarcode(itemId, newData);
-                byte[] newDataToWrite = new String(newDataWithBarcode).getBytes(StandardCharsets.UTF_8);
-
-                int blocks = newDataToWrite.length / blockSize;
-
-                byte[] cmd = getCommandWriteSingleBlock(tagId);
-                for (int i = 0; i < blocks; i++) {
-                    cmd[10] = (byte) ((offset + i) & 0x0ff);
-                    System.arraycopy(newDataToWrite, blockSize * i, cmd, 11, blockSize);
-
-                    nfcV.transceive(cmd);
-                }
-                nfcV.close();
-                Toast.makeText(activity, "Success to write to the tag. The new itemId is " + itemId, Toast.LENGTH_LONG).show();
-            } catch (IOException ioException) {
-                Toast.makeText(activity, "Failed to write to the tag", Toast.LENGTH_LONG).show();
-            }
+            writeBlocks(tagId, nfcV, activity, 0, 8, newDataToWrite);
         }
     }
 
-    public static void checkIn(Intent intent, Activity activity) {
+    private static void writeBlocks(byte[] tagId, NfcV nfcV, Activity activity, int offset, int blocks, byte[] newDataToWrite) {
+        try {
+            nfcV.connect();
+            byte[] cmd = getCommandWriteSingleBlock(tagId);
+            for (int i = 0; i < blocks; i++) {
+                cmd[10] = (byte) ((offset + i) & 0x0ff);
+                System.arraycopy(newDataToWrite, 4 * i, cmd, 11, 4);
+
+                nfcV.transceive(cmd);
+            }
+            nfcV.close();
+            Toast.makeText(activity, "Success to write to the tag. The new itemId is ", Toast.LENGTH_LONG).show();
+        } catch (IOException ioException) {
+            Toast.makeText(activity, "Failed to write to the tag", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public static void check(Intent intent, Activity activity, String checkValue) {
+
         if (intent != null) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NfcV nfcV = NfcV.get(tag);
@@ -133,37 +121,31 @@ public class NfcTagUtil {
             try {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
-                byte[] cmd = getCommand(tagId, writeAFICommand, checkInValue);
+                byte[] cmd;
+                if (checkValue.equals("false")) {
+                    cmd = getCommand(tagId, writeAFICommand, checkOutValue);
+                } else {
+                    cmd = getCommand(tagId, writeAFICommand, checkInValue);
+                }
                 nfcV.transceive(cmd);
 
                 nfcV.close();
-                Toast.makeText(activity, "Success to check in.", Toast.LENGTH_LONG).show();
+                if (checkValue.equals("false")) {
+                    Toast.makeText(activity, "Success to check out.", Toast.LENGTH_LONG).show();
+
+                } else {
+                    Toast.makeText(activity, "Success to check in.", Toast.LENGTH_LONG).show();
+                }
             } catch (IOException ioException) {
-                Toast.makeText(activity, "Failed to check in", Toast.LENGTH_LONG).show();
+                if (checkValue.equals("false")) {
+                    Toast.makeText(activity, "Failed to check out.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(activity, "Failed to check in", Toast.LENGTH_LONG).show();
+                }
             }
         }
     }
 
-
-    public static void checkOut(Intent intent, Activity activity) {
-        if (intent != null) {
-            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            NfcV nfcV = NfcV.get(tag);
-
-            try {
-                nfcV.connect();
-                byte[] tagId = tag.getId();
-                byte[] cmd = getCommand(tagId, writeAFICommand, checkOutValue);
-
-                nfcV.transceive(cmd);
-
-                nfcV.close();
-                Toast.makeText(activity, "Success to check out.", Toast.LENGTH_LONG).show();
-            } catch (IOException ioException) {
-                Toast.makeText(activity, "Failed to check out", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 
     public static <T> void enableNFCInForeground(NfcAdapter nfcAdapter, Activity activity, Class<T> classType) {
         PendingIntent pendingIntent = PendingIntent.getActivity(
@@ -196,8 +178,8 @@ public class NfcTagUtil {
     private static byte[] getSystemInformation(byte[] tagId) {
 
         byte[] cmd = new byte[]{
-                (byte) 0x20,
-                (byte) 0x2B,
+                flag,
+                getSystemInfoCommand,
                 (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
         };
         System.arraycopy(tagId, 0, cmd, 2, 8);

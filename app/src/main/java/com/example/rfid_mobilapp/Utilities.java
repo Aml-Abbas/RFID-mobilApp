@@ -1,5 +1,7 @@
 package com.example.rfid_mobilapp;
 
+import java.nio.charset.StandardCharsets;
+
 public class Utilities {
 
     public static char[] initdata(byte[] in) {
@@ -39,4 +41,5 @@ public class Utilities {
         }
         return currentData;
     }
+
 }
