@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcV;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -85,11 +86,7 @@ public class NfcTagUtil {
             byte[] tagId = tag.getId();
 
             byte[] oldData = readBlocks(tagId, nfcV, activity, 0, 8);
-            ;
-
-            char[] newData = Utilities.initdata(oldData);
-            char[] newDataWithBarcode = NfcTagUtil.setBarcode(itemId, newData);
-            byte[] newDataToWrite = new String(newDataWithBarcode).getBytes(StandardCharsets.UTF_8);
+            byte[] newDataToWrite = NfcTagUtil.setBarcode(itemId, oldData);
 
             writeBlocks(tagId, nfcV, activity, 0, 8, newDataToWrite);
         }
@@ -106,7 +103,7 @@ public class NfcTagUtil {
                 nfcV.transceive(cmd);
             }
             nfcV.close();
-            Toast.makeText(activity, "Success to write to the tag. The new itemId is ", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, "Success to write to the tag.", Toast.LENGTH_LONG).show();
         } catch (IOException ioException) {
             Toast.makeText(activity, "Failed to write to the tag", Toast.LENGTH_LONG).show();
         }
@@ -199,8 +196,8 @@ public class NfcTagUtil {
         return cmd;
     }
 
-    private static char[] setBarcode(String barcode, char[] currentData) {
-        return Utilities.replaceStringAt(barcode, 2, 17, currentData);
+    private static byte[] setBarcode(String barcode, byte[] currentData) {
+        return Utilities.replaceByteAt(barcode, 2, 16, currentData);
     }
 
 }

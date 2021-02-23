@@ -1,18 +1,7 @@
 package com.example.rfid_mobilapp;
 
-import java.nio.charset.StandardCharsets;
-
 public class Utilities {
 
-    public static char[] initdata(byte[] in) {
-
-        char[] userdata = new char[in.length];
-
-        for (int i = 0; i < in.length; i++) {
-            userdata[i]=(char)in[i];
-        }
-        return userdata;
-    }
 
     public static void copyByteArray(byte[] fromArray, int fromIndex,
                                       byte[] toArray, int fromIndexTo, int length) {
@@ -31,15 +20,16 @@ public class Utilities {
         return true;
     }
 
-    public static char[] replaceStringAt(String stringValue, int start, int len, char[] currentData) {
-        for (int i = 0; i < len; i++) {
-            if (i >= stringValue.length()) {
-                currentData[start+i]='\0';
-            } else {
-                currentData[start+i]=stringValue.charAt(i);
-            }
+    public static byte[] replaceByteAt(String barcode, int start, int len, byte[] currentData) {
+
+        byte[] temp= new byte[16];
+        for (int i=0; i<barcode.length(); i++){
+            temp[i]= (byte) barcode.charAt(i);
+        }
+
+        for (int i=0; i<len; i++){
+            currentData[start+i]= temp[i];
         }
         return currentData;
     }
-
 }
