@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("https://aml-abbas.github.io/rfid-pages/?itemId=" + payload));
-            Intent chooser = Intent.createChooser(intent, "Open webbsite for item:" + payload);
+            Intent chooser = Intent.createChooser(intent, "Open website for item:" + payload);
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(chooser);
             }
