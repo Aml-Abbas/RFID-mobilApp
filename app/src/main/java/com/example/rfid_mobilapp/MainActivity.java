@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }else {
                 NfcTagUtil.check(intent, this, true);
             }
+            checkValue= null;
         }else if(newItemId!= ""){
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
             newItemId="";
