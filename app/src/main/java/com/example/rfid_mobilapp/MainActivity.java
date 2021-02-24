@@ -16,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
     String newItemId;
     String checkValue;
 
+    private static final boolean checkIn = true;
+    private static final boolean checkOut = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,11 +55,12 @@ public class MainActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         if (checkValue!= null){
             if (checkValue.equals("false")){
-                NfcTagUtil.check(intent, this, false);
+                NfcTagUtil.check(intent, this, checkOut);
             }else {
-                NfcTagUtil.check(intent, this, true);
+                NfcTagUtil.check(intent, this, checkIn);
             }
             checkValue= null;
+            newItemId= "";
         }else if(newItemId!= ""){
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
             newItemId="";
