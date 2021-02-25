@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     Context mainActivityContext;
     String newItemId;
     String checkValue;
+    tagInsertDialog dialog;
 
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
@@ -77,12 +78,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(chooser);
             }
         }
-
+        dialog.dismiss();
     }
 
     private void openDialog(){
-        tagInsertDialog exampleDialog = new tagInsertDialog();
-        exampleDialog.show(getSupportFragmentManager(), "example dialog");
-
+        dialog = new tagInsertDialog();
+        dialog.show(getSupportFragmentManager(), "dialog");
     }
 }
