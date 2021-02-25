@@ -12,7 +12,7 @@ public class tagInsertDialog extends AppCompatDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Welcome")
-                .setMessage("Please, insert the tag against the mobil surface")
+                .setMessage("Please, place the tag against the mobil surface")
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

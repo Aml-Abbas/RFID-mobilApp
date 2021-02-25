@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             newItemId= itemId;
             checkValue = uri.getQueryParameter("checkValue");
         }
+        openDialog();
     }
     @Override
     protected void onResume() {
@@ -79,4 +80,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void openDialog(){
+        tagInsertDialog exampleDialog = new tagInsertDialog();
+        exampleDialog.show(getSupportFragmentManager(), "example dialog");
+
+    }
 }
