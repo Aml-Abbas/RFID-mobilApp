@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 
@@ -16,6 +15,9 @@ public class MainActivity extends AppCompatActivity {
     Context mainActivityContext;
     String newItemId;
     String checkValue;
+
+    private static final boolean checkIn = true;
+    private static final boolean checkOut = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             newItemId= itemId;
             checkValue = uri.getQueryParameter("checkValue");
         }
+        openDialog();
     }
     @Override
     protected void onResume() {
@@ -53,10 +56,12 @@ public class MainActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         if (checkValue!= null){
             if (checkValue.equals("false")){
-                NfcTagUtil.check(intent, this, false);
+                NfcTagUtil.check(intent, this, checkOut);
             }else {
-                NfcTagUtil.check(intent, this, true);
+                NfcTagUtil.check(intent, this, checkIn);
             }
+            checkValue= null;
+            newItemId= "";
         }else if(newItemId!= ""){
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
             newItemId="";
@@ -66,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
             tagContentTextView.setText(payload);
 
             intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("https://aml-abbas.github.io/rfid-pages/?itemId=" + payload));
-            Intent chooser = Intent.createChooser(intent, "Open webbsite for item:" + payload);
+            intent.setData(Uri.parse("https://aml-abbas.github.io/Quria/?itemId=" + payload));
+            Intent chooser = Intent.createChooser(intent, "Open website for item:" + payload);
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(chooser);
             }
@@ -75,4 +80,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void openDialog(){
+        tagInsertDialog exampleDialog = new tagInsertDialog();
+        exampleDialog.show(getSupportFragmentManager(), "example dialog");
+
+    }
 }
