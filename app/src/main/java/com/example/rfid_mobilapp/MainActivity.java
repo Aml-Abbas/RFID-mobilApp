@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     String checkValue;
     tagInsertDialog dialog;
 
+
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
 
