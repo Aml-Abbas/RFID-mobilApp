@@ -1,7 +1,6 @@
 package com.example.rfid_mobilapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             Uri uri = intent.getData();
             String itemId = uri.getQueryParameter("itemid");
-            tagContentTextView.setText(R.string.show_id + itemId);
+            tagContentTextView.setText("item id: " + itemId);
             newItemId = itemId;
             checkValue = uri.getQueryParameter("checkValue");
         }

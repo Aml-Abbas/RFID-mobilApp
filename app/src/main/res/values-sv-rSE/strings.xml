@@ -6,13 +6,9 @@
 
     <string name="success_write">lyckades skriva till taggen.</string>
     <string name="failed_write">misslyckades skriva till taggen.</string>
-
     <string name="place_tag">är du snäll, placera taggen bakom mobilens yta</string>
-
-
     <string name="ok">okj</string>
     <string name="welcome">Välkomna</string>
-
     <string name="no_id">ingen id</string>
     <string name="failed_read">misslyckades läsa taggen.</string>
     <string name="failed_checkin">misslyckades checka in.</string>
@@ -21,7 +17,6 @@
     <string name="success_checkout">lyckades checka out.</string>
     <string name="change_lan">Ändra sråk.</string>
     <string name="open_site">Öppna web sida för item:</string>
-
     <string name="same_language">Språket är redan valt.</string>
 
 </resources>
