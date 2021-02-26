@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             newItemId = itemId;
             checkValue = uri.getQueryParameter("checkValue");
         }
-        openDialog();
+        openHelpUserDialog();
     }
 
 
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.dismiss();
     }
 
-    private void openDialog() {
+    private void openHelpUserDialog() {
         dialog = new tagInsertDialog();
         dialog.show(getSupportFragmentManager(), "dialog");
     }
