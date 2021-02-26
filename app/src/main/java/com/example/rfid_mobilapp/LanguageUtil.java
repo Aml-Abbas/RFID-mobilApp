@@ -19,7 +19,7 @@ public class LanguageUtil {
 
     public static void getLanguageStruff(Activity activity, Spinner spinner, String currentLanguage, Resources resources) {
 
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
 
         list.add("Select language");
         list.add("English");
