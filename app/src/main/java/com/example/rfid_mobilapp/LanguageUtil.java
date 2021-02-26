@@ -38,7 +38,6 @@ public class LanguageUtil {
                         break;
                     case 2:
                         LanguageUtil.setLocale(activity, currentLanguage, "sv", resources);
-
                 }
             }
 
