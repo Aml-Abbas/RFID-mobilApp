@@ -25,7 +25,7 @@ public class NfcTagUtil {
     private static final byte checkOutValue = (byte) 0xC2;
 
     public static String getItemId(Intent intent, Activity activity) {
-        String payloadString = "test";
+        String payloadString = "";
 
         if (intent != null) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -41,7 +41,7 @@ public class NfcTagUtil {
             byte[] primeItemId2 = new byte[16];
             Utilities.copyByteArray(oldData, 2, primeItemId, 0, 16);
             if (Utilities.isEmpty(primeItemId)) {
-                return String.valueOf(R.string.no_id);
+                return "No Id";
             }
             String stringOfPrimaryId = new String(primeItemId, StandardCharsets.UTF_8);
 
