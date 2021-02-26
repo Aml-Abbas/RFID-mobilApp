@@ -3,22 +3,12 @@ package com.example.rfid_mobilapp;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {

@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcV;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
