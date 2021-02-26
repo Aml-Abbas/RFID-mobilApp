@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             Uri uri = intent.getData();
             String itemId = uri.getQueryParameter("itemid");
-            tagContentTextView.setText("tag's new itemId: " + itemId);
+            tagContentTextView.setText(R.string.show_id + itemId);
             newItemId= itemId;
             checkValue = uri.getQueryParameter("checkValue");
         }
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("https://aml-abbas.github.io/Quria/?itemId=" + payload));
-            Intent chooser = Intent.createChooser(intent, "Open website for item:" + payload);
+            Intent chooser = Intent.createChooser(intent, R.string.open_site + payload);
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(chooser);
             }

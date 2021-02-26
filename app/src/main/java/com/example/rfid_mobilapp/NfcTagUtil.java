@@ -42,7 +42,7 @@ public class NfcTagUtil {
             byte[] primeItemId2 = new byte[16];
             Utilities.copyByteArray(oldData, 2, primeItemId, 0, 16);
             if (Utilities.isEmpty(primeItemId)) {
-                return "No Id";
+                return String.valueOf(R.string.no_id);
             }
             String stringOfPrimaryId = new String(primeItemId, StandardCharsets.UTF_8);
 
@@ -74,7 +74,7 @@ public class NfcTagUtil {
             }
             nfcV.close();
         } catch (IOException ioException) {
-            Toast.makeText(activity, "Failed to read the tag", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, R.string.failed_read, Toast.LENGTH_LONG).show();
         }
         return resultData;
     }
@@ -103,9 +103,9 @@ public class NfcTagUtil {
                 nfcV.transceive(cmd);
             }
             nfcV.close();
-            Toast.makeText(activity, "Success to write to the tag.", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, R.string.success_write, Toast.LENGTH_LONG).show();
         } catch (IOException ioException) {
-            Toast.makeText(activity, "Failed to write to the tag", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, R.string.failed_write, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -128,16 +128,16 @@ public class NfcTagUtil {
 
                 nfcV.close();
                 if (!checkValue) {
-                    Toast.makeText(activity, "Success to check out.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, R.string.success_checkout, Toast.LENGTH_LONG).show();
 
                 } else {
-                    Toast.makeText(activity, "Success to check in.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, R.string.success_checkin, Toast.LENGTH_LONG).show();
                 }
             } catch (IOException ioException) {
                 if (!checkValue) {
-                    Toast.makeText(activity, "Failed to check out.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, R.string.failed_checkout, Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(activity, "Failed to check in", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, R.string.failed_checkin, Toast.LENGTH_LONG).show();
                 }
             }
         }

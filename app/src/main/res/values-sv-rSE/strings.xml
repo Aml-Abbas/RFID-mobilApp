@@ -22,6 +22,7 @@
     <string name="failed_checkout">misslyckades checka out.</string>
     <string name="success_checkout">lyckades checka out.</string>
     <string name="change_lan">Ändra sråk.</string>
+    <string name="open_site">Öppna web sida för item:</string>
 
     <string name="text_view">ändrat till svenska.</string>
 
