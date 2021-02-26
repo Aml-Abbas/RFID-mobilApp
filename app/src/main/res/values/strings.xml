@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">RFID-mobilApp</string>
+    <string name="app_name">TestExJobb</string>
+    <string name="success_write">Success to write to the tag.</string>
+    <string name="failed_write">Failed to write to the tag.</string>
+
+    <string name="show_id">the tag new itemId is: </string>
+    <string name="place_tag">Please, place the tag against the mobil surface</string>
+    <string name="ok">ok</string>
+    <string name="welcome">Welcome</string>
+
+    <string name="no_id">No Id</string>
+    <string name="failed_read">Failed to read the tag.</string>
+    <string name="success_read">Success to read the tag</string>
+    <string name="failed_checkin">Failed to check in.</string>
+    <string name="success_checkin">Success to check in.</string>
+    <string name="failed_checkout">Failed to check out.</string>
+    <string name="success_checkout">Success to check out.</string>
+    <string name="change_lan">Change language.</string>
+
+    <string name="text_view">changed to english.</string>
+    <string name="text_english" translatable="false">English</string>
+    <string name="text_swedish" translatable="false">" Svenska"</string>
+
 </resources>
