@@ -2,7 +2,7 @@
 
 
 <resources>
-    <string name="app_name">TestExJobb</string>
+    <string name="app_name">RFID-mobilApp</string>
 
     <string name="success_write">lyckades skriva till taggen.</string>
     <string name="failed_write">misslyckades skriva till taggen.</string>

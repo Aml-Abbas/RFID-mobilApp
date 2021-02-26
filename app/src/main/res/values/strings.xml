@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TestExJobb</string>
+    <string name="app_name">RFID-mobileApp</string>
     <string name="success_write">Success to write to the tag.</string>
     <string name="failed_write">Failed to write to the tag.</string>
 
