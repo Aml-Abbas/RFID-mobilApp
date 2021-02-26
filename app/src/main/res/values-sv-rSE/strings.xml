@@ -7,7 +7,6 @@
     <string name="success_write">lyckades skriva till taggen.</string>
     <string name="failed_write">misslyckades skriva till taggen.</string>
 
-    <string name="show_id">taggens nya item id is:  </string>
     <string name="place_tag">är du snäll, placera taggen bakom mobilens yta</string>
 
 
@@ -16,7 +15,6 @@
 
     <string name="no_id">ingen id</string>
     <string name="failed_read">misslyckades läsa taggen.</string>
-    <string name="success_read">lyckades läsa taggen.</string>
     <string name="failed_checkin">misslyckades checka in.</string>
     <string name="success_checkin">lyckades checka in.</string>
     <string name="failed_checkout">misslyckades checka out.</string>
