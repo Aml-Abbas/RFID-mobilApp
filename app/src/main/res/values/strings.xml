@@ -19,7 +19,7 @@
 
     <string name="open_site">Open website for item:</string>
 
-    <string name="text_view">changed to english.</string>
+    <string name="same_language">Language already selected!</string>
     <string name="text_english" translatable="false">English</string>
     <string name="text_swedish" translatable="false">" Svenska"</string>
 
