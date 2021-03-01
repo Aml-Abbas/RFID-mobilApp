@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcV;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -26,7 +25,7 @@ public class NfcTagUtil {
     private static final byte checkOutValue = (byte) 0xC2;
 
     public static String getItemId(Intent intent, Activity activity) {
-        String payloadString = "test";
+        String payloadString = "";
 
         if (intent != null) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -74,7 +73,7 @@ public class NfcTagUtil {
             }
             nfcV.close();
         } catch (IOException ioException) {
-            Toast.makeText(activity, "Failed to read the tag", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, R.string.failed_read, Toast.LENGTH_LONG).show();
         }
         return resultData;
     }
@@ -103,9 +102,9 @@ public class NfcTagUtil {
                 nfcV.transceive(cmd);
             }
             nfcV.close();
-            Toast.makeText(activity, "Success to write to the tag.", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, R.string.success_write, Toast.LENGTH_LONG).show();
         } catch (IOException ioException) {
-            Toast.makeText(activity, "Failed to write to the tag", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, R.string.failed_write, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -128,16 +127,16 @@ public class NfcTagUtil {
 
                 nfcV.close();
                 if (!checkValue) {
-                    Toast.makeText(activity, "Success to check out.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, R.string.success_checkout, Toast.LENGTH_LONG).show();
 
                 } else {
-                    Toast.makeText(activity, "Success to check in.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, R.string.success_checkin, Toast.LENGTH_LONG).show();
                 }
             } catch (IOException ioException) {
                 if (!checkValue) {
-                    Toast.makeText(activity, "Failed to check out.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, R.string.failed_checkout, Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(activity, "Failed to check in", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, R.string.failed_checkin, Toast.LENGTH_LONG).show();
                 }
             }
         }

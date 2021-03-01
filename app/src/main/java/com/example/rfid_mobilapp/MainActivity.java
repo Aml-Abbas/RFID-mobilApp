@@ -3,9 +3,11 @@ package com.example.rfid_mobilapp;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 
@@ -15,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     Context mainActivityContext;
     String newItemId;
     String checkValue;
+    tagInsertDialog dialog;
+    Spinner spinner;
 
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
@@ -24,21 +28,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tagContentTextView = findViewById(R.id.tagContentTextView);
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        mainActivityContext = this;
+        getIds();
+        Resources res = getResources();
 
+        LanguageUtil.getLanguageStruff(this, spinner, "en", res);
         Intent intent = getIntent();
-        newItemId="";
+        newItemId = "";
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             Uri uri = intent.getData();
             String itemId = uri.getQueryParameter("itemid");
-            tagContentTextView.setText("tag's new itemId: " + itemId);
-            newItemId= itemId;
+            tagContentTextView.setText("item id: " + itemId);
+            newItemId = itemId;
             checkValue = uri.getQueryParameter("checkValue");
         }
-        openDialog();
+        openHelpUserDialog();
     }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -54,35 +60,41 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (checkValue!= null){
-            if (checkValue.equals("false")){
+        if (checkValue != null) {
+            if (checkValue.equals("false")) {
                 NfcTagUtil.check(intent, this, checkOut);
-            }else {
+            } else {
                 NfcTagUtil.check(intent, this, checkIn);
             }
-            checkValue= null;
-            newItemId= "";
-        }else if(newItemId!= ""){
+            checkValue = null;
+            newItemId = "";
+        } else if (newItemId != "") {
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
-            newItemId="";
-        }else {
+            newItemId = "";
+        } else {
             tagContentTextView.setText("");
             String payload = NfcTagUtil.getItemId(intent, this);
             tagContentTextView.setText(payload);
 
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("https://aml-abbas.github.io/Quria/?itemId=" + payload));
-            Intent chooser = Intent.createChooser(intent, "Open website for item:" + payload);
+            Intent chooser = Intent.createChooser(intent, "Item Id: " + payload);
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(chooser);
             }
         }
-
+        dialog.dismiss();
     }
 
-    private void openDialog(){
-        tagInsertDialog exampleDialog = new tagInsertDialog();
-        exampleDialog.show(getSupportFragmentManager(), "example dialog");
+    private void openHelpUserDialog() {
+        dialog = new tagInsertDialog();
+        dialog.show(getSupportFragmentManager(), "dialog");
+    }
 
+    private void getIds() {
+        tagContentTextView = findViewById(R.id.tagContentTextView);
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        mainActivityContext = this;
+        spinner = (Spinner) findViewById(R.id.spinner);
     }
 }
