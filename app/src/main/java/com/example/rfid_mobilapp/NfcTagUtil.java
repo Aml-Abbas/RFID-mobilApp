@@ -33,11 +33,11 @@ public class NfcTagUtil {
 
             byte[] tagId = tag.getId();
 
-            byte[] oldData = readBlocks(tagId, nfcV, activity, 0, 8);
+            byte[] dataRead = readBlocks(tagId, nfcV, activity, 0, 8);
 
             byte[] primeItemId = new byte[16];
 
-            Utilities.copyByteArray(oldData, 2, primeItemId, 0, 16);
+            Utilities.copyByteArray(dataRead, 2, primeItemId, 0, 16);
             if (Utilities.isEmpty(primeItemId)) {
                 return "No Id";
             }
