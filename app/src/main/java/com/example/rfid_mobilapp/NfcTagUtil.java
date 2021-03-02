@@ -44,11 +44,11 @@ public class NfcTagUtil {
             String stringOfPrimaryId = new String(primeItemId, StandardCharsets.UTF_8);
 
             if (stringOfPrimaryId.charAt(0) == '1') {
-                byte[] primeItemId2 = new byte[16];
+                byte[] primeItemIdExtended = new byte[16];
                 byte[] OptionalBlock = readBlocks(tagId, nfcV, activity, 8, 6);
-                Utilities.copyByteArray(OptionalBlock, 4, primeItemId2, 0, 16);
+                Utilities.copyByteArray(OptionalBlock, 4, primeItemIdExtended, 0, 16);
                 payloadString = new String(primeItemId, StandardCharsets.UTF_8) +
-                        new String(primeItemId2, StandardCharsets.UTF_8);
+                        new String(primeItemIdExtended, StandardCharsets.UTF_8);
             } else {
                 payloadString = new String(primeItemId, StandardCharsets.UTF_8);
             }
