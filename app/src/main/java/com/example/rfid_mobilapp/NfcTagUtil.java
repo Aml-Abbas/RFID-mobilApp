@@ -36,9 +36,7 @@ public class NfcTagUtil {
             byte[] oldData = readBlocks(tagId, nfcV, activity, 0, 8);
 
             byte[] primeItemId = new byte[16];
-            boolean alternativeItemId = false;
 
-            byte[] primeItemId2 = new byte[16];
             Utilities.copyByteArray(oldData, 2, primeItemId, 0, 16);
             if (Utilities.isEmpty(primeItemId)) {
                 return "No Id";
@@ -46,15 +44,13 @@ public class NfcTagUtil {
             String stringOfPrimaryId = new String(primeItemId, StandardCharsets.UTF_8);
 
             if (stringOfPrimaryId.charAt(0) == '1') {
-                alternativeItemId = true;
+                byte[] primeItemId2 = new byte[16];
                 byte[] OptionalBlock = readBlocks(tagId, nfcV, activity, 8, 6);
                 Utilities.copyByteArray(OptionalBlock, 4, primeItemId2, 0, 16);
-            }
-            if (!alternativeItemId) {
-                payloadString = new String(primeItemId, StandardCharsets.UTF_8);
-            } else {
                 payloadString = new String(primeItemId, StandardCharsets.UTF_8) +
                         new String(primeItemId2, StandardCharsets.UTF_8);
+            } else {
+                payloadString = new String(primeItemId, StandardCharsets.UTF_8);
             }
 
         }
