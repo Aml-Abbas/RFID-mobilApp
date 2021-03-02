@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 
 public class NfcTagUtil {
 
-    private static final byte flag = (byte) 0x20;
+    private static final byte flagAddressedCommand = (byte) 0x20;
 
     private static final byte writeAFICommand = (byte) 0x27;
     private static final byte writeSingleBlockCommand = (byte) 0x21;
@@ -158,7 +158,7 @@ public class NfcTagUtil {
     private static byte[] getCommand(byte[] tagId, byte command, byte value) {
 
         byte[] cmd = new byte[]{
-                flag,
+                flagAddressedCommand,
                 command,
                 (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
                 value,
@@ -170,7 +170,7 @@ public class NfcTagUtil {
     private static byte[] getSystemInformation(byte[] tagId) {
 
         byte[] cmd = new byte[]{
-                flag,
+                flagAddressedCommand,
                 getSystemInfoCommand,
                 (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
         };
@@ -181,7 +181,7 @@ public class NfcTagUtil {
     private static byte[] getCommandWriteSingleBlock(byte[] tagId) {
 
         byte[] cmd = new byte[]{
-                flag,
+                flagAddressedCommand,
                 writeSingleBlockCommand,
                 (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
                 (byte) 0x00,
