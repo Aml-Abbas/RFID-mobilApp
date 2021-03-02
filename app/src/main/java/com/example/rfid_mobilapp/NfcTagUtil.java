@@ -109,32 +109,21 @@ public class NfcTagUtil {
         if (intent != null) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NfcV nfcV = NfcV.get(tag);
+            int textId;
 
             try {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
-                byte[] cmd;
-                if (!checkValue) {
-                    cmd = getCommand(tagId, writeAFICommand, checkOutValue);
-                } else {
-                    cmd = getCommand(tagId, writeAFICommand, checkInValue);
-                }
+                byte checkInOrOutValue = checkValue ? checkInValue : checkOutValue;
+                byte[] cmd = getCommand(tagId, writeAFICommand, checkInOrOutValue);
                 nfcV.transceive(cmd);
 
                 nfcV.close();
-                if (!checkValue) {
-                    Toast.makeText(activity, R.string.success_checkout, Toast.LENGTH_LONG).show();
-
-                } else {
-                    Toast.makeText(activity, R.string.success_checkin, Toast.LENGTH_LONG).show();
-                }
+                textId = !checkValue ? R.string.success_checkout : R.string.success_checkin;
             } catch (IOException ioException) {
-                if (!checkValue) {
-                    Toast.makeText(activity, R.string.failed_checkout, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(activity, R.string.failed_checkin, Toast.LENGTH_LONG).show();
-                }
+                textId = !checkValue ? R.string.failed_checkout : R.string.failed_checkin;
             }
+            Toast.makeText(activity, textId, Toast.LENGTH_LONG).show();
         }
     }
 
