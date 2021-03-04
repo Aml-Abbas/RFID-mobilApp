@@ -33,16 +33,20 @@ public class Utilities {
         return currentData;
     }
 
-    public static long calculateCRC16(final byte[] data) {
-        long crc = 0xFFFF;
+    public static int calculateCRC16(final byte[] data) {
+        int crc = 0xFFFF;
+        int polynomial = 0x1021;
 
-        for (int j = 0; j < data.length; j++) {
-            crc = ((crc >>> 8) | (crc << 8)) & 0xffff;
-            crc ^= (data[j] & 0xff);
-            crc ^= ((crc & 0xff) >> 4);
-            crc ^= (crc << 12) & 0xffff;
-            crc ^= ((crc & 0xFF) << 5) & 0xffff;
+        for (byte b : data) {
+            for (int i = 0; i < 8; i++) {
+                boolean bit = ((b >> (7 - i) & 1) == 1);
+                boolean c15 = ((crc >> 15 & 1) == 1);
+                crc <<= 1;
+                if (c15 ^ bit)
+                    crc ^= polynomial;
+            }
         }
+
         crc &= 0xffff;
         return crc;
 
