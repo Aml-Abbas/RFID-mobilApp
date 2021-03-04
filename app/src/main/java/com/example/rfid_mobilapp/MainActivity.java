@@ -31,13 +31,14 @@ public class MainActivity extends AppCompatActivity {
         getIds();
         Resources res = getResources();
 
+        tagContentTextView.setText(R.string.place_tag);
+
         LanguageUtil.getLanguageStruff(this, spinner, "en", res);
         Intent intent = getIntent();
         newItemId = "";
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             Uri uri = intent.getData();
             String itemId = uri.getQueryParameter("itemid");
-            tagContentTextView.setText("item id: " + itemId);
             newItemId = itemId;
             doCheckIn = uri.getQueryParameter("doCheckIn");
         }
