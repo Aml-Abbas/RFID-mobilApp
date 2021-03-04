@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 
 public class NfcTagUtil {
 
-    private static final byte flag = (byte) 0x20;
+    private static final byte flagAddressedCommand = (byte) 0x20;
 
     private static final byte writeAFICommand = (byte) 0x27;
     private static final byte writeSingleBlockCommand = (byte) 0x21;
@@ -33,28 +33,24 @@ public class NfcTagUtil {
 
             byte[] tagId = tag.getId();
 
-            byte[] oldData = readBlocks(tagId, nfcV, activity, 0, 8);
+            byte[] dataRead = readBlocks(tagId, nfcV, activity, 0, 8);
 
             byte[] primeItemId = new byte[16];
-            boolean alternativeItemId = false;
 
-            byte[] primeItemId2 = new byte[16];
-            Utilities.copyByteArray(oldData, 2, primeItemId, 0, 16);
+            Utilities.copyByteArray(dataRead, 2, primeItemId, 0, 16);
             if (Utilities.isEmpty(primeItemId)) {
                 return "No Id";
             }
             String stringOfPrimaryId = new String(primeItemId, StandardCharsets.UTF_8);
 
             if (stringOfPrimaryId.charAt(0) == '1') {
-                alternativeItemId = true;
+                byte[] primeItemIdExtended = new byte[16];
                 byte[] OptionalBlock = readBlocks(tagId, nfcV, activity, 8, 6);
-                Utilities.copyByteArray(OptionalBlock, 4, primeItemId2, 0, 16);
-            }
-            if (!alternativeItemId) {
-                payloadString = new String(primeItemId, StandardCharsets.UTF_8);
-            } else {
+                Utilities.copyByteArray(OptionalBlock, 4, primeItemIdExtended, 0, 16);
                 payloadString = new String(primeItemId, StandardCharsets.UTF_8) +
-                        new String(primeItemId2, StandardCharsets.UTF_8);
+                        new String(primeItemIdExtended, StandardCharsets.UTF_8);
+            } else {
+                payloadString = new String(primeItemId, StandardCharsets.UTF_8);
             }
 
         }
@@ -108,37 +104,26 @@ public class NfcTagUtil {
         }
     }
 
-    public static void check(Intent intent, Activity activity, boolean checkValue) {
+    public static void check(Intent intent, Activity activity, boolean doCheckIn) {
 
         if (intent != null) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NfcV nfcV = NfcV.get(tag);
+            int textId;
 
             try {
                 nfcV.connect();
                 byte[] tagId = tag.getId();
-                byte[] cmd;
-                if (!checkValue) {
-                    cmd = getCommand(tagId, writeAFICommand, checkOutValue);
-                } else {
-                    cmd = getCommand(tagId, writeAFICommand, checkInValue);
-                }
+                byte checkInOrOutValue = doCheckIn ? checkInValue : checkOutValue;
+                byte[] cmd = getCommand(tagId, writeAFICommand, checkInOrOutValue);
                 nfcV.transceive(cmd);
 
                 nfcV.close();
-                if (!checkValue) {
-                    Toast.makeText(activity, R.string.success_checkout, Toast.LENGTH_LONG).show();
-
-                } else {
-                    Toast.makeText(activity, R.string.success_checkin, Toast.LENGTH_LONG).show();
-                }
+                textId = doCheckIn ?  R.string.success_checkin : R.string.success_checkout;
             } catch (IOException ioException) {
-                if (!checkValue) {
-                    Toast.makeText(activity, R.string.failed_checkout, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(activity, R.string.failed_checkin, Toast.LENGTH_LONG).show();
-                }
+                textId = doCheckIn ? R.string.failed_checkin : R.string.failed_checkout;
             }
+            Toast.makeText(activity, textId, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -162,7 +147,7 @@ public class NfcTagUtil {
     private static byte[] getCommand(byte[] tagId, byte command, byte value) {
 
         byte[] cmd = new byte[]{
-                flag,
+                flagAddressedCommand,
                 command,
                 (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
                 value,
@@ -174,7 +159,7 @@ public class NfcTagUtil {
     private static byte[] getSystemInformation(byte[] tagId) {
 
         byte[] cmd = new byte[]{
-                flag,
+                flagAddressedCommand,
                 getSystemInfoCommand,
                 (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
         };
@@ -185,7 +170,7 @@ public class NfcTagUtil {
     private static byte[] getCommandWriteSingleBlock(byte[] tagId) {
 
         byte[] cmd = new byte[]{
-                flag,
+                flagAddressedCommand,
                 writeSingleBlockCommand,
                 (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
                 (byte) 0x00,

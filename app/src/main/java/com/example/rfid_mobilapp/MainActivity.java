@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     NfcAdapter mNfcAdapter;
     Context mainActivityContext;
     String newItemId;
-    String checkValue;
+    String doCheckIn;
     tagInsertDialog dialog;
     Spinner spinner;
 
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             String itemId = uri.getQueryParameter("itemid");
             tagContentTextView.setText("item id: " + itemId);
             newItemId = itemId;
-            checkValue = uri.getQueryParameter("checkValue");
+            doCheckIn = uri.getQueryParameter("doCheckIn");
         }
         openHelpUserDialog();
     }
@@ -60,13 +60,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (checkValue != null) {
-            if (checkValue.equals("false")) {
+        if (doCheckIn != null) {
+            if (doCheckIn.equals("false")) {
                 NfcTagUtil.check(intent, this, checkOut);
             } else {
                 NfcTagUtil.check(intent, this, checkIn);
             }
-            checkValue = null;
+            doCheckIn = null;
             newItemId = "";
         } else if (newItemId != "") {
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
