@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
     Context mainActivityContext;
     String newItemId;
     String doCheckIn;
-    tagInsertDialog dialog;
     Spinner spinner;
 
     private static final boolean checkIn = true;
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
             newItemId = itemId;
             doCheckIn = uri.getQueryParameter("doCheckIn");
         }
-        openHelpUserDialog();
     }
 
 
@@ -84,12 +82,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(chooser);
             }
         }
-        dialog.dismiss();
-    }
-
-    private void openHelpUserDialog() {
-        dialog = new tagInsertDialog();
-        dialog.show(getSupportFragmentManager(), "dialog");
     }
 
     private void getIds() {
