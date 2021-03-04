@@ -33,8 +33,8 @@ public class Utilities {
         return currentData;
     }
 
-    public static int calculateCRC16(final byte[] data) {
-        int crc = 0xFFFF;
+    public static long calculateCRC16(final byte[] data) {
+        long crc = 0xFFFF;
 
         for (int j = 0; j < data.length; j++) {
             crc = ((crc >>> 8) | (crc << 8)) & 0xffff;
