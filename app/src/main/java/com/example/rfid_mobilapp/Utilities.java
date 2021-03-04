@@ -36,8 +36,8 @@ public class Utilities {
     public static int calculateCRC16(final byte[] data) {
         int crc = 0xFFFF;
 
-        for (int j = 0; j < data.length ; j++) {
-            crc = ((crc  >>> 8) | (crc  << 8) )& 0xffff;
+        for (int j = 0; j < data.length; j++) {
+            crc = ((crc >>> 8) | (crc << 8)) & 0xffff;
             crc ^= (data[j] & 0xff);
             crc ^= ((crc & 0xff) >> 4);
             crc ^= (crc << 12) & 0xffff;
@@ -48,4 +48,15 @@ public class Utilities {
 
     }
 
+    public static byte[] getDataWithoutCRC(final byte[] data) {
+        byte[] dataWithoutCRC = new byte[32];
+        for (int i = 0; i < 19; i++) {
+            dataWithoutCRC[i] = data[i];
+        }
+        for (int i = 19; i < data.length; i++) {
+            dataWithoutCRC[i] = data[i + 2];
+        }
+
+        return dataWithoutCRC;
+    }
 }
