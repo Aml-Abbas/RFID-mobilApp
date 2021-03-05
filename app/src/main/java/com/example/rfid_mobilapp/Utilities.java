@@ -1,7 +1,5 @@
 package com.example.rfid_mobilapp;
 
-import java.nio.charset.StandardCharsets;
-
 public class Utilities {
 
 
@@ -58,8 +56,8 @@ public class Utilities {
         for (int i = 0; i < 19; i++) {
             dataWithoutCRC[i] = data[i];
         }
-        for (int i = 19; i < 32; i++) {
-            dataWithoutCRC[i] = data[i + 2];
+        for (int i = 21; i < 32; i++) {
+            dataWithoutCRC[i-2] = data[i];
         }
 
         return dataWithoutCRC;
