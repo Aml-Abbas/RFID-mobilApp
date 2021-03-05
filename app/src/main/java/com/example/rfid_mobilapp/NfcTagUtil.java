@@ -81,8 +81,9 @@ public class NfcTagUtil {
             byte[] tagId = tag.getId();
 
             byte[] oldData = readBlocks(tagId, nfcV, activity, 0, 8);
-            byte[] newDataToWrite = NfcTagUtil.setBarcode(itemId, oldData);
-
+            byte[] newDataWithBarcode = NfcTagUtil.setBarcode(itemId, oldData);
+            int CRCValue= Utilities.calculateCRC16(Utilities.getDataWithoutCRC(newDataWithBarcode));
+            byte[] newDataToWrite= setCRC(CRCValue, newDataWithBarcode);
             writeBlocks(tagId, nfcV, activity, 0, 8, newDataToWrite);
         }
     }
@@ -181,7 +182,10 @@ public class NfcTagUtil {
     }
 
     public static byte[] setBarcode(String barcode, byte[] currentData) {
-        return Utilities.replaceByteAt(barcode, 2, 16, currentData);
+        return Utilities.replaceBarcode(barcode, 3, 16, currentData);
     }
 
+    private static byte[] setCRC(int CRC, byte[] currentData) {
+        return Utilities.replaceCRC(CRC, currentData);
+    }
 }
