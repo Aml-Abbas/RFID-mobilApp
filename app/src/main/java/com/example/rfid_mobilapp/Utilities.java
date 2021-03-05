@@ -64,7 +64,6 @@ public class Utilities {
     }
 
     public static byte[] replaceCRC(int CRC, byte[] currentData) {
-
         currentData[19]= (byte) ((CRC >> 8) & 0xFF);
         currentData[20]= (byte) (CRC & 0xFF);
         return currentData;

@@ -182,7 +182,7 @@ public class NfcTagUtil {
     }
 
     private static byte[] setBarcode(String barcode, byte[] currentData) {
-        return Utilities.replaceBarcode(barcode, 2, 16, currentData);
+        return Utilities.replaceBarcode(barcode, 3, 16, currentData);
     }
 
     private static byte[] setCRC(int CRC, byte[] currentData) {
