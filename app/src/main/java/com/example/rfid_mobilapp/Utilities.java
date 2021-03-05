@@ -1,5 +1,7 @@
 package com.example.rfid_mobilapp;
 
+import java.nio.charset.StandardCharsets;
+
 public class Utilities {
 
 
@@ -20,7 +22,7 @@ public class Utilities {
         return true;
     }
 
-    public static byte[] replaceByteAt(String barcode, int start, int len, byte[] currentData) {
+    public static byte[] replaceBarcode(String barcode, int start, int len, byte[] currentData) {
 
         byte[] temp = new byte[16];
         for (int i = 0; i < barcode.length(); i++) {
@@ -46,7 +48,6 @@ public class Utilities {
                     crc ^= polynomial;
             }
         }
-
         crc &= 0xffff;
         return crc;
 
@@ -57,10 +58,17 @@ public class Utilities {
         for (int i = 0; i < 19; i++) {
             dataWithoutCRC[i] = data[i];
         }
-        for (int i = 19; i < data.length; i++) {
+        for (int i = 19; i < 32; i++) {
             dataWithoutCRC[i] = data[i + 2];
         }
 
         return dataWithoutCRC;
+    }
+
+    public static byte[] replaceCRC(int CRC, byte[] currentData) {
+
+        currentData[19]= (byte) ((CRC >> 8) & 0xFF);
+        currentData[20]= (byte) (CRC & 0xFF);
+        return currentData;
     }
 }
