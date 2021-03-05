@@ -188,5 +188,4 @@ public class NfcTagUtil {
     private static byte[] setCRC(int CRC, byte[] currentData) {
         return Utilities.replaceCRC(CRC, currentData);
     }
-
 }
