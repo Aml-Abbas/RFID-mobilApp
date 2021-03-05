@@ -181,7 +181,7 @@ public class NfcTagUtil {
         return cmd;
     }
 
-    private static byte[] setBarcode(String barcode, byte[] currentData) {
+    public static byte[] setBarcode(String barcode, byte[] currentData) {
         return Utilities.replaceBarcode(barcode, 3, 16, currentData);
     }
 
