@@ -8,7 +8,7 @@ public class NfcTagUtilTest {
 
     @Test
     public void setBarcodeTest() {
-        byte[] data= new byte[32];
+        byte[] data = new byte[32];
         String barcode = "AA9876543219876S";
         byte[] afterSetBarcode = NfcTagUtil.setBarcode(barcode, data);
         byte[] correct = new byte[32];
@@ -17,4 +17,5 @@ public class NfcTagUtilTest {
         }
         Assert.assertArrayEquals(afterSetBarcode, correct);
     }
+
 }
