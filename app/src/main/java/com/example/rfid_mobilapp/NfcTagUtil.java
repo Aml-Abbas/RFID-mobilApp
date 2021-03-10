@@ -37,7 +37,7 @@ public class NfcTagUtil {
 
             byte[] primeItemId = new byte[16];
 
-            Utilities.copyByteArray(dataRead, 2, primeItemId, 0, 16);
+            Utilities.copyByteArray(dataRead, 3, primeItemId, 0, 16);
             if (Utilities.isEmpty(primeItemId)) {
                 return "No Id";
             }
@@ -81,9 +81,15 @@ public class NfcTagUtil {
             byte[] tagId = tag.getId();
 
             byte[] oldData = readBlocks(tagId, nfcV, activity, 0, 8);
+            for (int i=0; i<oldData.length;i++){
+                System.out.println("byte nummer "+i+"is: "+oldData[i]);
+            }
             byte[] newDataWithBarcode = NfcTagUtil.setBarcode(itemId, oldData);
             int CRCValue= Utilities.calculateCRC16(Utilities.getDataWithoutCRC(newDataWithBarcode));
             byte[] newDataToWrite= setCRC(CRCValue, newDataWithBarcode);
+            for (int i=0; i<newDataToWrite.length;i++){
+                System.out.println("byte nummer "+i+"is: "+oldData[i]);
+            }
             writeBlocks(tagId, nfcV, activity, 0, 8, newDataToWrite);
         }
     }
@@ -185,7 +191,7 @@ public class NfcTagUtil {
         return Utilities.replaceBarcode(barcode, 3, 16, currentData);
     }
 
-    private static byte[] setCRC(int CRC, byte[] currentData) {
+    public static byte[] setCRC(int CRC, byte[] currentData) {
         return Utilities.replaceCRC(CRC, currentData);
     }
 }
