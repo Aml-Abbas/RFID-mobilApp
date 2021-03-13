@@ -3,12 +3,17 @@ package com.example.rfid_mobilapp;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -18,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     String newItemId;
     String doCheckIn;
     Spinner spinner;
+    Locale myLocale;
+    String currentLanguage ="en", currentLang;
 
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
@@ -32,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
         tagContentTextView.setText(R.string.place_tag);
 
-        LanguageUtil.getLanguageStruff(this, spinner, "en", res);
         Intent intent = getIntent();
         newItemId = "";
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
@@ -90,4 +96,21 @@ public class MainActivity extends AppCompatActivity {
         mainActivityContext = this;
         spinner = (Spinner) findViewById(R.id.spinner);
     }
+
+    private void setLocale(String localeName) {
+        if (!localeName.equals(currentLanguage)) {
+            myLocale = new Locale(localeName);
+            Resources res = getResources();
+            DisplayMetrics dm = res.getDisplayMetrics();
+            Configuration conf = res.getConfiguration();
+            conf.locale = myLocale;
+            res.updateConfiguration(conf, dm);
+            Intent refresh = new Intent(this, MainActivity.class);
+            refresh.putExtra(currentLang, localeName);
+            startActivity(refresh);
+        } else {
+            Toast.makeText(MainActivity.this, R.string.same_language, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
