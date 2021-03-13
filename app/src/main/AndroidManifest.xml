@@ -29,10 +29,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:host="primaryid"
                     android:scheme="androidrfid" />
-
             </intent-filter>
         </activity>
-
 
     </application>
 
