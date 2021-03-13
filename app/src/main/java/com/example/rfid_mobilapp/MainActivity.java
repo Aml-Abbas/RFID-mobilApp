@@ -40,10 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         getIds();
-        Resources res = getResources();
-
         tagContentTextView.setText(R.string.place_tag);
-
         Intent intent = getIntent();
         newItemId = "";
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
