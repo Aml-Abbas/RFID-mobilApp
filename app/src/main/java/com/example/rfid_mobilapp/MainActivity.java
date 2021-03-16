@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         openDialog();
         setContentView(R.layout.activity_main);
         getIds();
-        tagContentTextView.setText(R.string.place_tag);
+       // tagContentTextView.setText(R.string.place_tag);
         Intent intent = getIntent();
         newItemId = "";
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             newItemId = itemId;
             doCheckIn = uri.getQueryParameter("doCheckIn");
         }
-        chooseLanguage();
+//        chooseLanguage();
     }
 
 
