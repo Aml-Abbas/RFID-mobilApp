@@ -97,10 +97,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getIds() {
-        tagContentTextView = findViewById(R.id.tagContentTextView);
+      //  tagContentTextView = findViewById(R.id.tagContentTextView);
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         mainActivityContext = this;
-        spinner = (Spinner) findViewById(R.id.spinner);
+    //    spinner = (Spinner) findViewById(R.id.spinner);
     }
     private void chooseLanguage() {
         currentLanguage = getIntent().getStringExtra(currentLang);

@@ -7,6 +7,7 @@
     tools:context=".MainActivity"
     android:background="@android:color/transparent" >
 
+<!--
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="wrap_content"
@@ -39,5 +40,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
