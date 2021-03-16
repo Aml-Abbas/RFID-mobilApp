@@ -16,7 +16,7 @@ public class TagProgressDialog extends AppCompatDialogFragment {
         builder.setTitle(R.string.welcome)
                 .setMessage(R.string.place_tag)
 
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         closeApp(getContext());
                     }
