@@ -18,5 +18,6 @@
     <string name="change_lan">Ändra sråk.</string>
     <string name="open_site">Öppna web sida för item:</string>
     <string name="same_language">Språket är redan valt.</string>
+    <string name="cancel">Tillbaka</string>
 
 </resources>
