@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 public class TagProgressDialog extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setView(R.layout.dialoy_layout);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setView(R.layout.dialog_layout);
         builder.setTitle(R.string.welcome)
                 .setMessage(R.string.place_tag)
 
