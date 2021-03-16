@@ -3,7 +3,7 @@
 
     <string name="success_write">Success to write to the tag.</string>
     <string name="failed_write">Failed to write to the tag.</string>
-    <string name="place_tag">Please, place the tag against the mobil surface</string>
+    <string name="place_tag">Place the smartphone over the item you would like to scan</string>
     <string name="ok">ok</string>
     <string name="welcome">Welcome</string>
     <string name="no_id">No Id</string>
