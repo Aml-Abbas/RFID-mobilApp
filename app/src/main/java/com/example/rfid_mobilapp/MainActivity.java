@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(chooser);
             }
         }*/
+        finish();
+        dialog.dismiss();
     }
 
     private void getIds() {
