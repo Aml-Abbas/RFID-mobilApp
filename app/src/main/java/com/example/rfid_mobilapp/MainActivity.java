@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (newItemId != "") {
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
             newItemId = "";
-        } else {
+        }/* else {
             tagContentTextView.setText("");
             String payload = NfcTagUtil.getItemId(intent, this);
             tagContentTextView.setText(payload);
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(chooser);
             }
-        }
+        }*/
     }
 
     private void getIds() {
