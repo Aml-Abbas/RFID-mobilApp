@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinner;
     Locale myLocale;
     String currentLanguage ="en", currentLang;
+    TagProgressDialog dialog;
 
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
@@ -37,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        openDialog();
         setContentView(R.layout.activity_main);
-
         getIds();
         tagContentTextView.setText(R.string.place_tag);
         Intent intent = getIntent();
@@ -147,5 +148,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, R.string.same_language, Toast.LENGTH_SHORT).show();
         }
     }
-
+    private void openDialog(){
+        dialog = new TagProgressDialog();
+        dialog.show(getSupportFragmentManager(), "example dialog");
+    }
 }
