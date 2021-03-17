@@ -13,7 +13,7 @@ public class TagProgressDialog extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setView(R.layout.dialog_layout);
-        builder.setTitle(R.string.welcome)
+        builder.setTitle(R.string.app_name)
                 .setMessage(R.string.place_tag)
 
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
