@@ -39,7 +39,8 @@ public class NfcTagUtil {
 
             Utilities.copyByteArray(dataRead, 3, primeItemId, 0, 16);
             if (Utilities.isEmpty(primeItemId)) {
-                return "No Id";
+                String noId = activity.getResources().getString(R.string.no_id);
+                return noId;
             }
             String stringOfPrimaryId = new String(primeItemId, StandardCharsets.UTF_8);
 
