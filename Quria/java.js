@@ -20,7 +20,7 @@ function openAppen(){
 }
 
 
-const myWebSocket = new WebSocket('ws://localhost:8080/');
+const myWebSocket = new WebSocket('ws://https://aml-abbas.github.io/RFID-mobilApp/Quria/');
 myWebSocket.onmessage = function (event) {
   console.log('The server sent me this data: '+event.data);
 }
