@@ -24,3 +24,7 @@ const myWebSocket = new WebSocket('ws://localhost:8080/');
 myWebSocket.onmessage = function (event) {
   console.log('The server sent me this data: '+event.data);
 }
+
+myWebSocket.onopen = function (event) {
+    myWebSocket.send("Here's some text that the server is urgently awaiting!");
+  };
