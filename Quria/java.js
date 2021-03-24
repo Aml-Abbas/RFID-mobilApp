@@ -19,51 +19,16 @@ function openAppen(){
     location.href = "androidrfid://primaryid?itemid=" + itemId;
 }
 
-const messageWindow = document.getElementById("messages");
+var ws;
 
-const sendButton = document.getElementById("send");
-const messageInput = document.getElementById("message");
+    $("#connect").click(function(e)
+    {
 
-const fileInput = document.getElementById("file");
-const sendImageButton = document.getElementById("sendImage");
+            var ip = $("#address").val();
+            ws = new WebSocket("ws://" + ip);
+            ws.onopen = function()
+            {
+                 alert("connected!");
+            };
 
-const socket = new WebSocket("ws://localhost:8080/socket");
-socket.binaryType = "arraybuffer";
-
-socket.onopen = function (event) {
-    addMessageToWindow("Connected");
-};
-
-socket.onmessage = function (event) {
-    if (event.data instanceof ArrayBuffer) {
-        addMessageToWindow('Got Image:');
-        addImageToWindow(event.data);
-    } else {
-        addMessageToWindow(`Got Message: ${event.data}`);
-    }
-};
-
-sendButton.onclick = function (event) {
-    sendMessage(messageInput.value);
-    messageInput.value = "";
-};
-
-sendImageButton.onclick = function (event) {
-    let file = fileInput.files[0];
-    sendMessage(file);
-    fileInput.value = null;
-};
-
-function sendMessage(message) {
-    socket.send(message);
-    addMessageToWindow("Sent Message: " + message);
-}
-
-function addMessageToWindow(message) {
-    messageWindow.innerHTML += `<div>${message}</div>`
-}
-
-function addImageToWindow(image) {
-    let url = URL.createObjectURL(new Blob([image]));
-    messageWindow.innerHTML += `<img src="${url}"/>`
-}
+    });
