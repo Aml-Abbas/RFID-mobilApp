@@ -19,16 +19,8 @@ function openAppen(){
     location.href = "androidrfid://primaryid?itemid=" + itemId;
 }
 
-var ws;
 
-    $("#connect").click(function(e)
-    {
-
-            var ip = $("#address").val();
-            ws = new WebSocket("ws://" + ip);
-            ws.onopen = function()
-            {
-                 alert("connected!");
-            };
-
-    });
+const myWebSocket = new WebSocket('ws://localhost:8080/');
+myWebSocket.onmessage = function (event) {
+  console.log('The server sent me this data: '+event.data);
+}
