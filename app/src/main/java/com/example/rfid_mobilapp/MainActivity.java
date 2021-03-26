@@ -1,5 +1,6 @@
 package com.example.rfid_mobilapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -7,8 +8,10 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,12 +19,26 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class MainActivity extends AppCompatActivity {
+    private final String TAG = MainActivity.class.getSimpleName();
     TextView tagContentTextView;
     NfcAdapter mNfcAdapter;
     Context mainActivityContext;
@@ -29,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     String doCheckIn;
     Spinner spinner;
     Locale myLocale;
-    String currentLanguage ="en", currentLang;
+    String currentLanguage = "en", currentLang;
 
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
@@ -39,7 +56,44 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getIds();
+        try {
+            ServerSocket server = new ServerSocket(8080);
+            Log.d(TAG, "Server has started on localhost.\r\nWaiting for a connection...");
+            Thread thread = new Thread(() -> {
+                try  {
+                    Socket client = server.accept();
+                    Log.d(TAG, "A client connected.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            thread.start();
+
+           /* InputStream in = client.getInputStream();
+            OutputStream out = client.getOutputStream();
+            Scanner s = new Scanner(in, "UTF-8");
+            String data = s.useDelimiter("\\r\\n\\r\\n").next();
+            Matcher get = Pattern.compile("^GET").matcher(data);
+
+            if (get.find()) {
+                Matcher match = Pattern.compile("Sec-WebSocket-Key: (.*)").matcher(data);
+                match.find();
+                byte[] response = ("HTTP/1.1 101 Switching Protocols\r\n"
+                        + "Connection: Upgrade\r\n"
+                        + "Upgrade: websocket\r\n"
+                        + "Sec-WebSocket-Accept: "
+                        + Base64.getEncoder().encodeToString(MessageDigest.getInstance("SHA-1").digest((match.group(1) + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").getBytes("UTF-8")))
+                        + "\r\n\r\n").getBytes("UTF-8");
+                out.write(response, 0, response.length);
+            }
+
+        } catch (IOException | NoSuchAlgorithmException ioException) {
+            ioException.printStackTrace();
+        }*/
+
+
+       /* getIds();
         tagContentTextView.setText(R.string.place_tag);
         Intent intent = getIntent();
         newItemId = "";
@@ -49,11 +103,14 @@ public class MainActivity extends AppCompatActivity {
             newItemId = itemId;
             doCheckIn = uri.getQueryParameter("doCheckIn");
         }
-        chooseLanguage();
+        chooseLanguage();*/
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
     }
 
 
-    @Override
+     /*   @Override
     protected void onResume() {
         super.onResume();
         NfcTagUtil.enableNFCInForeground(mNfcAdapter, this, getClass());
@@ -146,6 +203,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(MainActivity.this, R.string.same_language, Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
 }
