@@ -19,16 +19,20 @@ function openAppen(){
     location.href = "androidrfid://primaryid?itemid=" + itemId;
 }
 
-var ws;
+var ip = "localhost";
+var port = "8888";
+var ws = new WebSocket("ws://" + ip + ":" + port);
+ws.onopen = function() {
+  var doSendPing = confirm('connected! Send ping? Otherwise we will send "bla bla".');
+  if (doSendPing) {
+    ws.send('ping');
+  } else {
+    ws.send('bla bla');
+  }
+};
+ws.onmessage = function (event) {
+  if (event.data === 'echo') {
+    alert(event.data);
+  }
+}
 
-$("#connect").click(function(e)
-{
-
-        var ip = $("#address").val();
-        ws = new WebSocket("ws://" + ip);
-        ws.onopen = function()
-        {
-             alert("connected!");
-        };
-
-});
