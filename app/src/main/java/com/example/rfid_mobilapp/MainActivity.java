@@ -56,13 +56,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        try {
-            ServerSocket server = new ServerSocket(8080);
-            Log.d(TAG, "Server has started on localhost.\r\nWaiting for a connection...");
+        //try {
+            //ServerSocket server = new ServerSocket(8080);
+            //Log.d(TAG, "Server has started on localhost.\r\nWaiting for a connection...");
             Thread thread = new Thread(() -> {
+                String host = "localhost";
+                int port = 8888;
                 try  {
-                    Socket client = server.accept();
-                    Log.d(TAG, "A client connected.");
+                    InetSocketAddress listenAddress = new InetSocketAddress(host, port);
+                    SocketServer server = new SocketServer(listenAddress);
+                    server.run();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -104,9 +107,9 @@ public class MainActivity extends AppCompatActivity {
             doCheckIn = uri.getQueryParameter("doCheckIn");
         }
         chooseLanguage();*/
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
+        //} catch (IOException ioException) {
+        //    ioException.printStackTrace();
+        //}
     }
 
 
