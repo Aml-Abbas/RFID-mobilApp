@@ -18,17 +18,3 @@ function openAppen(){
     var itemId = document.getElementById("item-id-input").value;
     location.href = "androidrfid://primaryid?itemid=" + itemId;
 }
-
-var ws;
-
-$("#connect").click(function(e)
-{
-
-        var ip = $("#address").val();
-        ws = new WebSocket("ws://" + ip);
-        ws.onopen = function()
-        {
-             alert("connected!");
-        };
-
-});
