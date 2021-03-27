@@ -19,8 +19,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinner;
     Locale myLocale;
     String currentLanguage = "en", currentLang;
+    ServerSocket server;
+    Socket client;
 
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
@@ -59,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
         //try {
             //ServerSocket server = new ServerSocket(8080);
             //Log.d(TAG, "Server has started on localhost.\r\nWaiting for a connection...");
+        try {
+            server = new ServerSocket(8080);
+            Log.d(TAG, "Server has started on localhost.\r\nWaiting for a connection...");
             Thread thread = new Thread(() -> {
                 String host = "localhost";
                 int port = 8888;
@@ -66,6 +74,15 @@ public class MainActivity extends AppCompatActivity {
                     InetSocketAddress listenAddress = new InetSocketAddress(host, port);
                     SocketServer server = new SocketServer(listenAddress);
                     server.run();
+                    client = server.accept();
+                    Log.d(TAG, "A client connected.");
+                    InputStream in = client.getInputStream();
+                    BufferedReader input = new BufferedReader(new InputStreamReader(in));
+                    String line;
+                    while ((line = input.readLine()) != null) {
+                        Log.d(TAG, "Client sent " + line);
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -73,27 +90,10 @@ public class MainActivity extends AppCompatActivity {
 
             thread.start();
 
-           /* InputStream in = client.getInputStream();
-            OutputStream out = client.getOutputStream();
-            Scanner s = new Scanner(in, "UTF-8");
-            String data = s.useDelimiter("\\r\\n\\r\\n").next();
-            Matcher get = Pattern.compile("^GET").matcher(data);
 
-            if (get.find()) {
-                Matcher match = Pattern.compile("Sec-WebSocket-Key: (.*)").matcher(data);
-                match.find();
-                byte[] response = ("HTTP/1.1 101 Switching Protocols\r\n"
-                        + "Connection: Upgrade\r\n"
-                        + "Upgrade: websocket\r\n"
-                        + "Sec-WebSocket-Accept: "
-                        + Base64.getEncoder().encodeToString(MessageDigest.getInstance("SHA-1").digest((match.group(1) + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").getBytes("UTF-8")))
-                        + "\r\n\r\n").getBytes("UTF-8");
-                out.write(response, 0, response.length);
-            }
-
-        } catch (IOException | NoSuchAlgorithmException ioException) {
+        } catch (IOException ioException) {
             ioException.printStackTrace();
-        }*/
+        }
 
 
        /* getIds();
