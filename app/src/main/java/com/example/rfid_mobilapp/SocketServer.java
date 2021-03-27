@@ -54,7 +54,7 @@ public class SocketServer extends WebSocketServer {
 
     public static void main(String[] args) {
         String host = "localhost";
-        int port = 8887;
+        int port = 8888;
 
         WebSocketServer server = new SocketServer(new InetSocketAddress(host, port));
         server.run();
