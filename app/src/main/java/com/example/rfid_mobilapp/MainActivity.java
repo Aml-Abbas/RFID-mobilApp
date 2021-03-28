@@ -64,20 +64,21 @@ public class MainActivity extends AppCompatActivity {
         //try {
         //ServerSocket server = new ServerSocket(8080);
         //Log.d(TAG, "Server has started on localhost.\r\nWaiting for a connection...");
-        Thread thread = new Thread(() -> {
-            String host = "localhost";
-            int port = 8888;
-            try  {
-                InetSocketAddress listenAddress = new InetSocketAddress(host, port);
-                SocketServer server = new SocketServer(listenAddress);
-                server.run();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        thread.start();
 
-           /* InputStream in = client.getInputStream();
+            Thread thread = new Thread(() -> {
+                String host = "localhost";
+                int port = 8888;
+                try  {
+                    InetSocketAddress listenAddress = new InetSocketAddress(host, port);
+                    SocketServer server = new SocketServer(listenAddress);
+                    server.run();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            thread.start();
+
+          /* InputStream in = client.getInputStream();
             OutputStream out = client.getOutputStream();
             Scanner s = new Scanner(in, "UTF-8");
             String data = s.useDelimiter("\\r\\n\\r\\n").next();
@@ -95,9 +96,9 @@ public class MainActivity extends AppCompatActivity {
         doCheckIn = uri.getQueryParameter("doCheckIn");
     }
     chooseLanguage();*/
-            //} catch (IOException ioException) {
-            //    ioException.printStackTrace();
-            //}
+        //} catch (IOException ioException) {
+        //    ioException.printStackTrace();
+        //}
     }
 
 

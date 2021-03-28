@@ -12,6 +12,7 @@ import org.java_websocket.server.WebSocketServer;
 public class SocketServer extends WebSocketServer {
 
     public SocketServer(InetSocketAddress address) {
+
         super(address);
     }
 
@@ -54,7 +55,7 @@ public class SocketServer extends WebSocketServer {
 
     public static void main(String[] args) {
         String host = "localhost";
-        int port = 8888;
+        int port = 8887;
 
         WebSocketServer server = new SocketServer(new InetSocketAddress(host, port));
         server.run();
