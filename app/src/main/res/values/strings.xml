@@ -16,4 +16,5 @@
     <string name="open_site">Open website for item:</string>
     <string name="same_language">Language already selected!</string>
     <string name="cancel">Back</string>
+    <string name="turn_off_rfid_service">Turn off RFID service</string>
 </resources>
