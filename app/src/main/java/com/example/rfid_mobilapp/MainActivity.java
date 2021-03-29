@@ -2,6 +2,7 @@ package com.example.rfid_mobilapp;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -61,22 +62,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent serviceIntent = new Intent(this, SocketServerService.class);
+        startService(serviceIntent);
+
         //try {
         //ServerSocket server = new ServerSocket(8080);
         //Log.d(TAG, "Server has started on localhost.\r\nWaiting for a connection...");
 
-            Thread thread = new Thread(() -> {
-                String host = "localhost";
-                int port = 8888;
-                try  {
-                    InetSocketAddress listenAddress = new InetSocketAddress(host, port);
-                    SocketServer server = new SocketServer(listenAddress);
-                    server.run();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-            thread.start();
+/*
+        Thread thread = new Thread(() -> {
+            String host = "localhost";
+            int port = 8888;
+            try {
+                InetSocketAddress listenAddress = new InetSocketAddress(host, port);
+                SocketServer server = new SocketServer(listenAddress);
+                server.run();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
+*/
 
           /* InputStream in = client.getInputStream();
             OutputStream out = client.getOutputStream();

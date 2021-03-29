@@ -3,8 +3,8 @@
     package="com.example.rfid_mobilapp">
 
     <uses-permission android:name="android.permission.NFC" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -16,10 +16,12 @@
         <activity android:name=".MainActivity">
 
             <intent-filter>
-                <action android:name="android.nfc.action.TECH_DISCOVERED"/>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
             </intent-filter>
-            <meta-data android:name="android.nfc.action.TECH_DISCOVERED"
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
                 android:resource="@xml/nfc_tech_filter" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -27,13 +29,17 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:host="primaryid"
+
+                <data
+                    android:host="primaryid"
                     android:scheme="androidrfid" />
             </intent-filter>
         </activity>
 
+        <service android:name=".SocketServerService"/>
     </application>
 
 </manifest>
