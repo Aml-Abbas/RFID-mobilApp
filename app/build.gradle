@@ -36,4 +36,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'org.java-websocket:Java-WebSocket:1.5.1'
+    implementation group: 'org.json', name: 'json', version: '20210307'
+
 }
