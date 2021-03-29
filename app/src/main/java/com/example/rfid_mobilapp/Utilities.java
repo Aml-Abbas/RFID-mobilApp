@@ -83,4 +83,13 @@ public class Utilities {
         }
         return jsonObject;
     }
+
+    public static String getItemFromJson(JSONObject obj, String item) throws JSONException {
+        return obj.getString(item);
+
+    }
+     // json look like this  {"toDo": "write", "value": "AA98765678GG"}
+    // json look like this  {"toDo": "chechIn", "value": "false"}
+    // json look like this  {"toDo": "checkIn", "value": "true"}
+
 }
