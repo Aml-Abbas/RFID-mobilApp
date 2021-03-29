@@ -16,11 +16,14 @@ import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
     String newItemId;
     String doCheckIn;
     Spinner spinner;
-    Button stopSocketServiceButton;
+    Switch stopSocketServiceButton;
+    Intent serviceIntent;
     Locale myLocale;
     String currentLanguage = "en", currentLang;
     ServerSocket server;
@@ -49,14 +53,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setLocale("sv");
         setContentView(R.layout.activity_main);
-        currentLanguage = getIntent().getStringExtra(currentLang);
+
+        Log.d(TAG, "language: " + getResources().getConfiguration().getLocales().get(0).getLanguage());
+
         getIds();
-        chooseLanguage();
-        Intent serviceIntent = new Intent(this, SocketServerService.class);
+        setUpSpinner(spinner);
+        setUpStopSocketServiceButton();
+        serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);
-        stopSocketServiceButton.setOnClickListener(v -> {
-            stopService(serviceIntent);
+    }
+
+    private void setUpStopSocketServiceButton() {
+        stopSocketServiceButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    startService(serviceIntent);
+                } else {
+                    stopService(serviceIntent);
+                }
+            }
         });
     }
 
@@ -102,38 +119,19 @@ public class MainActivity extends AppCompatActivity {
     } */
 
     private void getIds() {
-     //   mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        //   mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         mainActivityContext = this;
         spinner = findViewById(R.id.spinner);
-        stopSocketServiceButton= findViewById(R.id.stopSocketServiceButton);
+        stopSocketServiceButton = findViewById(R.id.stopSocketServiceButton);
     }
-    private void chooseLanguage() {
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.languages, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                switch (position) {
-                    case 0: break;
-                    case 1: setLocale("en"); break;
-                    case 2: setLocale("sv"); break;
-                }
-            }
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-                }
-            });
-
-            }
 
     public void setLocale(String localeName) {
-        if (!localeName.equals(currentLanguage)) {
+        if (!localeName.equals(currentLang)) {
             myLocale = new Locale(localeName);
             Resources res = getResources();
             DisplayMetrics dm = res.getDisplayMetrics();
             Configuration conf = res.getConfiguration();
+            conf.setLocale(myLocale);
             conf.locale = myLocale;
             res.updateConfiguration(conf, dm);
             Intent refresh = new Intent(this, MainActivity.class);
@@ -142,6 +140,40 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(MainActivity.this, "Language already selected!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void setUpSpinner(Spinner spinner) {
+
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.languages, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        break;
+                    case 1:
+                        setLocale("en");
+                        Log.d(TAG, "en Selected");
+                        Log.d(TAG, "language: " + getResources().getConfiguration().getLocales().get(0).getLanguage());
+
+                        break;
+                    case 2:
+                        setLocale("sv");
+                        Log.d(TAG, "SE Selected");
+                        Log.d(TAG, "language: " + getResources().getConfiguration().getLocales().get(0).getLanguage());
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
 }
