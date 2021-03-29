@@ -10,24 +10,34 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG = MainActivity.class.getSimpleName();
-    TextView tagContentTextView;
     NfcAdapter mNfcAdapter;
     Context mainActivityContext;
     String newItemId;
     String doCheckIn;
     Spinner spinner;
+    Button stopSocketServiceButton;
     Locale myLocale;
     String currentLanguage = "en", currentLang;
     ServerSocket server;
@@ -41,8 +51,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getIds();
+       // chooseLanguage();
         Intent serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);
+        stopSocketServiceButton.setOnClickListener(v -> {
+            stopService(serviceIntent);
+        });
     }
 
 
@@ -84,27 +99,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(chooser);
             }
         }
-    }
+    } */
 
     private void getIds() {
-        tagContentTextView = findViewById(R.id.tagContentTextView);
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+     //   mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         mainActivityContext = this;
-        spinner = (Spinner) findViewById(R.id.spinner);
+        spinner = findViewById(R.id.spinner);
+        stopSocketServiceButton= findViewById(R.id.stopSocketServiceButton);
     }
-    private void chooseLanguage() {
+  /*  private void chooseLanguage() {
         currentLanguage = getIntent().getStringExtra(currentLang);
-        List<String> list = new ArrayList<String>();
-
+        List<String> list = new ArrayList<>();
         list.add("Select language");
         list.add("English");
         list.add("Svenska");
-
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -119,13 +130,14 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             }
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                }
+            });
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
             }
-        });
-    }
-    private void setLocale(String localeName) {
+
+    public void setLocale(String localeName) {
         if (!localeName.equals(currentLanguage)) {
             myLocale = new Locale(localeName);
             Resources res = getResources();
@@ -137,8 +149,8 @@ public class MainActivity extends AppCompatActivity {
             refresh.putExtra(currentLang, localeName);
             startActivity(refresh);
         } else {
-            Toast.makeText(MainActivity.this, R.string.same_language, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Language already selected!", Toast.LENGTH_SHORT).show();
         }
-    }*/
-
+    }
+*/
 }

@@ -1,11 +1,14 @@
 package com.example.rfid_mobilapp;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -13,6 +16,10 @@ import androidx.core.app.NotificationCompat;
 import java.net.InetSocketAddress;
 
 public class SocketServerService extends Service {
+    NotificationManager notificationManager;
+    private final String TAG = SocketServerService.class.getSimpleName();
+    private  final  String channelId = "channel";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -20,6 +27,7 @@ public class SocketServerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        createNotificationChannel();
         createNotification();
         Thread thread = new Thread(() -> {
             String host = "localhost";
@@ -38,6 +46,8 @@ public class SocketServerService extends Service {
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "Service Stopped");
+        notificationManager.cancel(0);
         super.onDestroy();
     }
 
@@ -48,13 +58,14 @@ public class SocketServerService extends Service {
     }
 
     private void createNotification() {
+
         Intent openAppIntent = new Intent(this, MainActivity.class);
         openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         PendingIntent openAppPendingIntent =
                 PendingIntent.getActivity(this, 0, openAppIntent, 0);
 
-        NotificationCompat.Builder SocketServerServiceNotification = new NotificationCompat.Builder(this, "q")
+        NotificationCompat.Builder SocketServerServiceNotification = new NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(R.drawable.message_24)
                 .setContentTitle("SocketServerService")
                 .setContentText("The service is running")
@@ -62,8 +73,18 @@ public class SocketServerService extends Service {
                 .addAction(R.drawable.back_24, "Back to the app", openAppPendingIntent)
                 .setOngoing(true);
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, SocketServerServiceNotification.build());
+    }
+
+    private void createNotificationChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance= NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel= new NotificationChannel(channelId, "channelName", importance);
+            channel.setDescription("My channel");
+            NotificationManager notificationManager= getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
 }

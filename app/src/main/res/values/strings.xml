@@ -12,7 +12,6 @@
     <string name="success_checkin">Success to check in.</string>
     <string name="failed_checkout">Failed to check out.</string>
     <string name="success_checkout">Success to check out.</string>
-    <string name="change_lan">Change language.</string>
     <string name="open_site">Open website for item:</string>
     <string name="same_language">Language already selected!</string>
     <string name="cancel">Back</string>
