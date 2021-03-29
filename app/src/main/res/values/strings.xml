@@ -19,5 +19,6 @@
     <string name="select_language">"select language "</string>
     <string name="english">english</string>
     <string name="swedish">swedish</string>
+    <string name="Quria_integration">Quria integration</string>
 
 </resources>

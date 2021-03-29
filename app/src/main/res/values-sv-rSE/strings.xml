@@ -22,5 +22,6 @@
     <string name="select_language">välj språk</string>
     <string name="english">engelska</string>
     <string name="swedish">svenska</string>
+    <string name="Quria_integration">Quria integration</string>
 
 </resources>
