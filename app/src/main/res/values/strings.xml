@@ -21,4 +21,7 @@
     <string name="swedish">swedish</string>
     <string name="Quria_integration">Quria integration</string>
 
+    <string name="socket_server_service">SocketServerService</string>
+    <string name="service_running">The service is running</string>
+    <string name="back_app">Back to the app</string>
 </resources>

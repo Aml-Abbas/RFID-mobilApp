@@ -67,10 +67,10 @@ public class SocketServerService extends Service {
 
         NotificationCompat.Builder SocketServerServiceNotification = new NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(R.drawable.message_24)
-                .setContentTitle("SocketServerService")
-                .setContentText("The service is running")
+                .setContentTitle(getResources().getString(R.string.socket_server_service))
+                .setContentText(getResources().getString(R.string.service_running))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .addAction(R.drawable.back_24, "Back to the app", openAppPendingIntent)
+                .addAction(R.drawable.back_24, getResources().getString(R.string.back_app), openAppPendingIntent)
                 .setOngoing(true);
 
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

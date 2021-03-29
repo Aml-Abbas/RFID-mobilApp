@@ -24,4 +24,8 @@
     <string name="swedish">svenska</string>
     <string name="Quria_integration">Quria integration</string>
 
+    <string name="socket_server_service">SocketServerService</string>
+    <string name="service_running">service kör</string>
+    <string name="back_app">Tillaka till appen</string>
+
 </resources>
