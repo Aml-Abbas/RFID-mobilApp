@@ -10,6 +10,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.nfc.NfcAdapter;
@@ -43,9 +44,11 @@ public class MainActivity extends AppCompatActivity {
     Switch stopSocketServiceButton;
     Intent serviceIntent;
     Locale myLocale;
-    String currentLanguage = "en", currentLang;
-    ServerSocket server;
-    Socket client;
+    private SharedPreferences preferences;
+    private final String LANG_PREF_KEY = "language";
+    private final String LANGUAGE_SWEDISH = "sv";
+    private final String LANGUAGE_ENGLISH = "en";
+
 
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
@@ -53,11 +56,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setLocale("sv");
+
+        preferences = getSharedPreferences("langpref", MODE_PRIVATE);
+        if (preferences != null) {
+            setLocale(preferences.getString(LANG_PREF_KEY, LANGUAGE_ENGLISH));
+        }
+
         setContentView(R.layout.activity_main);
-
-        Log.d(TAG, "language: " + getResources().getConfiguration().getLocales().get(0).getLanguage());
-
         getIds();
         setUpSpinner(spinner);
         setUpStopSocketServiceButton();
@@ -126,20 +131,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setLocale(String localeName) {
-        if (!localeName.equals(currentLang)) {
-            myLocale = new Locale(localeName);
-            Resources res = getResources();
-            DisplayMetrics dm = res.getDisplayMetrics();
-            Configuration conf = res.getConfiguration();
-            conf.setLocale(myLocale);
-            conf.locale = myLocale;
-            res.updateConfiguration(conf, dm);
-            Intent refresh = new Intent(this, MainActivity.class);
-            refresh.putExtra(currentLang, localeName);
-            startActivity(refresh);
-        } else {
-            Toast.makeText(MainActivity.this, "Language already selected!", Toast.LENGTH_SHORT).show();
-        }
+        myLocale = new Locale(localeName);
+        Resources resources = getResources();
+        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(myLocale);
+        resources.updateConfiguration(config, displayMetrics);
+    }
+
+    private void restartActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
     private void setUpSpinner(Spinner spinner) {
@@ -155,16 +158,20 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         break;
                     case 1:
-                        setLocale("en");
-                        Log.d(TAG, "en Selected");
-                        Log.d(TAG, "language: " + getResources().getConfiguration().getLocales().get(0).getLanguage());
-
+                        if (getResources().getConfiguration().getLocales().get(0).getLanguage().equals(LANGUAGE_ENGLISH))
+                            Toast.makeText(MainActivity.this, R.string.same_language, Toast.LENGTH_SHORT).show();
+                        else {
+                            preferences.edit().putString(LANG_PREF_KEY, LANGUAGE_ENGLISH).apply();
+                            restartActivity();
+                        }
                         break;
                     case 2:
-                        setLocale("sv");
-                        Log.d(TAG, "SE Selected");
-                        Log.d(TAG, "language: " + getResources().getConfiguration().getLocales().get(0).getLanguage());
-
+                        if (getResources().getConfiguration().getLocales().get(0).getLanguage().equals(LANGUAGE_SWEDISH))
+                            Toast.makeText(MainActivity.this, R.string.same_language, Toast.LENGTH_SHORT).show();
+                        else {
+                            preferences.edit().putString(LANG_PREF_KEY, LANGUAGE_SWEDISH).apply();
+                            restartActivity();
+                        }
                         break;
                 }
             }

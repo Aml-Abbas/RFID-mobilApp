@@ -46,7 +46,6 @@ public class SocketServerService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.d(TAG, "Service Stopped");
         notificationManager.cancel(0);
         super.onDestroy();
     }
