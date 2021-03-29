@@ -50,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        currentLanguage = getIntent().getStringExtra(currentLang);
         getIds();
-       // chooseLanguage();
+        chooseLanguage();
         Intent serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);
         stopSocketServiceButton.setOnClickListener(v -> {
@@ -107,27 +107,18 @@ public class MainActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spinner);
         stopSocketServiceButton= findViewById(R.id.stopSocketServiceButton);
     }
-  /*  private void chooseLanguage() {
-        currentLanguage = getIntent().getStringExtra(currentLang);
-        List<String> list = new ArrayList<>();
-        list.add("Select language");
-        list.add("English");
-        list.add("Svenska");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+    private void chooseLanguage() {
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.languages, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 switch (position) {
-                    case 0:
-                        break;
-                    case 1:
-                        setLocale("en");
-                        break;
-                    case 2:
-                        setLocale("sv");
-                        break;
+                    case 0: break;
+                    case 1: setLocale("en"); break;
+                    case 2: setLocale("sv"); break;
                 }
             }
                 @Override
@@ -152,5 +143,5 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Language already selected!", Toast.LENGTH_SHORT).show();
         }
     }
-*/
+
 }

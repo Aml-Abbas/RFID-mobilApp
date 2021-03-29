@@ -16,4 +16,8 @@
     <string name="same_language">Language already selected!</string>
     <string name="cancel">Back</string>
     <string name="turn_off_rfid_service">Turn off RFID service</string>
+    <string name="select_language">"select language "</string>
+    <string name="english">english</string>
+    <string name="swedish">swedish</string>
+
 </resources>
