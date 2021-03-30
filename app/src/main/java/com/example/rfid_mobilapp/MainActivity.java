@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-     /*   @Override
+       @Override
     protected void onResume() {
         super.onResume();
         NfcTagUtil.enableNFCInForeground(mNfcAdapter, this, getClass());
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         NfcTagUtil.disableNFCInForeground(mNfcAdapter, this);
     }
 
-    @Override
+     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (doCheckIn != null) {
@@ -110,10 +111,7 @@ public class MainActivity extends AppCompatActivity {
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
             newItemId = "";
         } else {
-            tagContentTextView.setText("");
             String payload = NfcTagUtil.getItemId(intent, this);
-            tagContentTextView.setText(payload);
-
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("https://aml-abbas.github.io/RFID-mobilApp/Quria/?itemId=" + payload));
             Intent chooser = Intent.createChooser(intent, "Item Id: " + payload);
@@ -121,10 +119,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(chooser);
             }
         }
-    } */
+    }
 
     private void getIds() {
-        //   mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         mainActivityContext = this;
         spinner = findViewById(R.id.spinner);
         stopSocketServiceButton = findViewById(R.id.stopSocketServiceButton);
