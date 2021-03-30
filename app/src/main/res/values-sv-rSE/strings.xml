@@ -15,8 +15,17 @@
     <string name="success_checkin">lyckades checka in.</string>
     <string name="failed_checkout">misslyckades checka out.</string>
     <string name="success_checkout">lyckades checka out.</string>
-    <string name="change_lan">Ändra sråk.</string>
     <string name="open_site">Öppna web sida för item:</string>
     <string name="same_language">Språket är redan valt.</string>
     <string name="cancel">Tillbaka</string>
+    <string name="turn_off_rfid_service">Stäng av RFID service</string>
+    <string name="select_language">välj språk</string>
+    <string name="english">engelska</string>
+    <string name="swedish">svenska</string>
+    <string name="Quria_integration">Quria integration</string>
+
+    <string name="socket_server_service">SocketServerService</string>
+    <string name="service_running">service kör</string>
+    <string name="back_app">Tillaka till appen</string>
+
 </resources>

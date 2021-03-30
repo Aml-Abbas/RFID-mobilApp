@@ -12,8 +12,16 @@
     <string name="success_checkin">Success to check in.</string>
     <string name="failed_checkout">Failed to check out.</string>
     <string name="success_checkout">Success to check out.</string>
-    <string name="change_lan">Change language.</string>
     <string name="open_site">Open website for item:</string>
     <string name="same_language">Language already selected!</string>
     <string name="cancel">Back</string>
+    <string name="turn_off_rfid_service">Turn off RFID service</string>
+    <string name="select_language">"select language "</string>
+    <string name="english">english</string>
+    <string name="swedish">swedish</string>
+    <string name="Quria_integration">Quria integration</string>
+
+    <string name="socket_server_service">SocketServerService</string>
+    <string name="service_running">The service is running</string>
+    <string name="back_app">Back to the app</string>
 </resources>

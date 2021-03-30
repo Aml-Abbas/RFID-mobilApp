@@ -1,12 +1,18 @@
 package com.example.rfid_mobilapp;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,43 +21,34 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Locale;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG = MainActivity.class.getSimpleName();
-    TextView tagContentTextView;
     NfcAdapter mNfcAdapter;
     Context mainActivityContext;
     String newItemId;
     String doCheckIn;
     Spinner spinner;
+    Switch stopSocketServiceButton;
+    Intent serviceIntent;
     Locale myLocale;
-    String currentLanguage = "en", currentLang;
-    ServerSocket server;
-    Socket client;
+    private SharedPreferences preferences;
+    private final String LANG_PREF_KEY = "language";
+    private final String LANGUAGE_SWEDISH = "sv";
+    private final String LANGUAGE_ENGLISH = "en";
+
 
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
@@ -59,45 +56,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        //try {
-        //ServerSocket server = new ServerSocket(8080);
-        //Log.d(TAG, "Server has started on localhost.\r\nWaiting for a connection...");
-        Thread thread = new Thread(() -> {
-            String host = "localhost";
-            int port = 8888;
-            try  {
-                InetSocketAddress listenAddress = new InetSocketAddress(host, port);
-                SocketServer server = new SocketServer(listenAddress);
-                server.run();
-            } catch (Exception e) {
-                e.printStackTrace();
+        preferences = getSharedPreferences("langpref", MODE_PRIVATE);
+        if (preferences != null) {
+            setLocale(preferences.getString(LANG_PREF_KEY, LANGUAGE_ENGLISH));
+        }
+
+        setContentView(R.layout.activity_main);
+        getIds();
+        setUpSpinner(spinner);
+        setUpStopSocketServiceButton();
+        serviceIntent = new Intent(this, SocketServerService.class);
+        startService(serviceIntent);
+    }
+
+    private void setUpStopSocketServiceButton() {
+        stopSocketServiceButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    startService(serviceIntent);
+                } else {
+                    stopService(serviceIntent);
+                }
             }
         });
-        thread.start();
-
-           /* InputStream in = client.getInputStream();
-            OutputStream out = client.getOutputStream();
-            Scanner s = new Scanner(in, "UTF-8");
-            String data = s.useDelimiter("\\r\\n\\r\\n").next();
-            Matcher get = Pattern.compile("^GET").matcher(data);
-            if (get.find()) {
-                Matcher match = Pattern.compile("Sec-WebSocket-Key: (.*)").matcher(data);
-                match.find();
-                byte[] response = ("HTTP/1.1 101 Switching Protocols\r\n"
-                        + "Connection: Upgrade\r\n"
-                        + "Upgrade: websocket\r\n"
-                        + "Sec-WebSocket-Accept: "
-                        + Base64.getEncoder().encodeToString(MessageDigest.getInstance("SHA-1").digest((match.group(1) + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").getBytes("UTF-8")))
-                        + "\r\n\r\n").getBytes("UTF-8");
-                out.write(response, 0, response.length);
-        doCheckIn = uri.getQueryParameter("doCheckIn");
-    }
-    chooseLanguage();*/
-            //} catch (IOException ioException) {
-            //    ioException.printStackTrace();
-            //}
     }
 
 
@@ -139,61 +121,66 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(chooser);
             }
         }
-    }
+    } */
 
     private void getIds() {
-        tagContentTextView = findViewById(R.id.tagContentTextView);
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        //   mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         mainActivityContext = this;
-        spinner = (Spinner) findViewById(R.id.spinner);
+        spinner = findViewById(R.id.spinner);
+        stopSocketServiceButton = findViewById(R.id.stopSocketServiceButton);
     }
-    private void chooseLanguage() {
-        currentLanguage = getIntent().getStringExtra(currentLang);
-        List<String> list = new ArrayList<String>();
 
-        list.add("Select language");
-        list.add("English");
-        list.add("Svenska");
+    public void setLocale(String localeName) {
+        myLocale = new Locale(localeName);
+        Resources resources = getResources();
+        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(myLocale);
+        resources.updateConfiguration(config, displayMetrics);
+    }
 
+    private void restartActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+    private void setUpSpinner(Spinner spinner) {
+
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.languages, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
                         break;
                     case 1:
-                        setLocale("en");
+                        if (getResources().getConfiguration().getLocales().get(0).getLanguage().equals(LANGUAGE_ENGLISH))
+                            Toast.makeText(MainActivity.this, R.string.same_language, Toast.LENGTH_SHORT).show();
+                        else {
+                            preferences.edit().putString(LANG_PREF_KEY, LANGUAGE_ENGLISH).apply();
+                            restartActivity();
+                        }
                         break;
                     case 2:
-                        setLocale("sv");
+                        if (getResources().getConfiguration().getLocales().get(0).getLanguage().equals(LANGUAGE_SWEDISH))
+                            Toast.makeText(MainActivity.this, R.string.same_language, Toast.LENGTH_SHORT).show();
+                        else {
+                            preferences.edit().putString(LANG_PREF_KEY, LANGUAGE_SWEDISH).apply();
+                            restartActivity();
+                        }
                         break;
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }
-    private void setLocale(String localeName) {
-        if (!localeName.equals(currentLanguage)) {
-            myLocale = new Locale(localeName);
-            Resources res = getResources();
-            DisplayMetrics dm = res.getDisplayMetrics();
-            Configuration conf = res.getConfiguration();
-            conf.locale = myLocale;
-            res.updateConfiguration(conf, dm);
-            Intent refresh = new Intent(this, MainActivity.class);
-            refresh.putExtra(currentLang, localeName);
-            startActivity(refresh);
-        } else {
-            Toast.makeText(MainActivity.this, R.string.same_language, Toast.LENGTH_SHORT).show();
-        }
-    }*/
 
 }

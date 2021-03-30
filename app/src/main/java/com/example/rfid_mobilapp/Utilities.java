@@ -1,5 +1,10 @@
 package com.example.rfid_mobilapp;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Utilities {
 
 
@@ -68,4 +73,23 @@ public class Utilities {
         currentData[20]= (byte) (CRC & 0xFF);
         return currentData;
     }
+
+    public static JSONObject stringToJson(String jsonString){
+        JSONObject jsonObject= null;
+        try {
+            jsonObject = new JSONObject(jsonString);
+        }catch (JSONException err){
+            Log.d("Error", err.toString());
+        }
+        return jsonObject;
+    }
+
+    public static String getItemFromJson(JSONObject obj, String item) throws JSONException {
+        return obj.getString(item);
+
+    }
+     // json look like this  {"toDo": "write", "value": "AA98765678GG"}
+    // json look like this  {"toDo": "chechIn", "value": "false"}
+    // json look like this  {"toDo": "checkIn", "value": "true"}
+
 }

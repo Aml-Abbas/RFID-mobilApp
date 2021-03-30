@@ -80,17 +80,10 @@ public class NfcTagUtil {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NfcV nfcV = NfcV.get(tag);
             byte[] tagId = tag.getId();
-
             byte[] oldData = readBlocks(tagId, nfcV, activity, 0, 8);
-            for (int i=0; i<oldData.length;i++){
-                System.out.println("byte nummer "+i+"is: "+oldData[i]);
-            }
             byte[] newDataWithBarcode = NfcTagUtil.setBarcode(itemId, oldData);
-            int CRCValue= Utilities.calculateCRC16(Utilities.getDataWithoutCRC(newDataWithBarcode));
-            byte[] newDataToWrite= setCRC(CRCValue, newDataWithBarcode);
-            for (int i=0; i<newDataToWrite.length;i++){
-                System.out.println("byte nummer "+i+"is: "+oldData[i]);
-            }
+            int CRCValue = Utilities.calculateCRC16(Utilities.getDataWithoutCRC(newDataWithBarcode));
+            byte[] newDataToWrite = setCRC(CRCValue, newDataWithBarcode);
             writeBlocks(tagId, nfcV, activity, 0, 8, newDataToWrite);
         }
     }
@@ -102,7 +95,6 @@ public class NfcTagUtil {
             for (int i = 0; i < blocks; i++) {
                 cmd[10] = (byte) ((offset + i) & 0x0ff);
                 System.arraycopy(newDataToWrite, 4 * i, cmd, 11, 4);
-
                 nfcV.transceive(cmd);
             }
             nfcV.close();
@@ -127,7 +119,7 @@ public class NfcTagUtil {
                 nfcV.transceive(cmd);
 
                 nfcV.close();
-                textId = doCheckIn ?  R.string.success_checkin : R.string.success_checkout;
+                textId = doCheckIn ? R.string.success_checkin : R.string.success_checkout;
             } catch (IOException ioException) {
                 textId = doCheckIn ? R.string.failed_checkin : R.string.failed_checkout;
             }
