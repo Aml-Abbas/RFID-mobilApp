@@ -8,10 +8,13 @@ import java.nio.ByteBuffer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SocketServer extends WebSocketServer {
 
     private final String TAG = SocketServer.class.getSimpleName();
+    SocketServerService socketServerService;
 
     public SocketServer(InetSocketAddress address) {
         super(address);
@@ -35,6 +38,32 @@ public class SocketServer extends WebSocketServer {
         if (message.equals("ping")) {
             // "command" ping received, sending echo.
             conn.send("echo");
+        }else {
+            JSONObject jsonObject= Utilities.stringToJson(message);
+            Log.d(TAG, "git json: "+ jsonObject);
+
+            String toDo="";
+            String value="";
+            try {
+                toDo= Utilities.getItemFromJson(jsonObject, "toDo");
+                value= Utilities.getItemFromJson(jsonObject, "value");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            switch (toDo){
+                case "write":
+                    socketServerService.openApp();
+                    MainActivity.setItemId(value);
+                    Log.d(TAG, "set item id: "+ value);
+
+                    break;
+                case "doCheckIn":
+                    socketServerService.openApp();
+                    MainActivity.setDoCheckIn(value);
+                    Log.d(TAG, "set docheck in "+ value);
+
+                    break;
+            }
         }
     }
 
@@ -45,8 +74,9 @@ public class SocketServer extends WebSocketServer {
 
     @Override
     public void onError(WebSocket conn, Exception ex) {
-        Log.d(TAG, "an error occurred on connection " + conn.getRemoteSocketAddress() + ":" + ex);
-    }
+        if (conn!= null){
+            Log.d(TAG, "an error occurred on connection " + conn.getRemoteSocketAddress() + ":" + ex);
+        }    }
 
     @Override
     public void onStart() {

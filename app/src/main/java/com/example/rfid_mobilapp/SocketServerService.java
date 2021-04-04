@@ -85,5 +85,9 @@ public class SocketServerService extends Service {
             notificationManager.createNotificationChannel(channel);
         }
     }
-
+    public void openApp(){
+        Intent openAppIntent = new Intent(this, MainActivity.class);
+        openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(openAppIntent);
+    }
 }
