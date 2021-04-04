@@ -34,7 +34,7 @@ public class SocketServerService extends Service {
             int port = 8888;
             try {
                 InetSocketAddress listenAddress = new InetSocketAddress(host, port);
-                SocketServer server = new SocketServer(listenAddress);
+                SocketServer server = new SocketServer(listenAddress, this);
                 server.run();
             } catch (Exception e) {
                 e.printStackTrace();

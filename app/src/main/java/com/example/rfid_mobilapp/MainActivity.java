@@ -111,17 +111,23 @@ public class MainActivity extends AppCompatActivity {
      @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (doCheckIn != null) {
-            if (doCheckIn.equals("false")) {
-                NfcTagUtil.check(intent, this, checkOut);
-            } else {
-                NfcTagUtil.check(intent, this, checkIn);
-            }
-            doCheckIn = null;
-            newItemId = "";
-        } else if (newItemId != "") {
-            NfcTagUtil.writeNewItemId(newItemId, intent, this);
-            newItemId = "";
+         Log.d(TAG, "new intent");
+
+         if (doCheckIn != null) {
+             Log.d(TAG, "will do check");
+             if (doCheckIn.equals("false")) {
+                 NfcTagUtil.check(intent, this, checkOut);
+                 Log.d(TAG, "out");
+             } else {
+                 NfcTagUtil.check(intent, this, checkIn);
+                 Log.d(TAG, "in");
+             }
+             doCheckIn = null;
+             newItemId = "";
+         } else if (newItemId != "") {
+             NfcTagUtil.writeNewItemId(newItemId, intent, this);
+             Log.d(TAG, "write new item id");
+             newItemId = "";
         } /*else {
             String payload = NfcTagUtil.getItemId(intent, this);
             intent = new Intent(Intent.ACTION_VIEW);
@@ -131,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(chooser);
             }
         }*/
+         finish();
     }
 
     private void getIds() {

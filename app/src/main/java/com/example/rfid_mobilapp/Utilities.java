@@ -88,8 +88,4 @@ public class Utilities {
         return obj.getString(item);
 
     }
-     // json look like this  {"toDo": "write", "value": "AA98765678GG"}
-    // json look like this  {"toDo": "chechIn", "value": "false"}
-    // json look like this  {"toDo": "checkIn", "value": "true"}
-
 }

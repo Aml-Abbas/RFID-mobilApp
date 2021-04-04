@@ -16,8 +16,9 @@ public class SocketServer extends WebSocketServer {
     private final String TAG = SocketServer.class.getSimpleName();
     SocketServerService socketServerService;
 
-    public SocketServer(InetSocketAddress address) {
+    public SocketServer(InetSocketAddress address, SocketServerService socketServerService) {
         super(address);
+        this.socketServerService= socketServerService;
     }
 
     @Override
@@ -41,28 +42,28 @@ public class SocketServer extends WebSocketServer {
         }else {
             JSONObject jsonObject= Utilities.stringToJson(message);
             Log.d(TAG, "git json: "+ jsonObject);
+            if (jsonObject!= null){
+                String toDo="";
+                String value="";
+                try {
+                    toDo= Utilities.getItemFromJson(jsonObject, "toDo");
+                    value= Utilities.getItemFromJson(jsonObject, "value");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                switch (toDo){
+                    case "write":
+                        MainActivity.setItemId(value);
+                        Log.d(TAG, "set item id: "+ value);
 
-            String toDo="";
-            String value="";
-            try {
-                toDo= Utilities.getItemFromJson(jsonObject, "toDo");
-                value= Utilities.getItemFromJson(jsonObject, "value");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            switch (toDo){
-                case "write":
-                    socketServerService.openApp();
-                    MainActivity.setItemId(value);
-                    Log.d(TAG, "set item id: "+ value);
+                        break;
+                    case "doCheckIn":
+                        MainActivity.setDoCheckIn(value);
+                        Log.d(TAG, "set docheck in "+ value);
 
-                    break;
-                case "doCheckIn":
-                    socketServerService.openApp();
-                    MainActivity.setDoCheckIn(value);
-                    Log.d(TAG, "set docheck in "+ value);
-
-                    break;
+                        break;
+                }
+                socketServerService.openApp();
             }
         }
     }
@@ -88,7 +89,7 @@ public class SocketServer extends WebSocketServer {
         String host = "localhost";
         int port = 8887;
 
-        WebSocketServer server = new SocketServer(new InetSocketAddress(host, port));
-        server.run();
+//        WebSocketServer server = new SocketServer(new InetSocketAddress(host, port));
+ //       server.run();
     }
 }
