@@ -1,4 +1,4 @@
-var androiduri;
+/* var androiduri;
 
 function getParameterByName(name, url = window.location.href) {
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -17,7 +17,7 @@ function getIdFromParam() {
 function openAppen(){
     var itemId = document.getElementById("item-id-input").value;
     location.href = "androidrfid://primaryid?itemid=" + itemId;
-}
+} */
 
 function write_item_id() {
   var itemId = document.getElementById("item-id-input").value;
