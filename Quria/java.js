@@ -19,6 +19,16 @@ function openAppen(){
     location.href = "androidrfid://primaryid?itemid=" + itemId;
 }
 
+function write_item_id() {
+  var itemId = document.getElementById("item-id-input").value;
+  ws.send('{"toDo": "write", "value": "'+itemId+'"}');
+}
+
+function do_check_in(value) {
+  ws.send('{"toDo": "doCheckIn", "value": "'+value+'"}');
+}
+
+
 var ip = "localhost";
 var port = "8888";
 var ws = new WebSocket("ws://" + ip + ":" + port);
