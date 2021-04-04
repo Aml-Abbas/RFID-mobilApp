@@ -36,11 +36,11 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    private final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
     NfcAdapter mNfcAdapter;
     Context mainActivityContext;
-    String newItemId;
-    String doCheckIn;
+    static String newItemId;
+    static String doCheckIn;
     Spinner spinner;
     Switch stopSocketServiceButton;
     Intent serviceIntent;
@@ -53,6 +53,18 @@ public class MainActivity extends AppCompatActivity {
 
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
+
+    public static void setItemId(String itemId) {
+        Log.d(TAG, "item id is now"+ itemId);
+
+        newItemId= itemId;
+    }
+
+    public static void setDoCheckIn(String value) {
+        Log.d(TAG, "value now is "+ value);
+
+        doCheckIn= value;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
