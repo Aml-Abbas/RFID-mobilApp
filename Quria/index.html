@@ -41,17 +41,16 @@ h1 {letter-spacing: 6px}
 
             <input type="text" id="item-id-input" placeholder="Write a new item id" name="itemId"><br>
 
-  <button id="btn" class="button button5 w3-bar-item w3-button" onclick="openAppen()"><a id="link">Write</a></button>  </div>
+  <button id="btn" class="button button5 w3-bar-item w3-button" onclick="write_item_id()">Write</button>
+  </div>
    
   </div>
   <h1 class="w3-xlarge">Or</h1>
 
    <div class="w3-padding-10">
     <div class="w3-bar w3-border">
-        <button class="button button5 w3-bar-item w3-button"><a href="androidrfid://primaryid?doCheckIn=true" >Check in</a>
-</button>
-  <button class="button button5 w3-bar-item w3-button"><a href="androidrfid://primaryid?doCheckIn=false" >Check out</a>
-  </button>
+        <button class="button button5 w3-bar-item w3-button" onclick="do_check_in('true')">Check in</button>
+        <button class="button button5 w3-bar-item w3-button" onclick="do_check_in('false')">Check out</button>
     </div>
   </div>
   
