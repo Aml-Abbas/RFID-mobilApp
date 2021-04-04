@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (newItemId != "") {
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
             newItemId = "";
-        } else {
+        } /*else {
             String payload = NfcTagUtil.getItemId(intent, this);
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("https://aml-abbas.github.io/RFID-mobilApp/Quria/?itemId=" + payload));
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(chooser);
             }
-        }
+        }*/
     }
 
     private void getIds() {
