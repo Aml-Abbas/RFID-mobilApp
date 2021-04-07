@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(chooser);
             }
         }*/
-        moveTaskToBack(true);
+    finish();
     }
 
     private void getIds() {
