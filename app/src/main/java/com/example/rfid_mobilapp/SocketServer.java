@@ -55,12 +55,10 @@ public class SocketServer extends WebSocketServer {
                     case "write":
                         MainActivity.setItemId(value);
                         Log.d(TAG, "set item id: "+ value);
-
                         break;
                     case "doCheckIn":
                         MainActivity.setDoCheckIn(value);
                         Log.d(TAG, "set docheck in "+ value);
-
                         break;
                 }
                 socketServerService.openApp();

@@ -31,7 +31,6 @@ public class Utilities {
         for (int i = 0; i < barcode.length(); i++) {
             temp[i] = (byte) barcode.charAt(i);
         }
-
         for (int i = 0; i < len; i++) {
             currentData[start + i] = temp[i];
         }
@@ -62,23 +61,23 @@ public class Utilities {
             dataWithoutCRC[i] = data[i];
         }
         for (int i = 21; i < 32; i++) {
-            dataWithoutCRC[i-2] = data[i];
+            dataWithoutCRC[i - 2] = data[i];
         }
 
         return dataWithoutCRC;
     }
 
     public static byte[] replaceCRC(int CRC, byte[] currentData) {
-        currentData[19]= (byte) ((CRC >> 8) & 0xFF);
-        currentData[20]= (byte) (CRC & 0xFF);
+        currentData[19] = (byte) ((CRC >> 8) & 0xFF);
+        currentData[20] = (byte) (CRC & 0xFF);
         return currentData;
     }
 
-    public static JSONObject stringToJson(String jsonString){
-        JSONObject jsonObject= null;
+    public static JSONObject stringToJson(String jsonString) {
+        JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(jsonString);
-        }catch (JSONException err){
+        } catch (JSONException err) {
             Log.d("Error", err.toString());
         }
         return jsonObject;
