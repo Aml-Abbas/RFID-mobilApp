@@ -64,10 +64,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "value now is " + value);
         doCheckIn = value;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, " on create" );
+        Log.d(TAG, " on create");
 
         preferences = getSharedPreferences("langpref", MODE_PRIVATE);
         if (preferences != null) {
@@ -106,11 +107,13 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         Log.d(TAG, "on onDestroy");
     }
+
     @Override
     protected void onRestart() {
         super.onRestart();
         Log.d(TAG, "on onReStart");
     }
+
     @Override
     protected void onResume() {
         super.onResume();
