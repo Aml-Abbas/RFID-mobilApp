@@ -2,6 +2,7 @@ package com.example.rfid_mobilapp;
 
 import android.util.Log;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -78,15 +79,19 @@ public class SocketServer extends WebSocketServer {
 
     @Override
     public void onError(WebSocket conn, Exception ex) {
-        if (conn!= null){
-            Log.d(TAG, "an error occurred on connection " + conn.getRemoteSocketAddress() + ":" + ex);
-        }    }
+        Log.d(TAG, "received ByteBuffer from " + conn.getRemoteSocketAddress());
+    }
 
     @Override
     public void onStart() {
         Log.d(TAG, "server started successfully");
     }
 
+    @Override
+    public void stop() throws IOException, InterruptedException {
+        Log.d(TAG, "stop: called");
+        super.stop();
+    }
 
     public static void main(String[] args) {
         String host = "localhost";

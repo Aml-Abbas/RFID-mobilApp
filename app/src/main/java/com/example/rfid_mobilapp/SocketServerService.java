@@ -18,18 +18,27 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class SocketServerService extends Service {
     NotificationManager notificationManager;
     SocketServer server;
     InetSocketAddress listenAddress;
+    private Thread serverThread;
+    private final String host = "localhost";
+    private final int port = 8888;
     private final String TAG = SocketServerService.class.getSimpleName();
     private  final  String channelId = "channel";
 
     @Override
     public void onCreate() {
+        new Thread(() -> {
+            InetSocketAddress listenAddress = new InetSocketAddress(host, port);
+            server = new SocketServer(listenAddress, this);
+        }).start();
         super.onCreate();
+
     }
 
     @Override
@@ -63,6 +72,12 @@ public class SocketServerService extends Service {
     public void onDestroy() {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
+        try {
+            server.stop();
+            serverThread.join();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
         super.onDestroy();
     }
 

@@ -45,3 +45,8 @@ ws.onmessage = function (event) {
     alert(event.data);
   }
 }
+
+ws.onclose = function (even) {
+  alert("Connection Closed");
+  ws.close();
+}

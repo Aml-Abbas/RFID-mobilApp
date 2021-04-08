@@ -134,11 +134,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "on pause");
     }
 
-    @Override
+ @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Log.d(TAG, "new intent");
-
         if (doCheckIn != null) {
             Log.d(TAG, "will do check");
             if (doCheckIn.equals("false")) {
