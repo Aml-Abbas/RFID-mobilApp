@@ -137,24 +137,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.d(TAG, "new intent");
+        Log.d(TAG, "new intent = " + intent.getAction());
 
-        if (doCheckIn != null) {
-            Log.d(TAG, "will do check");
-            if (doCheckIn.equals("false")) {
-                NfcTagUtil.check(intent, this, checkOut);
-                Log.d(TAG, "out");
-            } else {
-                NfcTagUtil.check(intent, this, checkIn);
-                Log.d(TAG, "in");
-            }
-            doCheckIn = null;
-            newItemId = "";
-        } else if (newItemId != "") {
-            NfcTagUtil.writeNewItemId(newItemId, intent, this);
-            Log.d(TAG, "write new item id");
-            newItemId = "";
-        } /*else {
+        if (intent.getAction() != null && intent.getAction().equals("android.nfc.action.TECH_DISCOVERED")) {
+            if (doCheckIn != null) {
+                Log.d(TAG, "will do check");
+                if (doCheckIn.equals("false")) {
+                    NfcTagUtil.check(intent, this, checkOut);
+                    Log.d(TAG, "out");
+                } else {
+                    NfcTagUtil.check(intent, this, checkIn);
+                    Log.d(TAG, "in");
+                }
+                doCheckIn = null;
+                newItemId = "";
+            } else if (!newItemId.equals("")) {
+                NfcTagUtil.writeNewItemId(newItemId, intent, this);
+                Log.d(TAG, "write new item id");
+                newItemId = "";
+            } /*else {
             String payload = NfcTagUtil.getItemId(intent, this);
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("https://aml-abbas.github.io/RFID-mobilApp/Quria/?itemId=" + payload));
@@ -163,7 +164,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(chooser);
             }
         }*/
-    finish();
+            if (intent.getAction() != null)
+                finish();
+        }
     }
 
     private void getIds() {
