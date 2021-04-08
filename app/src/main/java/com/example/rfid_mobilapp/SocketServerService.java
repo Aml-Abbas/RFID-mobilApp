@@ -53,6 +53,7 @@ public class SocketServerService extends Service {
 
     @Override
     public void onDestroy() {
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
         super.onDestroy();
     }
