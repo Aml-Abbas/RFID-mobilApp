@@ -21,7 +21,7 @@
             >
 
             <intent-filter>
-                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+                <action android:name="android.nfc.action.TECH_DISCOVERED"/>
             </intent-filter>
             <meta-data
                 android:name="android.nfc.action.TECH_DISCOVERED"
@@ -30,6 +30,11 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
         </activity>

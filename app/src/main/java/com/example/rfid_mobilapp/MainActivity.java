@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private static final boolean checkOut = false;
 
     public static void setItemId(String itemId) {
-        Log.d(TAG, "item id is now" + itemId);
+        Log.d(TAG, "1. item id is now" + itemId);
         newItemId = itemId;
     }
 
@@ -134,28 +134,33 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "on pause");
     }
 
-    @Override
+ @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.d(TAG, "new intent = " + intent.getAction());
+        Log.d(TAG, "new intent");
+        if (doCheckIn != null) {
+            Log.d(TAG, "will do check");
+            if (doCheckIn.equals("false")) {
+                NfcTagUtil.check(intent, this, checkOut);
+                Log.d(TAG, "out");
+            } else {
+                NfcTagUtil.check(intent, this, checkIn);
+                Log.d(TAG, "in");
+            }
+            doCheckIn = null;
+            newItemId = "";
+        } else if (newItemId != null && !newItemId.isEmpty()) {
+            NfcTagUtil.writeNewItemId(newItemId, intent, this);
+            newItemId = "";
+        } else {
+            String payload = NfcTagUtil.getItemId(intent, this);
+            serviceIntent = new Intent(this, SocketServerService.class);
+            serviceIntent.setAction("READ_TAG");
+            serviceIntent.putExtra("itemId", payload);
+            startService(serviceIntent);
+        }
 
-        if (intent.getAction() != null && intent.getAction().equals("android.nfc.action.TECH_DISCOVERED")) {
-            if (doCheckIn != null) {
-                Log.d(TAG, "will do check");
-                if (doCheckIn.equals("false")) {
-                    NfcTagUtil.check(intent, this, checkOut);
-                    Log.d(TAG, "out");
-                } else {
-                    NfcTagUtil.check(intent, this, checkIn);
-                    Log.d(TAG, "in");
-                }
-                doCheckIn = null;
-                newItemId = "";
-            } else if (!newItemId.equals("")) {
-                NfcTagUtil.writeNewItemId(newItemId, intent, this);
-                Log.d(TAG, "write new item id");
-                newItemId = "";
-            } /*else {
+        /*else {
             String payload = NfcTagUtil.getItemId(intent, this);
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("https://aml-abbas.github.io/RFID-mobilApp/Quria/?itemId=" + payload));
@@ -164,9 +169,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(chooser);
             }
         }*/
-            if (intent.getAction() != null)
-                finish();
-        }
+        moveTaskToBack(true);
     }
 
     private void getIds() {

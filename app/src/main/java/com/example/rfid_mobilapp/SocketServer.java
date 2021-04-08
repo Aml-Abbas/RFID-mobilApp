@@ -5,6 +5,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -16,14 +18,17 @@ public class SocketServer extends WebSocketServer {
 
     private final String TAG = SocketServer.class.getSimpleName();
     SocketServerService socketServerService;
+    private Collection<WebSocket> connections;
 
     public SocketServer(InetSocketAddress address, SocketServerService socketServerService) {
         super(address);
+        this.connections = new ArrayList<>();
         this.socketServerService= socketServerService;
     }
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
+        connections.add(conn);
         conn.send("Welcome to the server!"); //This method sends a message to the new client
         broadcast("new connection: " + handshake.getResourceDescriptor()); //This method sends a message to all clients connected
         Log.d(TAG, "new connection to " + conn.getRemoteSocketAddress());
@@ -31,6 +36,7 @@ public class SocketServer extends WebSocketServer {
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
+        connections.remove(conn);
         Log.d(TAG, "closed " + conn.getRemoteSocketAddress() + " with exit code " + code + " additional info: " + reason);
     }
 
@@ -55,14 +61,13 @@ public class SocketServer extends WebSocketServer {
                 switch (toDo){
                     case "write":
                         MainActivity.setItemId(value);
-                        Log.d(TAG, "set item id: "+ value);
                         break;
                     case "doCheckIn":
                         MainActivity.setDoCheckIn(value);
                         Log.d(TAG, "set docheck in "+ value);
                         break;
                 }
-                socketServerService.openApp();
+                //socketServerService.openApp();
             }
         }
     }
@@ -94,5 +99,11 @@ public class SocketServer extends WebSocketServer {
 
 //        WebSocketServer server = new SocketServer(new InetSocketAddress(host, port));
  //       server.run();
+    }
+
+    public void sendToAll(String text) {
+        for (WebSocket c : connections) {
+            c.send("Message from service: "+text);
+        }
     }
 }
