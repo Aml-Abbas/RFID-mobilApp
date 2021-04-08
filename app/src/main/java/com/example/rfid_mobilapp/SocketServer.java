@@ -66,7 +66,7 @@ public class SocketServer extends WebSocketServer {
                         Log.d(TAG, "set docheck in "+ value);
                         break;
                 }
-                socketServerService.openApp();
+                //socketServerService.openApp();
             }
         }
     }
