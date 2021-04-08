@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private static final boolean checkOut = false;
 
     public static void setItemId(String itemId) {
-        Log.d(TAG, "item id is now" + itemId);
+        Log.d(TAG, "1. item id is now" + itemId);
         newItemId = itemId;
     }
 
@@ -150,9 +150,8 @@ public class MainActivity extends AppCompatActivity {
             }
             doCheckIn = null;
             newItemId = "";
-        } else if (newItemId != "") {
+        } else if (newItemId != null && !newItemId.isEmpty()) {
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
-            Log.d(TAG, "write new item id");
             newItemId = "";
         } /*else {
             String payload = NfcTagUtil.getItemId(intent, this);
