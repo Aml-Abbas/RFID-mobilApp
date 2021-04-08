@@ -34,20 +34,28 @@ public class SocketServerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        createNotificationChannel();
-        createNotification();
-        Thread thread = new Thread(() -> {
-            String host = "localhost";
-            int port = 8888;
-            try {
-                listenAddress = new InetSocketAddress(host, port);
-                server = new SocketServer(listenAddress, this);
-                server.run();
-            } catch (Exception e) {
-                e.printStackTrace();
+        if (server != null) {
+            if (intent != null && intent.getAction() != null && intent.getAction().equals("READ_TAG") && intent.getExtras() != null) {
+                String itemId = intent.getExtras().getString("itemId");
+                server.sendToAll(itemId);
             }
-        });
-        thread.start();
+        } else {
+            createNotificationChannel();
+            createNotification();
+            Thread thread = new Thread(() -> {
+                String host = "localhost";
+                int port = 8888;
+                try {
+                    listenAddress = new InetSocketAddress(host, port);
+                    server = new SocketServer(listenAddress, this);
+                    server.run();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            thread.start();
+        }
+
         return super.onStartCommand(intent, flags, startId);
     }
 
