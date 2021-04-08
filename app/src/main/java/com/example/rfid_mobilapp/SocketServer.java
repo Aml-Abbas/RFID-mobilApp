@@ -74,9 +74,8 @@ public class SocketServer extends WebSocketServer {
 
     @Override
     public void onError(WebSocket conn, Exception ex) {
-        if (conn!= null){
-            Log.d(TAG, "an error occurred on connection " + conn.getRemoteSocketAddress() + ":" + ex);
-        }    }
+        Log.d(TAG, "received ByteBuffer from " + conn.getRemoteSocketAddress());
+    }
 
     @Override
     public void onStart() {
