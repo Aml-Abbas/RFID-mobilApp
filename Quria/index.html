@@ -107,9 +107,11 @@ ws.onclose = function(event) {
   console.log("WebSocket is closed now.");
 };
 ws.onmessage = function (event) {
-  //if (event.data === 'echo') {
+  if (event.data === 'echo') {
     alert(event.data);
-  //}
+  }else{
+    document.getElementById("item_id").innerHTML = event.data;
+  }
 }
 
 function onLoad() {
@@ -117,6 +119,11 @@ function onLoad() {
 }
 window.onload=onLoad;
 
+
+function showItemId(itemId) {
+    var itemIdP = document.getElementById("item_id");
+    itemIdP.textContent = `item id: ${itemId}`;
+}; 
 
 </script>
 </body>
