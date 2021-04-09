@@ -1,9 +1,7 @@
 package com.example.rfid_mobilapp;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -29,13 +27,11 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     NfcAdapter mNfcAdapter;
@@ -50,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
     private final String LANG_PREF_KEY = "language";
     private final String LANGUAGE_SWEDISH = "sv";
     private final String LANGUAGE_ENGLISH = "en";
-
-
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
 
@@ -64,17 +58,14 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "value now is " + value);
         doCheckIn = value;
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, " on create");
-
         preferences = getSharedPreferences("langpref", MODE_PRIVATE);
         if (preferences != null) {
             setLocale(preferences.getString(LANG_PREF_KEY, LANGUAGE_ENGLISH));
         }
-
         setContentView(R.layout.activity_main);
         getIds();
         setUpSpinner(spinner);
@@ -82,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);
     }
-
     private void setUpStopSocketServiceButton() {
         stopSocketServiceButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -94,39 +84,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "on Stop");
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "on onDestroy");
     }
-
     @Override
     protected void onRestart() {
         super.onRestart();
         Log.d(TAG, "on onReStart");
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         NfcTagUtil.enableNFCInForeground(mNfcAdapter, this, getClass());
         Log.d(TAG, "on Resume");
     }
-
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "on onStart");
     }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -134,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "on pause");
     }
 
- @Override
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Log.d(TAG, "new intent");
@@ -178,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spinner);
         stopSocketServiceButton = findViewById(R.id.stopSocketServiceButton);
     }
-
     public void setLocale(String localeName) {
         myLocale = new Locale(localeName);
         Resources resources = getResources();
@@ -187,19 +169,15 @@ public class MainActivity extends AppCompatActivity {
         config.setLocale(myLocale);
         resources.updateConfiguration(config, displayMetrics);
     }
-
     private void restartActivity() {
         Intent intent = getIntent();
         finish();
         startActivity(intent);
     }
-
     private void setUpSpinner(Spinner spinner) {
-
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.languages, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -224,12 +202,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
-
 }
