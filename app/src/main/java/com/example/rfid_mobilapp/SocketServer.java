@@ -1,7 +1,5 @@
 package com.example.rfid_mobilapp;
-
 import android.util.Log;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -13,7 +11,6 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 public class SocketServer extends WebSocketServer {
 
     private final String TAG = SocketServer.class.getSimpleName();
@@ -71,34 +68,28 @@ public class SocketServer extends WebSocketServer {
             }
         }
     }
-
     @Override
     public void onMessage(WebSocket conn, ByteBuffer message) {
         Log.d(TAG, "received ByteBuffer from " + conn.getRemoteSocketAddress());
     }
-
     @Override
     public void onError(WebSocket conn, Exception ex) {
         Log.d(TAG, "received ByteBuffer from " + conn.getRemoteSocketAddress());
     }
-
     @Override
     public void onStart() {
         Log.d(TAG, "server started successfully");
     }
-
     @Override
     public void stop() throws IOException, InterruptedException {
         Log.d(TAG, "stop: called");
         super.stop();
     }
-
     public static void main(String[] args) {
         String host = "localhost";
         int port = 8887;
-
 //        WebSocketServer server = new SocketServer(new InetSocketAddress(host, port));
- //       server.run();
+        //       server.run();
     }
 
     public void sendToAll(String text) {
