@@ -14,9 +14,12 @@ import android.os.Build;
 import android.os.IBinder;
 import android.se.omapi.Session;
 import android.util.Log;
-
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+
+import com.example.rfid_mobilapp.MainActivity;
+import com.example.rfid_mobilapp.R;
+import com.example.rfid_mobilapp.SocketServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -30,15 +33,14 @@ public class SocketServerService extends Service {
     private final int port = 8888;
     private final String TAG = SocketServerService.class.getSimpleName();
     private  final  String channelId = "channel";
-
     @Override
     public void onCreate() {
-        new Thread(() -> {
+        serverThread=  new Thread(() -> {
             InetSocketAddress listenAddress = new InetSocketAddress(host, port);
             server = new SocketServer(listenAddress, this);
-        }).start();
+        });
+        serverThread.start();
         super.onCreate();
-
     }
 
     @Override
@@ -74,24 +76,21 @@ public class SocketServerService extends Service {
         notificationManager.cancel(0);
         try {
             server.stop();
-            serverThread.join();
+            serverThread.interrupt();
+            serverThread.interrupt();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         super.onDestroy();
     }
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-
-
     private void createNotification() {
         Intent openAppIntent = new Intent(this, MainActivity.class);
         openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
         PendingIntent openAppPendingIntent =
                 PendingIntent.getActivity(this, 0, openAppIntent, 0);
         NotificationCompat.Builder SocketServerServiceNotification = new NotificationCompat.Builder(this, channelId)
@@ -101,11 +100,9 @@ public class SocketServerService extends Service {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .addAction(R.drawable.back_24, getResources().getString(R.string.back_app), openAppPendingIntent)
                 .setOngoing(true);
-
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, SocketServerServiceNotification.build());
     }
-
     private void createNotificationChannel(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance= NotificationManager.IMPORTANCE_DEFAULT;
