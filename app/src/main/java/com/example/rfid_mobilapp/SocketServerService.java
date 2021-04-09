@@ -1,26 +1,15 @@
 package com.example.rfid_mobilapp;
 
-import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
-import android.se.omapi.Session;
-import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-
-import com.example.rfid_mobilapp.MainActivity;
-import com.example.rfid_mobilapp.R;
-import com.example.rfid_mobilapp.SocketServer;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
@@ -31,7 +20,6 @@ public class SocketServerService extends Service {
     private Thread serverThread;
     private final String host = "localhost";
     private final int port = 8888;
-    private final String TAG = SocketServerService.class.getSimpleName();
     private  final  String channelId = "channel";
     @Override
     public void onCreate() {
@@ -48,7 +36,7 @@ public class SocketServerService extends Service {
         if (server != null) {
             if (intent != null && intent.getAction() != null && intent.getAction().equals("READ_TAG") && intent.getExtras() != null) {
                 String itemId = intent.getExtras().getString("itemId");
-                server.sendToAll(itemId);
+                server.broadcast("item id is: " + itemId);
             }
         } else {
             createNotificationChannel();
@@ -111,10 +99,5 @@ public class SocketServerService extends Service {
             NotificationManager notificationManager= getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
-    }
-    public void openApp(){
-        Intent openAppIntent = new Intent(this, MainActivity.class);
-        openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(openAppIntent);
     }
 }

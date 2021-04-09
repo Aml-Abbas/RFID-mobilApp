@@ -26,8 +26,8 @@ public class SocketServer extends WebSocketServer {
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
         connections.add(conn);
-        conn.send("Welcome to the server!"); //This method sends a message to the new client
-        broadcast("new connection: " + handshake.getResourceDescriptor()); //This method sends a message to all clients connected
+        conn.send("Welcome to the server!");
+        broadcast("new connection: " + handshake.getResourceDescriptor());
         Log.d(TAG, "new connection to " + conn.getRemoteSocketAddress());
     }
 
@@ -84,17 +84,5 @@ public class SocketServer extends WebSocketServer {
     public void stop() throws IOException, InterruptedException {
         Log.d(TAG, "stop: called");
         super.stop();
-    }
-    public static void main(String[] args) {
-        String host = "localhost";
-        int port = 8887;
-//        WebSocketServer server = new SocketServer(new InetSocketAddress(host, port));
-        //       server.run();
-    }
-
-    public void sendToAll(String text) {
-        for (WebSocket c : connections) {
-            c.send("Message from service: "+text);
-        }
     }
 }
