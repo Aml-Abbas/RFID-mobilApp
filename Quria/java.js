@@ -1,4 +1,4 @@
-var androiduri;
+/* var androiduri;
 
 function getParameterByName(name, url = window.location.href) {
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -17,7 +17,17 @@ function getIdFromParam() {
 function openAppen(){
     var itemId = document.getElementById("item-id-input").value;
     location.href = "androidrfid://primaryid?itemid=" + itemId;
+} */
+
+function write_item_id() {
+  var itemId = document.getElementById("item-id-input").value;
+  ws.send('{"toDo": "write", "value": "'+itemId+'"}');
 }
+
+function do_check_in(value) {
+  ws.send('{"toDo": "doCheckIn", "value": "'+value+'"}');
+}
+
 
 var ip = "localhost";
 var port = "8888";
@@ -34,4 +44,9 @@ ws.onmessage = function (event) {
   if (event.data === 'echo') {
     alert(event.data);
   }
+}
+
+ws.onclose = function (even) {
+  alert("Connection Closed");
+  ws.close();
 }

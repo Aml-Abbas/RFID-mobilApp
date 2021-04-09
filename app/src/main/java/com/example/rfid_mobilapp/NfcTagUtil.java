@@ -133,8 +133,9 @@ public class NfcTagUtil {
                 activity, 0,
                 new Intent(activity, classType).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0
         );
+        IntentFilter nfcIntentFilter2 = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         IntentFilter nfcIntentFilter = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
-        IntentFilter[] filters = {nfcIntentFilter};
+        IntentFilter[] filters = {nfcIntentFilter, nfcIntentFilter2};
         String[][] techLists = {{NfcV.class.getName()}};
 
         nfcAdapter.enableForegroundDispatch(activity, pendingIntent, filters, techLists);

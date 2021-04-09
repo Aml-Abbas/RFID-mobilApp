@@ -1,9 +1,8 @@
 package com.example.rfid_mobilapp;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -28,19 +27,17 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 public class MainActivity extends AppCompatActivity {
-    private final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
     NfcAdapter mNfcAdapter;
     Context mainActivityContext;
-    String newItemId;
-    String doCheckIn;
+    static String newItemId;
+    static String doCheckIn;
     Spinner spinner;
     Switch stopSocketServiceButton;
     Intent serviceIntent;
@@ -49,20 +46,26 @@ public class MainActivity extends AppCompatActivity {
     private final String LANG_PREF_KEY = "language";
     private final String LANGUAGE_SWEDISH = "sv";
     private final String LANGUAGE_ENGLISH = "en";
-
-
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
 
+    public static void setItemId(String itemId) {
+        Log.d(TAG, "1. item id is now" + itemId);
+        newItemId = itemId;
+    }
+
+    public static void setDoCheckIn(String value) {
+        Log.d(TAG, "value now is " + value);
+        doCheckIn = value;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d(TAG, " on create");
         preferences = getSharedPreferences("langpref", MODE_PRIVATE);
         if (preferences != null) {
             setLocale(preferences.getString(LANG_PREF_KEY, LANGUAGE_ENGLISH));
         }
-
         setContentView(R.layout.activity_main);
         getIds();
         setUpSpinner(spinner);
@@ -70,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);
     }
-
     private void setUpStopSocketServiceButton() {
         stopSocketServiceButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -82,35 +84,66 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-       @Override
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "on Stop");
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "on onDestroy");
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "on onReStart");
+    }
+    @Override
     protected void onResume() {
         super.onResume();
         NfcTagUtil.enableNFCInForeground(mNfcAdapter, this, getClass());
+        Log.d(TAG, "on Resume");
     }
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "on onStart");
+    }
     @Override
     protected void onPause() {
         super.onPause();
         NfcTagUtil.disableNFCInForeground(mNfcAdapter, this);
+        Log.d(TAG, "on pause");
     }
 
-     @Override
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        Log.d(TAG, "new intent");
         if (doCheckIn != null) {
+            Log.d(TAG, "will do check");
             if (doCheckIn.equals("false")) {
                 NfcTagUtil.check(intent, this, checkOut);
+                Log.d(TAG, "out");
             } else {
                 NfcTagUtil.check(intent, this, checkIn);
+                Log.d(TAG, "in");
             }
             doCheckIn = null;
             newItemId = "";
-        } else if (newItemId != "") {
+        } else if (newItemId != null && !newItemId.isEmpty()) {
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
             newItemId = "";
         } else {
+            String payload = NfcTagUtil.getItemId(intent, this);
+            serviceIntent = new Intent(this, SocketServerService.class);
+            serviceIntent.setAction("READ_TAG");
+            serviceIntent.putExtra("itemId", payload);
+            startService(serviceIntent);
+        }
+
+        /*else {
             String payload = NfcTagUtil.getItemId(intent, this);
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("https://aml-abbas.github.io/RFID-mobilApp/Quria/?itemId=" + payload));
@@ -118,7 +151,8 @@ public class MainActivity extends AppCompatActivity {
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(chooser);
             }
-        }
+        }*/
+        moveTaskToBack(true);
     }
 
     private void getIds() {
@@ -127,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spinner);
         stopSocketServiceButton = findViewById(R.id.stopSocketServiceButton);
     }
-
     public void setLocale(String localeName) {
         myLocale = new Locale(localeName);
         Resources resources = getResources();
@@ -136,19 +169,15 @@ public class MainActivity extends AppCompatActivity {
         config.setLocale(myLocale);
         resources.updateConfiguration(config, displayMetrics);
     }
-
     private void restartActivity() {
         Intent intent = getIntent();
         finish();
         startActivity(intent);
     }
-
     private void setUpSpinner(Spinner spinner) {
-
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.languages, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -173,12 +202,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
-
 }
