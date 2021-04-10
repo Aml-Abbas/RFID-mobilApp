@@ -3,14 +3,17 @@ package com.example.rfid_mobilapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.util.Log;
 
 public class NfcActivity extends AppCompatActivity {
     private static final String TAG = NfcTagUtil.class.getSimpleName();
+    NfcAdapter mNfcAdapter;
     static String newItemId;
     static String doCheckIn;
     TagProgressDialog dialog;
+    Intent serviceIntent;
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
 
@@ -19,8 +22,8 @@ public class NfcActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         openDialog();
-
     }
 
     @Override
@@ -41,13 +44,13 @@ public class NfcActivity extends AppCompatActivity {
         } else if (newItemId != null && !newItemId.isEmpty()) {
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
             newItemId = "";
-        } /*else {
+        } else {
             String payload = NfcTagUtil.getItemId(intent, this);
             serviceIntent = new Intent(this, SocketServerService.class);
             serviceIntent.setAction("READ_TAG");
             serviceIntent.putExtra("itemId", payload);
             startService(serviceIntent);
-        }*/
+        }
         moveTaskToBack(true);
     }
 
@@ -84,7 +87,7 @@ public class NfcActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //  NfcTagUtil.enableNFCInForeground(mNfcAdapter, this, getClass());
+        NfcTagUtil.enableNFCInForeground(mNfcAdapter, this, getClass());
         Log.d(TAG, "on Resume");
     }
 
@@ -97,7 +100,7 @@ public class NfcActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        // NfcTagUtil.disableNFCInForeground(mNfcAdapter, this);
+        NfcTagUtil.disableNFCInForeground(mNfcAdapter, this);
         Log.d(TAG, "on pause");
     }
 

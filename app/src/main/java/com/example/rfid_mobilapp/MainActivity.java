@@ -23,7 +23,6 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-    NfcAdapter mNfcAdapter;
     Spinner spinner;
     Switch stopSocketServiceButton;
     Intent serviceIntent;
@@ -83,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        NfcTagUtil.enableNFCInForeground(mNfcAdapter, this, getClass());
         Log.d(TAG, "on Resume");
     }
 
@@ -96,13 +94,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        NfcTagUtil.disableNFCInForeground(mNfcAdapter, this);
         Log.d(TAG, "on pause");
     }
 
 
     private void getIds() {
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         spinner = findViewById(R.id.spinner);
         stopSocketServiceButton = findViewById(R.id.stopSocketServiceButton);
     }
