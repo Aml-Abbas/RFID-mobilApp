@@ -100,6 +100,7 @@ public class NfcActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "on onStart");
+        moveTaskToBack(true);
     }
 
     @Override

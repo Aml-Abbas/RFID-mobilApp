@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "on Stop");
+        Intent intent = new Intent(this, NfcActivity.class);
+        startActivity(intent);
     }
 
     @Override
