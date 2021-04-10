@@ -7,7 +7,6 @@ import org.json.JSONObject;
 
 public class Utilities {
 
-
     public static void copyByteArray(byte[] fromArray, int fromIndex,
                                      byte[] toArray, int fromIndexTo, int length) {
 

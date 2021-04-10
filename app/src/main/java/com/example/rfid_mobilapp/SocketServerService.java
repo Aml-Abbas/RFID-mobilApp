@@ -1,25 +1,16 @@
 package com.example.rfid_mobilapp;
 
-import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
-import android.se.omapi.Session;
-import android.util.Log;
+
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-
-import com.example.rfid_mobilapp.MainActivity;
-import com.example.rfid_mobilapp.R;
-import com.example.rfid_mobilapp.SocketServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -31,11 +22,11 @@ public class SocketServerService extends Service {
     private Thread serverThread;
     private final String host = "localhost";
     private final int port = 8888;
-    private final String TAG = SocketServerService.class.getSimpleName();
-    private  final  String channelId = "channel";
+    private final String channelId = "channel";
+
     @Override
     public void onCreate() {
-        serverThread=  new Thread(() -> {
+        serverThread = new Thread(() -> {
             InetSocketAddress listenAddress = new InetSocketAddress(host, port);
             server = new SocketServer(listenAddress, this);
         });
@@ -48,7 +39,7 @@ public class SocketServerService extends Service {
         if (server != null) {
             if (intent != null && intent.getAction() != null && intent.getAction().equals("READ_TAG") && intent.getExtras() != null) {
                 String itemId = intent.getExtras().getString("itemId");
-                server.sendToAll(itemId);
+                server.broadcast("item id is: " + itemId);
             }
         } else {
             createNotificationChannel();
@@ -77,17 +68,18 @@ public class SocketServerService extends Service {
         try {
             server.stop();
             serverThread.interrupt();
-            serverThread.interrupt();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         super.onDestroy();
     }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
     private void createNotification() {
         Intent openAppIntent = new Intent(this, MainActivity.class);
         openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -103,18 +95,14 @@ public class SocketServerService extends Service {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, SocketServerServiceNotification.build());
     }
-    private void createNotificationChannel(){
+
+    private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance= NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel= new NotificationChannel(channelId, "channelName", importance);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(channelId, "channelName", importance);
             channel.setDescription("My channel");
-            NotificationManager notificationManager= getSystemService(NotificationManager.class);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
-    }
-    public void openApp(){
-        Intent openAppIntent = new Intent(this, MainActivity.class);
-        openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(openAppIntent);
     }
 }
