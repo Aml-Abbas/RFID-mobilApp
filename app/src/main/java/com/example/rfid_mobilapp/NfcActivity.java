@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.EditText;
 
 public class NfcActivity extends AppCompatActivity {
     private static final String TAG = NfcTagUtil.class.getSimpleName();
@@ -24,6 +25,10 @@ public class NfcActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nfc);
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         openDialog();
+        if(!MainActivity.isServerOn()){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
