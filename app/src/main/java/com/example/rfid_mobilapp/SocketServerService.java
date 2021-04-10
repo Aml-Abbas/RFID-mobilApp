@@ -8,8 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
@@ -20,10 +22,11 @@ public class SocketServerService extends Service {
     private Thread serverThread;
     private final String host = "localhost";
     private final int port = 8888;
-    private  final  String channelId = "channel";
+    private final String channelId = "channel";
+
     @Override
     public void onCreate() {
-        serverThread=  new Thread(() -> {
+        serverThread = new Thread(() -> {
             InetSocketAddress listenAddress = new InetSocketAddress(host, port);
             server = new SocketServer(listenAddress, this);
         });
@@ -70,11 +73,13 @@ public class SocketServerService extends Service {
         }
         super.onDestroy();
     }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
     private void createNotification() {
         Intent openAppIntent = new Intent(this, MainActivity.class);
         openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -90,12 +95,13 @@ public class SocketServerService extends Service {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, SocketServerServiceNotification.build());
     }
-    private void createNotificationChannel(){
+
+    private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance= NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel= new NotificationChannel(channelId, "channelName", importance);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(channelId, "channelName", importance);
             channel.setDescription("My channel");
-            NotificationManager notificationManager= getSystemService(NotificationManager.class);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }

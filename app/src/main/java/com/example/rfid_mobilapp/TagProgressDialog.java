@@ -24,7 +24,7 @@ public class TagProgressDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
-    private void closeApp( Context context) {
-        ((Activity)context).finish();
+    private void closeApp(Context context) {
+        ((Activity) context).finish();
     }
 }

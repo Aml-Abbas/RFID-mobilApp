@@ -1,5 +1,7 @@
 package com.example.rfid_mobilapp;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
+
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);
     }
+
     private void setUpStopSocketServiceButton() {
         stopSocketServiceButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -57,32 +61,38 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "on Stop");
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "on onDestroy");
     }
+
     @Override
     protected void onRestart() {
         super.onRestart();
         Log.d(TAG, "on onReStart");
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         NfcTagUtil.enableNFCInForeground(mNfcAdapter, this, getClass());
         Log.d(TAG, "on Resume");
     }
+
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "on onStart");
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -96,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spinner);
         stopSocketServiceButton = findViewById(R.id.stopSocketServiceButton);
     }
+
     public void setLocale(String localeName) {
         myLocale = new Locale(localeName);
         Resources resources = getResources();
@@ -104,11 +115,13 @@ public class MainActivity extends AppCompatActivity {
         config.setLocale(myLocale);
         resources.updateConfiguration(config, displayMetrics);
     }
+
     private void restartActivity() {
         Intent intent = getIntent();
         finish();
         startActivity(intent);
     }
+
     private void setUpSpinner(Spinner spinner) {
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.languages, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -137,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }

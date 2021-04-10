@@ -1,6 +1,7 @@
 package com.example.rfid_mobilapp;
 
 import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
