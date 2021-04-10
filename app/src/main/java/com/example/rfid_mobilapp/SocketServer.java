@@ -21,6 +21,8 @@ public class SocketServer extends WebSocketServer {
         super(address);
         this.connections = new ArrayList<>();
         this.socketServerService= socketServerService;
+        Log.d(TAG, " the constructor " );
+
     }
 
     @Override
@@ -57,14 +59,13 @@ public class SocketServer extends WebSocketServer {
                 }
                 switch (toDo){
                     case "write":
-                        MainActivity.setItemId(value);
+                        NfcActivity.setItemId(value);
                         break;
                     case "doCheckIn":
-                        MainActivity.setDoCheckIn(value);
+                        NfcActivity.setDoCheckIn(value);
                         Log.d(TAG, "set docheck in "+ value);
                         break;
                 }
-                //socketServerService.openApp();
             }
         }
     }
