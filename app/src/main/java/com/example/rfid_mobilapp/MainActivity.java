@@ -2,12 +2,10 @@ package com.example.rfid_mobilapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -24,7 +22,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     Spinner spinner;
-    Switch stopSocketServiceButton;
+    static Switch stopSocketServiceSwitch;
     Intent serviceIntent;
     Locale myLocale;
     private SharedPreferences preferences;
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpStopSocketServiceButton() {
-        stopSocketServiceButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        stopSocketServiceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     serviceIntent = new Intent(MainActivity.this, SocketServerService.class);
@@ -97,10 +95,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "on pause");
     }
 
+    public static boolean isServerOn(){
+      return stopSocketServiceSwitch.isChecked();
+    }
 
     private void getIds() {
         spinner = findViewById(R.id.spinner);
-        stopSocketServiceButton = findViewById(R.id.stopSocketServiceButton);
+        stopSocketServiceSwitch = findViewById(R.id.stopSocketServiceButton);
     }
 
     public void setLocale(String localeName) {
