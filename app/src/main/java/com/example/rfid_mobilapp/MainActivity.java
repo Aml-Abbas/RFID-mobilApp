@@ -21,9 +21,6 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     NfcAdapter mNfcAdapter;
-    Context mainActivityContext;
-    static String newItemId;
-    static String doCheckIn;
     Spinner spinner;
     Switch stopSocketServiceButton;
     Intent serviceIntent;
@@ -32,18 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private final String LANG_PREF_KEY = "language";
     private final String LANGUAGE_SWEDISH = "sv";
     private final String LANGUAGE_ENGLISH = "en";
-    private static final boolean checkIn = true;
-    private static final boolean checkOut = false;
 
-    public static void setItemId(String itemId) {
-        Log.d(TAG, "1. item id is now" + itemId);
-        newItemId = itemId;
-    }
-
-    public static void setDoCheckIn(String value) {
-        Log.d(TAG, "value now is " + value);
-        doCheckIn = value;
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         stopSocketServiceButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    serviceIntent = new Intent(MainActivity.this, SocketServerService.class);
                     startService(serviceIntent);
                 } else {
                     stopService(serviceIntent);
@@ -103,37 +90,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "on pause");
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        Log.d(TAG, "new intent");
-        if (doCheckIn != null) {
-            Log.d(TAG, "will do check");
-            if (doCheckIn.equals("false")) {
-                NfcTagUtil.check(intent, this, checkOut);
-                Log.d(TAG, "out");
-            } else {
-                NfcTagUtil.check(intent, this, checkIn);
-                Log.d(TAG, "in");
-            }
-            doCheckIn = null;
-            newItemId = "";
-        } else if (newItemId != null && !newItemId.isEmpty()) {
-            NfcTagUtil.writeNewItemId(newItemId, intent, this);
-            newItemId = "";
-        } else {
-            String payload = NfcTagUtil.getItemId(intent, this);
-            serviceIntent = new Intent(this, SocketServerService.class);
-            serviceIntent.setAction("READ_TAG");
-            serviceIntent.putExtra("itemId", payload);
-            startService(serviceIntent);
-        }
-        moveTaskToBack(true);
-    }
 
     private void getIds() {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        mainActivityContext = this;
         spinner = findViewById(R.id.spinner);
         stopSocketServiceButton = findViewById(R.id.stopSocketServiceButton);
     }
