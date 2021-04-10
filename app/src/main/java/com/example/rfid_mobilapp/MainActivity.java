@@ -95,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "on pause");
     }
 
-    public static boolean isServerOn(){
-      return stopSocketServiceSwitch.isChecked();
+    public static boolean isServerOn() {
+        return stopSocketServiceSwitch.isChecked();
     }
 
     private void getIds() {
