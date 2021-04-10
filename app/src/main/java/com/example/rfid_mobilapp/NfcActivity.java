@@ -10,6 +10,7 @@ public class NfcActivity extends AppCompatActivity {
     private static final String TAG = NfcTagUtil.class.getSimpleName();
     static String newItemId;
     static String doCheckIn;
+    TagProgressDialog dialog;
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
 
@@ -18,6 +19,8 @@ public class NfcActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
+        openDialog();
+
     }
 
     @Override
@@ -60,40 +63,46 @@ public class NfcActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "on Stop");
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "on onDestroy");
     }
+
     @Override
     protected void onRestart() {
         super.onRestart();
         Log.d(TAG, "on onReStart");
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-      //  NfcTagUtil.enableNFCInForeground(mNfcAdapter, this, getClass());
+        //  NfcTagUtil.enableNFCInForeground(mNfcAdapter, this, getClass());
         Log.d(TAG, "on Resume");
     }
+
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "on onStart");
     }
+
     @Override
     protected void onPause() {
         super.onPause();
-       // NfcTagUtil.disableNFCInForeground(mNfcAdapter, this);
+        // NfcTagUtil.disableNFCInForeground(mNfcAdapter, this);
         Log.d(TAG, "on pause");
+    }
+
+    private void openDialog() {
+        dialog = new TagProgressDialog();
+        dialog.show(getSupportFragmentManager(), "example dialog");
     }
 }
