@@ -34,16 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, " on create");
-        preferences = getSharedPreferences("langpref", MODE_PRIVATE);
-        if (preferences != null) {
-            setLocale(preferences.getString(LANG_PREF_KEY, LANGUAGE_ENGLISH));
-        }
-        setContentView(R.layout.activity_main);
-        getIds();
-        setUpSpinner(spinner);
-        setUpSocketServiceSwitch();
-        serviceIntent = new Intent(this, SocketServerService.class);
-        startService(serviceIntent);
+        onCreateHelper();
     }
 
     private void setUpSocketServiceSwitch() {
@@ -118,11 +109,18 @@ public class MainActivity extends AppCompatActivity {
         resources.updateConfiguration(config, displayMetrics);
     }
 
-    private void restartActivity() {
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
-    }
+    private void onCreateHelper() {
+        preferences = getSharedPreferences("langpref", MODE_PRIVATE);
+        if (preferences != null) {
+            setLocale(preferences.getString(LANG_PREF_KEY, LANGUAGE_ENGLISH));
+        }
+        setContentView(R.layout.activity_main);
+        getIds();
+        setUpSpinner(spinner);
+        setUpSocketServiceSwitch();
+        serviceIntent = new Intent(this, SocketServerService.class);
+        startService(serviceIntent);
+        }
 
     private void setUpSpinner(Spinner spinner) {
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.languages, android.R.layout.simple_spinner_item);
@@ -139,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, R.string.same_language, Toast.LENGTH_SHORT).show();
                         else {
                             preferences.edit().putString(LANG_PREF_KEY, LANGUAGE_ENGLISH).apply();
-                            restartActivity();
+                            onCreateHelper();
                         }
                         break;
                     case 2:
@@ -147,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, R.string.same_language, Toast.LENGTH_SHORT).show();
                         else {
                             preferences.edit().putString(LANG_PREF_KEY, LANGUAGE_SWEDISH).apply();
-                            restartActivity();
+                            onCreateHelper();
                         }
                         break;
                 }
