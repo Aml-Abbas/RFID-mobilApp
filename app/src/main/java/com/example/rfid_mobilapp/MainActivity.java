@@ -41,12 +41,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getIds();
         setUpSpinner(spinner);
-        setUSocketServiceButton();
+        setUpSocketServiceButton();
         serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);
     }
 
-    private void setUSocketServiceButton() {
+    private void setUpSocketServiceButton() {
         socketServiceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
