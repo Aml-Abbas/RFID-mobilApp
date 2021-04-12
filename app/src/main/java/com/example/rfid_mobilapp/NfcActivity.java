@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.EditText;
 
 public class NfcActivity extends AppCompatActivity {
     private static final String TAG = NfcTagUtil.class.getSimpleName();
@@ -57,7 +56,7 @@ public class NfcActivity extends AppCompatActivity {
             startService(serviceIntent);
         }
         moveTaskToBack(true);
-    }
+        }
 
 
     public static void setItemId(String itemId) {
@@ -94,6 +93,7 @@ public class NfcActivity extends AppCompatActivity {
         super.onResume();
         NfcTagUtil.enableNFCInForeground(mNfcAdapter, this, getClass());
         Log.d(TAG, "on Resume");
+        moveTaskToBack(true);
     }
 
     @Override
