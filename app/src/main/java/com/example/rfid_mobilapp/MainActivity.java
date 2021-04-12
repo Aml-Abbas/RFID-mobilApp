@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static boolean isServerOn() {
-        if (socketServiceSwitch!=null){
+        if (socketServiceSwitch != null) {
             return socketServiceSwitch.isChecked();
         }
         return false;
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         setUpSocketServiceSwitch();
         serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);
-        }
+    }
 
     private void setUpSpinner(Spinner spinner) {
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.languages, android.R.layout.simple_spinner_item);

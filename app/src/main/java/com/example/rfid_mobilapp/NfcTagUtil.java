@@ -40,7 +40,7 @@ public class NfcTagUtil {
             Utilities.copyByteArray(dataRead, 3, primeItemId, 0, 16);
             if (Utilities.isEmpty(primeItemId)) {
                 payloadString = "no id";
-            }else {
+            } else {
                 String stringOfPrimaryId = new String(primeItemId, StandardCharsets.UTF_8);
 
                 if (stringOfPrimaryId.charAt(0) == '1') {
@@ -81,16 +81,16 @@ public class NfcTagUtil {
         Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         String status;
 
-        if (intent != null && tag!=null) {
+        if (intent != null && tag != null) {
             NfcV nfcV = NfcV.get(tag);
             byte[] tagId = tag.getId();
             byte[] oldData = readBlocks(tagId, nfcV, activity, 0, 8);
             byte[] newDataWithBarcode = NfcTagUtil.setBarcode(itemId, oldData);
             int CRCValue = Utilities.calculateCRC16(Utilities.getDataWithoutCRC(newDataWithBarcode));
             byte[] newDataToWrite = setCRC(CRCValue, newDataWithBarcode);
-            status= writeBlocks(tagId, nfcV, activity, 0, 8, newDataToWrite)+" itemtId";
-        }else {
-            status= "failed_write itemId";
+            status = writeBlocks(tagId, nfcV, activity, 0, 8, newDataToWrite) + " trying to write item Id.";
+        } else {
+            status = activity.getResources().getString(R.string.failed_write) + " item Id was not written.";
         }
         serviceIntent = new Intent(activity, SocketServerService.class);
         serviceIntent.setAction("WRITE_ITEM_ID");
@@ -108,20 +108,18 @@ public class NfcTagUtil {
                 nfcV.transceive(cmd);
             }
             nfcV.close();
-            return "success_write";
-           // Toast.makeText(activity, R.string.success_write, Toast.LENGTH_LONG).show();
+            return activity.getResources().getString(R.string.success_write);
         } catch (IOException ioException) {
-           // Toast.makeText(activity, R.string.failed_write, Toast.LENGTH_LONG).show();
         }
-        return "failed_write";
+        return activity.getResources().getString(R.string.failed_write);
     }
 
     public static void check(Intent intent, Activity activity, boolean doCheckIn) {
         Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        String status;
 
-        if (intent != null && tag!= null) {
+        if (intent != null && tag != null) {
             NfcV nfcV = NfcV.get(tag);
-            int textId;
 
             try {
                 nfcV.connect();
@@ -131,11 +129,17 @@ public class NfcTagUtil {
                 nfcV.transceive(cmd);
 
                 nfcV.close();
-                textId = doCheckIn ? R.string.success_checkin : R.string.success_checkout;
+                status = doCheckIn ? activity.getResources().getString(R.string.success_checkin)
+                        : activity.getResources().getString(R.string.success_checkout);
             } catch (IOException ioException) {
-                textId = doCheckIn ? R.string.failed_checkin : R.string.failed_checkout;
+                status = doCheckIn ? activity.getResources().getString(R.string.failed_checkin)
+                        : activity.getResources().getString(R.string.failed_checkout);
+
             }
-            Toast.makeText(activity, textId, Toast.LENGTH_LONG).show();
+            serviceIntent = new Intent(activity, SocketServerService.class);
+            serviceIntent.setAction("CHECK");
+            serviceIntent.putExtra("doCheckIn", status);
+            activity.startService(serviceIntent);
         }
     }
 
