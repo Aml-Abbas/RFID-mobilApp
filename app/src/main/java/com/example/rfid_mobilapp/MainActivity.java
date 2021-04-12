@@ -98,7 +98,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static boolean isServerOn() {
-        return socketServiceSwitch.isChecked();
+        if (socketServiceSwitch!=null){
+            return socketServiceSwitch.isChecked();
+        }
+        return false;
     }
 
     private void getIds() {
