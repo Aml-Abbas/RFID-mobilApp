@@ -28,7 +28,7 @@ public class SocketServerService extends Service {
     public void onCreate() {
         serverThread = new Thread(() -> {
             InetSocketAddress listenAddress = new InetSocketAddress(host, port);
-            server = new SocketServer(listenAddress, this);
+            server = new SocketServer(listenAddress);
         });
         serverThread.start();
         super.onCreate();
@@ -49,7 +49,7 @@ public class SocketServerService extends Service {
                 int port = 8888;
                 try {
                     listenAddress = new InetSocketAddress(host, port);
-                    server = new SocketServer(listenAddress, this);
+                    server = new SocketServer(listenAddress);
                     server.run();
                 } catch (Exception e) {
                     e.printStackTrace();
