@@ -17,13 +17,11 @@ import org.json.JSONObject;
 public class SocketServer extends WebSocketServer {
 
     private final String TAG = SocketServer.class.getSimpleName();
-    SocketServerService socketServerService;
     private Collection<WebSocket> connections;
 
-    public SocketServer(InetSocketAddress address, SocketServerService socketServerService) {
+    public SocketServer(InetSocketAddress address) {
         super(address);
         this.connections = new ArrayList<>();
-        this.socketServerService = socketServerService;
         Log.d(TAG, " the constructor ");
 
     }
