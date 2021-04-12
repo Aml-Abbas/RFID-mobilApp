@@ -46,8 +46,11 @@ function write_item_id() {
   ws.onmessage = function (event) {
     if (event.data === 'echo') {
       alert(event.data);
-    }else{
+    }else if(event.data.includes("item id is:")){
       document.getElementById("item_id").innerHTML = event.data;
+    }else{
+      popup_modal.style.display = "none";
+      alert(event.data);
     }
   }
   
