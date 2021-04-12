@@ -22,7 +22,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     Spinner spinner;
-    static Switch stopSocketServiceSwitch;
+    static Switch socketServiceSwitch;
     Intent serviceIntent;
     Locale myLocale;
     private SharedPreferences preferences;
@@ -41,13 +41,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getIds();
         setUpSpinner(spinner);
-        setUpStopSocketServiceButton();
+        setUpSocketServiceSwitch();
         serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);
     }
 
-    private void setUpStopSocketServiceButton() {
-        stopSocketServiceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    private void setUpSocketServiceSwitch() {
+        socketServiceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     serviceIntent = new Intent(MainActivity.this, SocketServerService.class);
@@ -98,12 +98,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static boolean isServerOn() {
-        return stopSocketServiceSwitch.isChecked();
+        if (socketServiceSwitch!=null){
+            return socketServiceSwitch.isChecked();
+        }
+        return false;
     }
 
     private void getIds() {
         spinner = findViewById(R.id.spinner);
-        stopSocketServiceSwitch = findViewById(R.id.stopSocketServiceButton);
+        socketServiceSwitch = findViewById(R.id.stopSocketServiceButton);
     }
 
     public void setLocale(String localeName) {
