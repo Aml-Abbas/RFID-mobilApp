@@ -27,7 +27,7 @@ public class NfcTagUtil {
     public static String getItemId(Intent intent, Activity activity) {
         String payloadString = "";
 
-        if (intent != null) {
+        if (intent != null && intent.getParcelableArrayExtra(NfcAdapter.EXTRA_TAG)!= null) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NfcV nfcV = NfcV.get(tag);
 
@@ -76,7 +76,7 @@ public class NfcTagUtil {
     }
 
     public static void writeNewItemId(String itemId, Intent intent, Activity activity) {
-        if (intent != null) {
+        if (intent != null && intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)!= null) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NfcV nfcV = NfcV.get(tag);
             byte[] tagId = tag.getId();
@@ -106,7 +106,7 @@ public class NfcTagUtil {
 
     public static void check(Intent intent, Activity activity, boolean doCheckIn) {
 
-        if (intent != null) {
+        if (intent != null && intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)!= null) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NfcV nfcV = NfcV.get(tag);
             int textId;
