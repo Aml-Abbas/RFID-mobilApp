@@ -1,9 +1,24 @@
+var popup_modal = document.getElementById("popup-modal");
+var close = document.getElementsByClassName("close")[0];
+
+close.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
 function write_item_id() {
+    modal.style.display = "block";
     var itemId = document.getElementById("item-id-input").value;
     ws.send('{"toDo": "write", "value": "'+itemId+'"}');
   }
   
   function do_check_in(value) {
+    modal.style.display = "block";
     ws.send('{"toDo": "doCheckIn", "value": "'+value+'"}');
   }
   
