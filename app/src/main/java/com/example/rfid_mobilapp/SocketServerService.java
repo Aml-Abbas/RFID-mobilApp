@@ -20,6 +20,7 @@ public class SocketServerService extends Service {
     SocketServer server;
     InetSocketAddress listenAddress;
     private Thread serverThread;
+    Thread thread;
     private final String host = "localhost";
     private final int port = 8888;
     private final String channelId = "channel";
@@ -44,7 +45,7 @@ public class SocketServerService extends Service {
         } else {
             createNotificationChannel();
             createNotification();
-            Thread thread = new Thread(() -> {
+            thread= new Thread(() -> {
                 String host = "localhost";
                 int port = 8888;
                 try {
@@ -68,6 +69,9 @@ public class SocketServerService extends Service {
         try {
             server.stop();
             serverThread.interrupt();
+            serverThread.join();
+            thread.interrupt();
+            thread.join();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
