@@ -39,18 +39,21 @@ public class SocketServerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (server != null) {
             if (intent != null && intent.getAction() != null && intent.getExtras() != null) {
-                if (intent.getAction().equals("READ_ITEM_ID")){
+                if (intent.getAction().equals("READ_ITEM_ID")) {
                     String itemId = intent.getExtras().getString("itemId");
                     server.broadcast("item id is: " + itemId);
-                }else if (intent.getAction().equals("WRITE_ITEM_ID")){
+                } else if (intent.getAction().equals("WRITE_ITEM_ID")) {
                     String status = intent.getExtras().getString("itemId");
+                    server.broadcast(status);
+                } else if (intent.getAction().equals("CHECK")) {
+                    String status = intent.getExtras().getString("doCheckIn");
                     server.broadcast(status);
                 }
             }
         } else {
             createNotificationChannel();
             createNotification();
-            thread= new Thread(() -> {
+            thread = new Thread(() -> {
                 String host = "localhost";
                 int port = 8888;
                 try {
