@@ -38,9 +38,14 @@ public class SocketServerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (server != null) {
-            if (intent != null && intent.getAction() != null && intent.getAction().equals("READ_TAG") && intent.getExtras() != null) {
-                String itemId = intent.getExtras().getString("itemId");
-                server.broadcast("item id is: " + itemId);
+            if (intent != null && intent.getAction() != null && intent.getExtras() != null) {
+                if (intent.getAction().equals("READ_ITEM_ID")){
+                    String itemId = intent.getExtras().getString("itemId");
+                    server.broadcast("item id is: " + itemId);
+                }else if (intent.getAction().equals("WRITE_ITEM_ID")){
+                    String status = intent.getExtras().getString("itemId");
+                    server.broadcast(status);
+                }
             }
         } else {
             createNotificationChannel();

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class NfcTagUtil {
+    static Intent serviceIntent;
 
     private static final byte flagAddressedCommand = (byte) 0x20;
 
@@ -24,7 +25,7 @@ public class NfcTagUtil {
     private static final byte checkInValue = (byte) 0x07;
     private static final byte checkOutValue = (byte) 0xC2;
 
-    public static String getItemId(Intent intent, Activity activity) {
+    public static void getItemId(Intent intent, Activity activity) {
         String payloadString = "";
         Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
@@ -38,23 +39,25 @@ public class NfcTagUtil {
 
             Utilities.copyByteArray(dataRead, 3, primeItemId, 0, 16);
             if (Utilities.isEmpty(primeItemId)) {
-                String noId = activity.getResources().getString(R.string.no_id);
-                return noId;
-            }
-            String stringOfPrimaryId = new String(primeItemId, StandardCharsets.UTF_8);
+                payloadString = "no id";
+            }else {
+                String stringOfPrimaryId = new String(primeItemId, StandardCharsets.UTF_8);
 
-            if (stringOfPrimaryId.charAt(0) == '1') {
-                byte[] primeItemIdExtended = new byte[16];
-                byte[] OptionalBlock = readBlocks(tagId, nfcV, activity, 8, 6);
-                Utilities.copyByteArray(OptionalBlock, 4, primeItemIdExtended, 0, 16);
-                payloadString = new String(primeItemId, StandardCharsets.UTF_8) +
-                        new String(primeItemIdExtended, StandardCharsets.UTF_8);
-            } else {
-                payloadString = new String(primeItemId, StandardCharsets.UTF_8);
+                if (stringOfPrimaryId.charAt(0) == '1') {
+                    byte[] primeItemIdExtended = new byte[16];
+                    byte[] OptionalBlock = readBlocks(tagId, nfcV, activity, 8, 6);
+                    Utilities.copyByteArray(OptionalBlock, 4, primeItemIdExtended, 0, 16);
+                    payloadString = new String(primeItemId, StandardCharsets.UTF_8) +
+                            new String(primeItemIdExtended, StandardCharsets.UTF_8);
+                } else {
+                    payloadString = new String(primeItemId, StandardCharsets.UTF_8);
+                }
             }
-
         }
-        return payloadString;
+        serviceIntent = new Intent(activity, SocketServerService.class);
+        serviceIntent.setAction("READ_ITEM_ID");
+        serviceIntent.putExtra("itemId", payloadString);
+        activity.startService(serviceIntent);
     }
 
     private static byte[] readBlocks(byte[] tagId, NfcV nfcV, Activity activity, int offset, int blocks) {
@@ -76,6 +79,7 @@ public class NfcTagUtil {
 
     public static void writeNewItemId(String itemId, Intent intent, Activity activity) {
         Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        String status;
 
         if (intent != null && tag!=null) {
             NfcV nfcV = NfcV.get(tag);
@@ -84,11 +88,17 @@ public class NfcTagUtil {
             byte[] newDataWithBarcode = NfcTagUtil.setBarcode(itemId, oldData);
             int CRCValue = Utilities.calculateCRC16(Utilities.getDataWithoutCRC(newDataWithBarcode));
             byte[] newDataToWrite = setCRC(CRCValue, newDataWithBarcode);
-            writeBlocks(tagId, nfcV, activity, 0, 8, newDataToWrite);
+            status= writeBlocks(tagId, nfcV, activity, 0, 8, newDataToWrite)+" itemtId";
+        }else {
+            status= "failed_write itemId";
         }
+        serviceIntent = new Intent(activity, SocketServerService.class);
+        serviceIntent.setAction("WRITE_ITEM_ID");
+        serviceIntent.putExtra("itemId", status);
+        activity.startService(serviceIntent);
     }
 
-    private static void writeBlocks(byte[] tagId, NfcV nfcV, Activity activity, int offset, int blocks, byte[] newDataToWrite) {
+    private static String writeBlocks(byte[] tagId, NfcV nfcV, Activity activity, int offset, int blocks, byte[] newDataToWrite) {
         try {
             nfcV.connect();
             byte[] cmd = getCommandWriteSingleBlock(tagId);
@@ -98,10 +108,12 @@ public class NfcTagUtil {
                 nfcV.transceive(cmd);
             }
             nfcV.close();
-            Toast.makeText(activity, R.string.success_write, Toast.LENGTH_LONG).show();
+            return "success_write";
+           // Toast.makeText(activity, R.string.success_write, Toast.LENGTH_LONG).show();
         } catch (IOException ioException) {
-            Toast.makeText(activity, R.string.failed_write, Toast.LENGTH_LONG).show();
+           // Toast.makeText(activity, R.string.failed_write, Toast.LENGTH_LONG).show();
         }
+        return "failed_write";
     }
 
     public static void check(Intent intent, Activity activity, boolean doCheckIn) {

@@ -13,10 +13,8 @@ public class NfcActivity extends AppCompatActivity {
     static String newItemId;
     static String doCheckIn;
     TagProgressDialog dialog;
-    Intent serviceIntent;
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +47,10 @@ public class NfcActivity extends AppCompatActivity {
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
             newItemId = "";
         } else {
-            String payload = NfcTagUtil.getItemId(intent, this);
-            serviceIntent = new Intent(this, SocketServerService.class);
-            serviceIntent.setAction("READ_TAG");
-            serviceIntent.putExtra("itemId", payload);
-            startService(serviceIntent);
+            NfcTagUtil.getItemId(intent, this);
         }
         moveTaskToBack(true);
         }
-
 
     public static void setItemId(String itemId) {
         Log.d(TAG, "1. item id is now" + itemId);
@@ -68,7 +61,6 @@ public class NfcActivity extends AppCompatActivity {
         Log.d(TAG, "value now is " + value);
         doCheckIn = value;
     }
-
 
     @Override
     protected void onStop() {
