@@ -94,15 +94,19 @@ showModal('true');
       document.getElementById("ws-status").innerHTML = "DISCONNECTED";
     console.log("WebSocket is closed now.");
   };
+
   ws.onmessage = function (event) {
     if (event.data === 'echo') {
       alert(event.data);
-    }else if(event.data.includes("item id is:")){
-      var item_nbr = event.data.replace( /^\D+/g, '');
-      showItemId(item_nbr);
     }else{
+      console.log(event.data);
+      var json = JSON.parse(event.data);
+      if(json.Done.localeCompare("read_item_id")==0){
+        showItemId(json.value);
+      }else{
+        alert(json.value);
+      }
       showModal('false');
-      alert(event.data);
     }
   }
   
