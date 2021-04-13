@@ -52,7 +52,8 @@ function showModal(status){
   if(status.localeCompare('false')==0){
     place_tag_modal.style.display = "none";
   }else{
-    place_tag_modal.style.display = "block";
+    place_tag_modal.style.display = "block"
+    move();
   }
 }
 place_tag_close.onclick = function() {
@@ -112,12 +113,12 @@ function write_item_id() {
     }else{
       console.log(event.data);
       var json = JSON.parse(event.data);
+      showModal('false');
       if(json.Done.localeCompare("read_item_id")==0){
         showItemId(json.value);
       }else{
         alert(json.value);
       }
-      showModal('false');
     }
   }
   
@@ -125,3 +126,23 @@ function write_item_id() {
     document.getElementById("ws-status").innerHTML = "DISCONNECTED";
   }
   window.onload=onLoad;
+
+function move() {
+  var i = 0;
+  if (i == 0) {
+    i = 0.01;
+    var elem = document.getElementById("myBar");
+    var width = 10;
+    var id = setInterval(frame, 10);
+    function frame() {
+      if (width >= 100) {
+        clearInterval(id);
+        i = 0;
+      } else {
+        width= width+0.01;
+        elem.style.width = (width | 0) + "%";
+        elem.innerHTML = (width| 0)  + "%";
+      }
+    }
+  }
+}
