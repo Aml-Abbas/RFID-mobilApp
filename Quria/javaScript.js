@@ -53,12 +53,6 @@ close.onclick = function() {
   popup_modal.style.display = "none";
 }
 
-window.onclick = function(event) {
-  if (event.target == popup_modal) {
-    popup_modal.style.display = "none";
-  }
-}
-
 function write_item_id() {
   popup_modal.style.display = "block";
     var itemId = document.getElementById("item-id-input").value;
