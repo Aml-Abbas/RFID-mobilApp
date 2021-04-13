@@ -5,12 +5,12 @@ var books= [
   {
      "item_id": "28",
      "name": "Harry Potter",
-     "picture":"harrypotter.jfif"
+     "picture":"harrypotter.jpg"
   },
   {
      "item_id": "18",
      "name": "Spegelmannen",
-     "picture":"spegelmannen.jfif"
+     "picture":"spegelmannen.jpg"
   },
   {
      "item_id": "14",
@@ -20,7 +20,7 @@ var books= [
   {
      "item_id": "36",
      "name": "Kungariket",
-     "picture":"kungariket.jfif"
+     "picture":"kungariket.jpg"
   }
  ];
  
@@ -28,22 +28,23 @@ var books= [
   
  function showItemId(itemId) {
 
-  var itemIdP = document.getElementsByClassName("item_id"); 
-  var image = document.getElementsByClassName("image");
-  var name = document.getElementsByClassName("name");
+  var itemIdP = document.getElementById("book_id"); 
+  var image = document.getElementById("book_pic");
+  var name = document.getElementById("book_name");
 
   for (var i = 0; i < books.length; i++) {
-    var book_id=  books[i].item_id.trim();
+    var book_id=  books[i].item_id.toString().trim();
+    var bookItemId = itemId.toString().trim();
 
-    console.log("item_nbr: "+ itemId);
-    console.log("item_nbr for varje book: "+ book_id);
-    console.log("is it equals: "+ (itemId.trim() == book_id.trim()));
-    if(itemId.trim() == book_id.trim()){
-      console.log("found it ");
+    if(bookItemId.localeCompare(book_id)== 0){
 
-      itemIdP.innerHTML = `item id: `+books[i].item_id;
-      image.innerHTML= `<img src="pic/books/`+books[i].picture+`>`;
-      name.innerHTML=  `name of the book is: `+books[i].name;
+      itemIdP.innerHTML  = `item id: `+books[i].item_id;
+      var img = document.createElement("img");
+    img.src = "pic/books/"+books[i].picture;
+    img.width = 100;
+    img.height = 200;
+    document.getElementById("book_pic").appendChild(img);
+    name.innerHTML=  `name of the book is: `+books[i].name;
     }
   }
 }
@@ -95,7 +96,7 @@ function write_item_id() {
       alert(event.data);
     }else if(event.data.includes("item id is:")){
       var item_nbr = event.data.replace( /^\D+/g, '');
-      document.getElementsByClassName("item_id").innerHTML = item_nbr;
+      document.getElementById("book_id").innerHTML = item_nbr;
       showItemId(item_nbr);
     }else{
       popup_modal.style.display = "none";
