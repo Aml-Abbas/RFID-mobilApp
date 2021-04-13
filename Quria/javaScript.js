@@ -45,6 +45,7 @@ var books= [
     img.width = 100;
     img.height = 200;
     book_image.appendChild(img);
+    break;
     }
   }
 }
