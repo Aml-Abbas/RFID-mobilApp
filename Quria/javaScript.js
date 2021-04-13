@@ -1,6 +1,53 @@
 var popup_modal = document.getElementById("popup-modal");
 var close = document.getElementsByClassName("close")[0];
 
+var books= [
+  {
+     "item_id": "28",
+     "name": "Harry Potter",
+     "picture":"harrypotter.jfif"
+  },
+  {
+     "item_id": "18",
+     "name": "Spegelmannen",
+     "picture":"spegelmannen.jfif"
+  },
+  {
+     "item_id": "14",
+     "name": "Vi får väl trösta varandra",
+     "picture":"varandra.jpg"
+  },
+  {
+     "item_id": "36",
+     "name": "Kungariket",
+     "picture":"kungariket.jfif"
+  }
+ ];
+ 
+   
+  
+ function showItemId(itemId) {
+
+  var itemIdP = document.getElementsByClassName("item_id"); 
+  var image = document.getElementsByClassName("image");
+  var name = document.getElementsByClassName("name");
+
+  for (var i = 0; i < books.length; i++) {
+    var book_id=  books[i].item_id.trim();
+
+    console.log("item_nbr: "+ itemId);
+    console.log("item_nbr for varje book: "+ book_id);
+    console.log("is it equals: "+ (itemId.trim() == book_id.trim()));
+    if(itemId.trim() == book_id.trim()){
+      console.log("found it ");
+
+      itemIdP.innerHTML = `item id: `+books[i].item_id;
+      image.innerHTML= `<img src="pic/books/`+books[i].picture+`>`;
+      name.innerHTML=  `name of the book is: `+books[i].name;
+    }
+  }
+}
+
 close.onclick = function() {
   popup_modal.style.display = "none";
 }
@@ -47,7 +94,9 @@ function write_item_id() {
     if (event.data === 'echo') {
       alert(event.data);
     }else if(event.data.includes("item id is:")){
-      document.getElementById("item_id").innerHTML = event.data;
+      var item_nbr = event.data.replace( /^\D+/g, '');
+      document.getElementsByClassName("item_id").innerHTML = item_nbr;
+      showItemId(item_nbr);
     }else{
       popup_modal.style.display = "none";
       alert(event.data);
@@ -58,9 +107,3 @@ function write_item_id() {
     document.getElementById("ws-status").innerHTML = "DISCONNECTED";
   }
   window.onload=onLoad;
-  
-  
-  function showItemId(itemId) {
-      var itemIdP = document.getElementById("item_id");
-      itemIdP.textContent = `item id: ${itemId}`;
-  }; 
