@@ -1,5 +1,7 @@
-var popup_modal = document.getElementById("popup-modal");
-var close = document.getElementById("close");
+var place_tag_modal = document.getElementById("place-tag-modal");
+var write_item_id_modal = document.getElementById("write-item-id-modal");
+var place_tag_close = document.getElementById("place-tag-close");
+var write_item_id_close = document.getElementById("write-item-id-close");
 var itemIdP = document.getElementById("book_id"); 
 var book_image = document.getElementById("book_pic");
 var book_name = document.getElementById("book_name");
@@ -48,27 +50,40 @@ var books= [
 
 function showModal(status){
   if(status.localeCompare('false')==0){
-    popup_modal.style.display = "none";
+    place_tag_modal.style.display = "none";
   }else{
-    popup_modal.style.display = "block";
-
+    place_tag_modal.style.display = "block";
   }
 }
-close.onclick = function() {
+place_tag_close.onclick = function() {
 showModal('false');
 }
 
+write_item_id_close.onclick = function() {
+  write_item_id_modal.style.display = "none";
+}
+
+  
 function write_item_id() {
-showModal('true');
+  write_item_id_modal.style.display = "none";
+    showModal('true');
     var itemId = document.getElementById("item-id-input").value;
     ws.send('{"toDo": "write", "value": "'+itemId+'"}');
   }
   
+  function show_write_modal(){
+    write_item_id_modal.style.display = "block";
+  }
+
   function do_check_in(value) {
     showModal('true');
     ws.send('{"toDo": "doCheckIn", "value": "'+value+'"}');
   }
   
+  function show_item(){
+    showModal('true');
+  }
+
   function sendPing() {
     ws.send('ping');
   }

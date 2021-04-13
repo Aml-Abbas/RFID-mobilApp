@@ -1,81 +1,60 @@
 <!DOCTYPE html>
 <html>
-  
 <title>Quria</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="style.css">
 
 <body>
 
-<!-- !PAGE CONTENT! -->
-<div class="w3-content" style="max-width:1500px">
 
-<!-- Header -->
-<header class="w3-panel w3-center w3-opacity" style="padding:128px 16px">
-  <h1 class="w3-xlarge">Quria</h1>
-  <h1>Welcome</h1>
-  <div>WebSocket status: <span id="ws-status"></span></div><button onclick="sendPing()">Send ping</button>
-</header>
-
-<body>
-<!-- Photo Grid -->
-
-
-
-  <div class="book_image">
-    <image class="image" id="book_pic">
+  <div class="welcome">
+    <h1>Welcome</h1>
+    <div>WebSocket status: <span id="ws-status"></span></div><button class="button_ping" onclick="sendPing()">Send ping</button>
   </div>
-  <h4 class="name" id="book_name"></h4>
-  <h3 class="item_id" id="book_id"></h3>
 
+  <div class="row">
 
-<div class="w3-padding-10">
-    <div class="w3-bar w3-border">
-      <h5 id="item-id" class="w3-large"></h5>
+  <div class="left">
+ <div class="buttons">
 
-            <input type="text" id="item-id-input" placeholder="Write a new item id" name="itemId"><br>
+        <button class="button" onclick="show_write_modal()">Write</button>
+        <button class="button" onclick="do_check_in('true')">Check in</button>
+        <button class="button" onclick="do_check_in('false')">Check out</button>
+        <button class="button" onclick="show_item()">Show item</button>
 
-  <button id="btn" class="button button5 w3-bar-item w3-button" onclick="write_item_id()">Write</button>
   </div>
-   
   </div>
-  <h1 class="w3-xlarge">Or</h1>
 
-   <div class="w3-padding-10">
-    <div class="w3-bar w3-border">
-        <button class="button button5 w3-bar-item w3-button" onclick="do_check_in('true')">Check in</button>
-        <button class="button button5 w3-bar-item w3-button" onclick="do_check_in('false')">Check out</button>
-    </div>
+  <div class="right">
+
+
+<div class="card">
+  <img id="book_pic" style="width:100%">
+  <div class="container">
+    <h4><b class="name" id="book_name"></b></h4> 
+    <p class="item_id" id="book_id"></p> 
   </div>
+
+</div>
+
+  </div>
+  </div>
+
   
-  </div>
- 
-  
-  <!-- The Modal -->
-<div id="popup-modal" class="popup-modal-class">
+<div id="place-tag-modal" class="place-tag-modal-class">
 
-  <!-- Modal content -->
-  <div class="popup-modal-content">
-    <span id="close">&times;</span>
+  <div class="place-tag-modal-content">
+    <span id="place-tag-close">&times;</span>
     <p>Place the smartphone over the item you would like to scan</p>
   </div>
 </div>
 
-<!-- End Page Content -->
-
-<!-- Footer -->
-<footer class="w3-container w3-padding-64 w3-light-grey w3-center w3-large"> 
-  <i class="fa fa-facebook-official w3-hover-opacity"></i>
-  <i class="fa fa-instagram w3-hover-opacity"></i>
-  <i class="fa fa-snapchat w3-hover-opacity"></i>
-  <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-  <i class="fa fa-twitter w3-hover-opacity"></i>
-  <i class="fa fa-linkedin w3-hover-opacity"></i>
-</footer>
+<div id="write-item-id-modal" class="write-item-id-modal-class">
+  <div class="write-item-id-modal-content">
+    <span id="write-item-id-close">&times;</span>
+    <input type="text" id="item-id-input" placeholder="Write a new item id" name="itemId"><br>
+    <button class="button" onclick="write_item_id()">Write item id</button>
+  </div>
+</div>
 
 </body>
 <script src="javaScript.js"></script>
