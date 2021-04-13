@@ -1,5 +1,9 @@
 var popup_modal = document.getElementById("popup-modal");
 var close = document.getElementById("close");
+var itemIdP = document.getElementById("book_id"); 
+var image = document.getElementById("book_pic");
+var name = document.getElementById("book_name");
+
 
 var books= [
   {
@@ -28,10 +32,6 @@ var books= [
   
  function showItemId(itemId) {
 
-  var itemIdP = document.getElementById("book_id"); 
-  var image = document.getElementById("book_pic");
-  var name = document.getElementById("book_name");
-
   for (var i = 0; i < books.length; i++) {
     var book_id=  books[i].item_id.toString().trim();
     var bookItemId = itemId.toString().trim();
@@ -43,7 +43,7 @@ var books= [
     img.src = "pic/books/"+books[i].picture;
     img.width = 100;
     img.height = 200;
-    document.getElementById("book_pic").appendChild(img);
+    image.appendChild(img);
     name.innerHTML=  `name of the book is: `+books[i].name;
     }
   }
