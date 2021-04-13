@@ -1,5 +1,5 @@
 var popup_modal = document.getElementById("popup-modal");
-var close = document.getElementsByClassName("close")[0];
+var close = document.getElementById("close");
 
 var books= [
   {
