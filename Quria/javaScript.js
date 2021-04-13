@@ -38,8 +38,8 @@ var books= [
 
     if(bookItemId.localeCompare(book_id)== 0){
 
-      itemIdP.innerHTML  = `item id: `+book_id;
-      book_name.innerHTML=  `name of the book is: `+books[i].name;
+      itemIdP.innerHTML  = 'item id: '+book_id;
+      book_name.innerHTML=  'name of the book is: '+books[i].name;
       var img = document.createElement("img");
     img.src = "pic/books/"+books[i].picture;
     img.width = 100;
@@ -96,7 +96,6 @@ function write_item_id() {
       alert(event.data);
     }else if(event.data.includes("item id is:")){
       var item_nbr = event.data.replace( /^\D+/g, '');
-      document.getElementById("book_id").innerHTML = item_nbr;
       showItemId(item_nbr);
     }else{
       popup_modal.style.display = "none";
