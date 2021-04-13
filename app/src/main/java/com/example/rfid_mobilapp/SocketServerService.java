@@ -38,16 +38,20 @@ public class SocketServerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (server != null) {
+            String jsonString= "";
             if (intent != null && intent.getAction() != null && intent.getExtras() != null) {
                 if (intent.getAction().equals("READ_ITEM_ID")) {
                     String itemId = intent.getExtras().getString("itemId");
-                    server.broadcast("item id is: " + itemId);
+                    jsonString= Utilities.createJsonString("read_item_id", itemId);
+                    server.broadcast(jsonString);
                 } else if (intent.getAction().equals("WRITE_ITEM_ID")) {
                     String status = intent.getExtras().getString("itemId");
-                    server.broadcast(status);
+                    jsonString= Utilities.createJsonString("write_item_id", status);
+                    server.broadcast(jsonString);
                 } else if (intent.getAction().equals("CHECK")) {
                     String status = intent.getExtras().getString("doCheckIn");
-                    server.broadcast(status);
+                    jsonString= Utilities.createJsonString("check", status);
+                    server.broadcast(jsonString);
                 }
             }
         } else {

@@ -56,7 +56,7 @@ public class NfcTagUtil {
         }
         serviceIntent = new Intent(activity, SocketServerService.class);
         serviceIntent.setAction("READ_ITEM_ID");
-        serviceIntent.putExtra("itemId", payloadString);
+        serviceIntent.putExtra("itemId", payloadString.trim());
         activity.startService(serviceIntent);
     }
 
