@@ -40,11 +40,7 @@ var books= [
 
       itemIdP.innerHTML  = 'item id: '+book_id;
       book_name.innerHTML=  'name of the book is: '+books[i].name;
-      var img = document.createElement("img");
-    img.src = "pic/books/"+books[i].picture;
-    img.width = 100;
-    img.height = 200;
-    book_image.appendChild(img);
+      book_image.src = 'pic/books/'+books[i].picture;
     break;
     }
   }

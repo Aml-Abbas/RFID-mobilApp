@@ -49,3 +49,9 @@
 body,h1 {font-family: "Raleway", Arial, sans-serif}
 h1 {letter-spacing: 6px}
 .w3-row-padding img {margin-bottom: 12px}
+
+.book_image, .image, #book_pic{
+height: 400px;
+width: 400px;
+padding: 20px;
+}
