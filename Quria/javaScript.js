@@ -49,18 +49,26 @@ var books= [
   }
 }
 
+function showModal(status){
+  if(status.localeCompare('false')==0){
+    popup_modal.style.display = "none";
+  }else{
+    popup_modal.style.display = "block";
+
+  }
+}
 close.onclick = function() {
-  popup_modal.style.display = "none";
+showModal('false');
 }
 
 function write_item_id() {
-  popup_modal.style.display = "block";
+showModal('true');
     var itemId = document.getElementById("item-id-input").value;
     ws.send('{"toDo": "write", "value": "'+itemId+'"}');
   }
   
   function do_check_in(value) {
-    popup_modal.style.display = "block";
+    showModal('true');
     ws.send('{"toDo": "doCheckIn", "value": "'+value+'"}');
   }
   
@@ -92,7 +100,7 @@ function write_item_id() {
       var item_nbr = event.data.replace( /^\D+/g, '');
       showItemId(item_nbr);
     }else{
-      popup_modal.style.display = "none";
+      showModal('false');
       alert(event.data);
     }
   }
