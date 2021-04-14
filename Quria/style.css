@@ -99,17 +99,31 @@
       text-decoration: none;
       cursor: pointer;
     }
-  
-    #myProgress {
-      width: 100%;
-      background-color: #ddd;
+
+    #phone-animation {
+      width: 50px;
+      height: 50px;
+      content:url(pic/phone_new.jpg);
+      position: relative;
+      animation: left_right 5s infinite;
+      display:inline;
     }
     
-    #myBar {
-      width: 10%;
-      height: 30px;
-      background-color: #4CAF50;
-      text-align: center;
-      line-height: 30px;
-      color: white;
+    @keyframes left_right {
+      from {left: 0px;}
+      to {left: 42%;}
+    }
+
+    #book-animation{
+      width: 100px;
+      height: 100px;
+      content:url(pic/book_per.png);
+      position: relative;
+      animation: right_left 5s infinite;
+      display:inline;
+    }
+
+    @keyframes right_left {
+      from {left: 50%;}
+      to {left: 50%;}
     }
