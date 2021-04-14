@@ -88,7 +88,7 @@ public class NfcTagUtil {
             byte[] newDataWithBarcode = NfcTagUtil.setBarcode(itemId, oldData);
             int CRCValue = Utilities.calculateCRC16(Utilities.getDataWithoutCRC(newDataWithBarcode));
             byte[] newDataToWrite = setCRC(CRCValue, newDataWithBarcode);
-            status = writeBlocks(tagId, nfcV, activity, 0, 8, newDataToWrite) + " trying to write item Id.";
+            status = writeBlocks(tagId, nfcV, activity, 0, 8, newDataToWrite) + ", try again.";
         } else {
             status = activity.getResources().getString(R.string.failed_write) + " item Id was not written.";
         }
