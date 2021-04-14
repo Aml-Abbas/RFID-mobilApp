@@ -172,7 +172,8 @@ function write_item_id() {
 let charts_success = document.getElementsByClassName('success-div');
 let charts_failed = document.getElementsByClassName('failed-div');
 
-for(let i=0;i<charts_success.length;i++) {
+
+  for(let i=0;i<charts_success.length;i++) {
     let chart = charts_success[i];
     let percent = chart.dataset.percent;
     let color = ('color' in chart.dataset) ? chart.dataset.color : "#2F4F4F";
@@ -180,6 +181,7 @@ for(let i=0;i<charts_success.length;i++) {
     let stroke = ('stroke' in chart.dataset) ? chart.dataset.stroke : "1";
     charts_success[i].innerHTML = createCircleChart(percent, color, size, stroke);
 }
+
 for(let i=0;i<charts_failed.length;i++) {
   let chart = charts_failed[i];
   let percent = chart.dataset.percent;
