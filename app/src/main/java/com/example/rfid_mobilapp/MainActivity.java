@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "on Stop");
-        Intent intent = new Intent(this, NfcActivity.class);
-        startActivity(intent);
     }
 
     @Override
@@ -93,6 +91,13 @@ public class MainActivity extends AppCompatActivity {
         socketServiceSwitch = findViewById(R.id.stopSocketServiceButton);
     }
 
+    public static boolean isServerOn() {
+        if (socketServiceSwitch != null) {
+            return socketServiceSwitch.isChecked();
+        }
+        return false;
+    }
+
     public void setLocale(String localeName) {
         myLocale = new Locale(localeName);
         Resources resources = getResources();
@@ -110,9 +115,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getIds();
         setUpSpinner(spinner);
-        setUpSocketServiceSwitch();
         serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);
+        setUpSocketServiceSwitch();
     }
 
     private void setUpSpinner(Spinner spinner) {

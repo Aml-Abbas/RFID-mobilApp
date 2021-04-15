@@ -19,7 +19,7 @@ public class SocketServerService extends Service {
     NotificationManager notificationManager;
     SocketServer server;
     InetSocketAddress listenAddress;
-    private Thread serverThread;
+   // private Thread serverThread;
     Thread thread;
     private final String host = "localhost";
     private final int port = 8888;
@@ -27,11 +27,11 @@ public class SocketServerService extends Service {
 
     @Override
     public void onCreate() {
-        serverThread = new Thread(() -> {
-            InetSocketAddress listenAddress = new InetSocketAddress(host, port);
-            server = new SocketServer(listenAddress);
-        });
-        serverThread.start();
+//        serverThread = new Thread(() -> {
+//            InetSocketAddress listenAddress = new InetSocketAddress(host, port);
+//            server = new SocketServer(listenAddress);
+//        });
+//        serverThread.start();
         super.onCreate();
     }
 
@@ -54,7 +54,7 @@ public class SocketServerService extends Service {
                     server.broadcast(jsonString);
                 }
             }
-        } else {
+        } else if (MainActivity.isServerOn()){
             createNotificationChannel();
             createNotification();
             thread = new Thread(() -> {
@@ -80,8 +80,9 @@ public class SocketServerService extends Service {
         notificationManager.cancel(0);
         try {
             server.stop();
-            serverThread.interrupt();
+         //   serverThread.interrupt();
             thread.interrupt();
+            thread.join();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -96,7 +97,7 @@ public class SocketServerService extends Service {
 
     private void createNotification() {
         Intent openAppIntent = new Intent(this, MainActivity.class);
-        openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        openAppIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent openAppPendingIntent =
                 PendingIntent.getActivity(this, 0, openAppIntent, 0);
         NotificationCompat.Builder SocketServerServiceNotification = new NotificationCompat.Builder(this, channelId)
