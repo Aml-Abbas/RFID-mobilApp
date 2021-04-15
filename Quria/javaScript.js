@@ -13,7 +13,6 @@ var failed_text = document.getElementById("failed-text");
 
 var itemIdP = document.getElementById("book_id"); 
 var book_image = document.getElementById("book_pic");
-var book_name = document.getElementById("book_name");
 
 
 var books= [
@@ -49,7 +48,6 @@ var books= [
 
     if(bookItemId.localeCompare(book_id)== 0){
       itemIdP.innerHTML  = 'item id: '+book_id;
-      book_name.innerHTML=  'name of the book is: '+books[i].name;
       book_image.src = 'pic/books/'+books[i].picture;
     break;
     }
