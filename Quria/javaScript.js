@@ -2,11 +2,13 @@ var place_tag_modal = document.getElementById("place-tag-modal");
 var write_item_id_modal = document.getElementById("write-item-id-modal");
 var success_modal = document.getElementById("success-modal");
 var failed_modal = document.getElementById("failed-modal");
+var connection_modal = document.getElementById("connection-modal");
 
 var place_tag_close = document.getElementById("place-tag-close");
 var write_item_id_close = document.getElementById("write-item-id-close");
 var success_close = document.getElementById("success-close");
 var failed_close = document.getElementById("failed-close");
+var connection_close = document.getElementById("connection-close");
 
 var success_text = document.getElementById("success-text"); 
 var failed_text = document.getElementById("failed-text"); 
@@ -14,6 +16,7 @@ var failed_text = document.getElementById("failed-text");
 var itemIdP = document.getElementById("book_id"); 
 var book_image = document.getElementById("book_pic");
 
+var isConnected= false;
 
 var books= [
   {
@@ -69,6 +72,10 @@ write_item_id_close.onclick = function() {
   write_item_id_modal.style.display = "none";
 }
 
+connection_close.onclick = function() {
+  connection_modal.style.display = "none";
+}
+
 success_close.onclick = function() {
   success_modal.style.display = "none";
 }
@@ -95,20 +102,39 @@ function write_item_id() {
   }
   
   function show_write_modal(){
+    if(!isConnected){
+      connection_modal.style.display = "block";
+    }else{
+
     write_item_id_modal.style.display = "block";
-  }
+    }
+    }
 
   function do_check_in(value) {
+    if(!isConnected){
+      connection_modal.style.display = "block";
+    }else{
+
     showPlaceTagModal('true');
     ws.send('{"toDo": "doCheckIn", "value": "'+value+'"}');
-  }
+    }
+    }
   
   function show_item(){
+    if(!isConnected){
+      connection_modal.style.display = "block";
+    }else{
+
     showPlaceTagModal('true');
-  }
+    }
+    }
 
   function sendPing() {
-    ws.send('ping');
+    if(!isConnected){
+      connection_modal.style.display = "block";
+    }else{
+      ws.send('ping');
+    }
   }
   
   
@@ -116,6 +142,7 @@ function write_item_id() {
   var port = "8888";
   var ws = new WebSocket("ws://" + ip + ":" + port);
   ws.onopen = function() {
+    isConnected= true;
     document.getElementById("ws-status").innerHTML = "CONNECTED";
     var doSendPing = confirm('connected! Send ping? Otherwise we will send "bla bla".');
     if (doSendPing) {
@@ -125,6 +152,7 @@ function write_item_id() {
     }
   };
   ws.onclose = function(event) {
+    isConnected= false;
       document.getElementById("ws-status").innerHTML = "DISCONNECTED";
     console.log("WebSocket is closed now.");
   };

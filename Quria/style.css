@@ -65,7 +65,7 @@
   
   
   .place-tag-modal-class, .write-item-id-modal-class,
-  .success-modal-class, .failed-modal-class {
+  .success-modal-class, .failed-modal-class, .connection-modal-class {
       display: none; 
       position: fixed; 
       z-index: 1; 
@@ -80,7 +80,7 @@
     }
     
     .place-tag-modal-content, .write-item-id-modal-content,
-    .failed-modal-content, .success-modal-content {
+    .failed-modal-content, .success-modal-content, .connection-modal-content {
       background-color: #fefefe;
       margin: auto;
       padding: 20px;
@@ -89,7 +89,7 @@
     }
     
     #place-tag-close, #write-item-id-close,
-    #success-close, #failed-close{
+    #success-close, #failed-close, #connection-close{
       color: #aaaaaa;
       float: right;
       font-size: 28px;
@@ -99,7 +99,8 @@
     #place-tag-close:hover, #write-item-id-close:hover,
     #place-tag-close:focus, #write-item-id-close:focus,
     #success-close:focus, #failed-close:focus,
-    #success-close:hover, #failed-close:hover {
+    #success-close:hover, #failed-close:hover,
+    #connection-close:hover, #connection-close:focus{
       color: #000;
       text-decoration: none;
       cursor: pointer;
