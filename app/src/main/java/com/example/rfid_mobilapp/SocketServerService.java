@@ -81,9 +81,7 @@ public class SocketServerService extends Service {
         try {
             server.stop();
             serverThread.interrupt();
-            serverThread.join();
             thread.interrupt();
-            thread.join();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }

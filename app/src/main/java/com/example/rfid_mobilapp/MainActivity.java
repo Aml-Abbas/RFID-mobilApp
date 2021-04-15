@@ -88,13 +88,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "on pause");
     }
 
-    public static boolean isServerOn() {
-        if (socketServiceSwitch != null) {
-            return socketServiceSwitch.isChecked();
-        }
-        return false;
-    }
-
     private void getIds() {
         spinner = findViewById(R.id.spinner);
         socketServiceSwitch = findViewById(R.id.stopSocketServiceButton);
