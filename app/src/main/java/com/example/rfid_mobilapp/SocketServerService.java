@@ -19,37 +19,50 @@ public class SocketServerService extends Service {
     NotificationManager notificationManager;
     SocketServer server;
     InetSocketAddress listenAddress;
-    private Thread serverThread;
+   // private Thread serverThread;
+    Thread thread;
     private final String host = "localhost";
     private final int port = 8888;
     private final String channelId = "channel";
 
     @Override
     public void onCreate() {
-        serverThread = new Thread(() -> {
-            InetSocketAddress listenAddress = new InetSocketAddress(host, port);
-            server = new SocketServer(listenAddress, this);
-        });
-        serverThread.start();
+//        serverThread = new Thread(() -> {
+//            InetSocketAddress listenAddress = new InetSocketAddress(host, port);
+//            server = new SocketServer(listenAddress);
+//        });
+//        serverThread.start();
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (server != null) {
-            if (intent != null && intent.getAction() != null && intent.getAction().equals("READ_TAG") && intent.getExtras() != null) {
-                String itemId = intent.getExtras().getString("itemId");
-                server.broadcast("item id is: " + itemId);
+            String jsonString= "";
+            if (intent != null && intent.getAction() != null && intent.getExtras() != null) {
+                if (intent.getAction().equals("READ_ITEM_ID")) {
+                    String itemId = intent.getExtras().getString("itemId");
+                    jsonString= Utilities.createJsonString("read_item_id", itemId);
+                    server.broadcast(jsonString);
+                } else if (intent.getAction().equals("WRITE_ITEM_ID")) {
+                    String status = intent.getExtras().getString("itemId");
+                    jsonString= Utilities.createJsonString("write_item_id", status);
+                    server.broadcast(jsonString);
+                } else if (intent.getAction().equals("CHECK")) {
+                    String status = intent.getExtras().getString("doCheckIn");
+                    jsonString= Utilities.createJsonString("check", status);
+                    server.broadcast(jsonString);
+                }
             }
-        } else {
+        } else if (MainActivity.isServerOn()){
             createNotificationChannel();
             createNotification();
-            Thread thread = new Thread(() -> {
+            thread = new Thread(() -> {
                 String host = "localhost";
                 int port = 8888;
                 try {
                     listenAddress = new InetSocketAddress(host, port);
-                    server = new SocketServer(listenAddress, this);
+                    server = new SocketServer(listenAddress);
                     server.run();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -67,7 +80,9 @@ public class SocketServerService extends Service {
         notificationManager.cancel(0);
         try {
             server.stop();
-            serverThread.interrupt();
+         //   serverThread.interrupt();
+            thread.interrupt();
+            thread.join();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -82,7 +97,7 @@ public class SocketServerService extends Service {
 
     private void createNotification() {
         Intent openAppIntent = new Intent(this, MainActivity.class);
-        openAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        openAppIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent openAppPendingIntent =
                 PendingIntent.getActivity(this, 0, openAppIntent, 0);
         NotificationCompat.Builder SocketServerServiceNotification = new NotificationCompat.Builder(this, channelId)

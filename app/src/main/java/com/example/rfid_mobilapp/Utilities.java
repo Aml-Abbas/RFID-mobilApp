@@ -84,6 +84,9 @@ public class Utilities {
 
     public static String getItemFromJson(JSONObject obj, String item) throws JSONException {
         return obj.getString(item);
+    }
 
+    public static String createJsonString(String done, String value){
+        return "{\"Done\": \""+done+"\", \"value\": \""+value+"\"}";
     }
 }

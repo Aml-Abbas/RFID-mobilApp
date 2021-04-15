@@ -1,130 +1,92 @@
 <!DOCTYPE html>
 <html>
-  <style>
-    #messages {
-        text-align: left;
-        width: 50%;
-        padding: 1em;
-        border: 1px solid black;
-    }
-</style>
 <title>Quria</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-.button5 {background-color: #008CBA;}
-body,h1 {font-family: "Raleway", Arial, sans-serif}
-h1 {letter-spacing: 6px}
-.w3-row-padding img {margin-bottom: 12px}
-</style>
+<link rel="stylesheet" href="style.css">
+
 <body>
 
-<!-- !PAGE CONTENT! -->
-<div class="w3-content" style="max-width:1500px">
 
-<!-- Header -->
-<header class="w3-panel w3-center w3-opacity" style="padding:128px 16px">
-  <h1 class="w3-xlarge">Quria</h1>
-  <h1>Welcome</h1>
-  <div>WebSocket status: <span id="ws-status"></span></div><button onclick="sendPing()">Send ping</button>
-
-<br>
-<br>
-<br>
-<p id="item_id"></p>
-
-</header>
-
-<!-- Photo Grid -->
-
-
-<div class="w3-padding-10">
-    <div class="w3-bar w3-border">
-      <h5 id="item-id" class="w3-large"></h5>
-
-            <input type="text" id="item-id-input" placeholder="Write a new item id" name="itemId"><br>
-
-  <button id="btn" class="button button5 w3-bar-item w3-button" onclick="write_item_id()">Write</button>
+  <div class="welcome">
+    <h1>Welcome</h1>
+    <div>WebSocket status: <span id="ws-status"></span></div><button class="button_ping" onclick="sendPing()">Send ping</button>
   </div>
-   
-  </div>
-  <h1 class="w3-xlarge">Or</h1>
 
-   <div class="w3-padding-10">
-    <div class="w3-bar w3-border">
-        <button class="button button5 w3-bar-item w3-button" onclick="do_check_in('true')">Check in</button>
-        <button class="button button5 w3-bar-item w3-button" onclick="do_check_in('false')">Check out</button>
+  <div class="row">
+
+  <div class="left">
+ <div class="buttons">
+
+        <button class="button" onclick="show_write_modal()">Program</button>
+        <button class="button" onclick="do_check_in('true')">Check in</button>
+        <button class="button" onclick="do_check_in('false')">Check out</button>
+        <button class="button" onclick="show_item()">Show item</button>
+
+  </div>
+  </div>
+
+  <div class="right">
+<div class="card">
+  <img id="book_pic" style="width:100%">
+  <div class="container">
+    <h4 class="item_id" id="book_id"></h4> 
+  </div>
+
+</div>
+
+  </div>
+  </div>
+
+  
+<div id="place-tag-modal" class="place-tag-modal-class">
+
+  <div class="place-tag-modal-content">
+    <span id="place-tag-close">&times;</span>
+    <p>Place the smartphone over the item you would like to scan</p>
+    <div id="book-animation"></div>
+    <div id="phone-animation"></div>
     </div>
   </div>
-  
+</div>
+
+<div id="write-item-id-modal" class="write-item-id-modal-class">
+  <div class="write-item-id-modal-content">
+    <span id="write-item-id-close">&times;</span>
+    <input type="text" id="item-id-input" placeholder="Write a new item id" name="itemId"><br>
+    <button class="button-program-chip" onclick="write_item_id()">Program the chip</button>
   </div>
- 
-  
-<!-- End Page Content -->
+</div>
 
-<!-- Footer -->
-<footer class="w3-container w3-padding-64 w3-light-grey w3-center w3-large"> 
-  <i class="fa fa-facebook-official w3-hover-opacity"></i>
-  <i class="fa fa-instagram w3-hover-opacity"></i>
-  <i class="fa fa-snapchat w3-hover-opacity"></i>
-  <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-  <i class="fa fa-twitter w3-hover-opacity"></i>
-  <i class="fa fa-linkedin w3-hover-opacity"></i>
-</footer>
+<div id="success-modal" class="success-modal-class">
 
-<script>
-function write_item_id() {
-  var itemId = document.getElementById("item-id-input").value;
-  ws.send('{"toDo": "write", "value": "'+itemId+'"}');
-}
+  <div class="success-modal-content">
+    <span id="success-close">&times;</span>
+    <p id="success-text"></p>
+    <div class="success-div" data-percent="100" data-color="#4CAF50" data-size="125" data-stroke="3"></div>
+    </div>
+      </div>
+  </div>
+</div>
 
-function do_check_in(value) {
-  ws.send('{"toDo": "doCheckIn", "value": "'+value+'"}');
-}
+<div id="failed-modal" class="failed-modal-class">
 
-function sendPing() {
-  ws.send('ping');
-}
+  <div class="failed-modal-content">
+    <span id="failed-close">&times;</span>
+    <p id="failed-text"></p>
+    <div class="failed-div" data-percent="65" data-color="#9e2a36" data-size="125" data-stroke="3"></div>
+  </div>
+  </div>
+</div>
 
+<div id="connection-modal" class="connection-modal-class">
 
-var ip = "localhost";
-var port = "8888";
-var ws = new WebSocket("ws://" + ip + ":" + port);
-ws.onopen = function() {
-  document.getElementById("ws-status").innerHTML = "CONNECTED";
-  var doSendPing = confirm('connected! Send ping? Otherwise we will send "bla bla".');
-  if (doSendPing) {
-    ws.send('ping');
-  } else {
-    ws.send('bla bla');
-  }
-};
-ws.onclose = function(event) {
-    document.getElementById("ws-status").innerHTML = "DISCONNECTED";
-  console.log("WebSocket is closed now.");
-};
-ws.onmessage = function (event) {
-  if (event.data === 'echo') {
-    alert(event.data);
-  }else{
-    document.getElementById("item_id").innerHTML = event.data;
-  }
-}
+  <div class="connection-modal-content">
+    <span id="connection-close">&times;</span>
+    <p>Open the connection first and try again.</p>
+  </div>
+  </div>
+</div>
 
-function onLoad() {
-  document.getElementById("ws-status").innerHTML = "DISCONNECTED";
-}
-window.onload=onLoad;
-
-
-function showItemId(itemId) {
-    var itemIdP = document.getElementById("item_id");
-    itemIdP.textContent = `item id: ${itemId}`;
-}; 
-
-</script>
+</body>
+<script src="javaScript.js"></script>
 </body>
 </html>
