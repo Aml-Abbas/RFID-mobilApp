@@ -19,11 +19,11 @@
     border-radius: 30px;
     width: 60%;
     color: white;
-  padding: 15px;
+    padding: 15px;
     margin: 3px;
     font-size: 16px;
   }
-  .button_ping {
+  .button_ping , .button-program-chip{
     width: 25%;
     color: white;
     padding: 10px;
@@ -77,8 +77,6 @@
       overflow: auto;
       background-color: rgb(0,0,0);
       background-color: rgba(0,0,0,0.4);
-      align-items: center;
-      align-content: center;
     }
     
     .place-tag-modal-content, .write-item-id-modal-content,
@@ -106,6 +104,16 @@
       text-decoration: none;
       cursor: pointer;
     }
+
+    input[type=text]{
+      width: 60%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
 
     #phone-animation {
       width: 50px;
