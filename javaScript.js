@@ -216,3 +216,57 @@ for(let i=0;i<charts_failed.length;i++) {
   let stroke = ('stroke' in chart.dataset) ? chart.dataset.stroke : "1";
   charts_failed[i].innerHTML = createCircleChart(percent, color, size, stroke);
 }
+
+
+window.addEventListener("load", function () {
+  alert(`Hi`);
+  Quagga.init({
+      inputStream: {
+          name: "Live",
+          type: "LiveStream",
+          target: document.querySelector('#camera') // Or '#yourElement' (optional)
+      },
+      decoder: {
+          readers: [[{
+              format: "ean_reader",
+              config: {
+                  supplements: [
+                      'ean_5_reader', 'ean_2_reader'
+                  ]
+              }
+          }], 
+          "code_128_reader",
+          "ean_8_reader",
+          "code_39_reader",
+          "code_39_vin_reader",
+          "codabar_reader",
+          "upc_reader",
+          "upc_e_reader",
+          "i2of5_reader",
+          "2of5_reader",
+          "code_93_reader",
+          "code_32_reader",
+      "Codabar",
+  "Code 11",
+"Code 128",
+"Code 39",
+"Extended Code 39",
+"Code 93",
+"Composite Code",
+]
+      }
+  }, function (err) {
+      if (err) {
+          console.log(` Quagaa init error ${err}`);
+          return
+      }
+      console.log("Initialization finished. Ready to start");
+      Quagga.start();
+  });
+
+
+  Quagga.onDetected(function (data) {
+      console.log(`Barcode detected ${data}`);
+      alert(`Barcode detected`);
+  });
+});
