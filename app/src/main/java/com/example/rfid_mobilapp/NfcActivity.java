@@ -22,6 +22,10 @@ public class NfcActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nfc);
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         openDialog();
+        if (!MainActivity.isServerOn()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
