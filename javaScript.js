@@ -251,8 +251,11 @@ window.addEventListener("load", function () {
 
 
   Quagga.onDetected(function (data) {
-     console.log(`Barcode detected ${data}`);
-     alert(`Barcode detected`);
-     alert(data.codeResult.code);
-  });
+         alert("Barcode detected "+
+        " data " +data.codeResult.code+
+        " type "+ data.codeResult.format+
+              " start "+ data.codeResult.start+
+               " end "+ data.codeResult.end);
+    });
+ 
 });
