@@ -219,7 +219,7 @@ for(let i=0;i<charts_failed.length;i++) {
 
 
 window.addEventListener("load", function () {
-  alert(`Hi`);
+  console.log("Hi");
   Quagga.init({
       inputStream: {
           name: "Live",
@@ -227,15 +227,8 @@ window.addEventListener("load", function () {
           target: document.querySelector('#camera') // Or '#yourElement' (optional)
       },
       decoder: {
-          readers: [[{
-              format: "ean_reader",
-              config: {
-                  supplements: [
-                      'ean_5_reader', 'ean_2_reader'
-                  ]
-              }
-          }], 
-          "code_128_reader",
+         readers: ["code_128_reader",
+          "ean_reader",
           "ean_8_reader",
           "code_39_reader",
           "code_39_vin_reader",
@@ -245,15 +238,7 @@ window.addEventListener("load", function () {
           "i2of5_reader",
           "2of5_reader",
           "code_93_reader",
-          "code_32_reader",
-      "Codabar",
-  "Code 11",
-"Code 128",
-"Code 39",
-"Extended Code 39",
-"Code 93",
-"Composite Code",
-]
+          "code_32_reader"]
       }
   }, function (err) {
       if (err) {
@@ -267,6 +252,5 @@ window.addEventListener("load", function () {
 
   Quagga.onDetected(function (data) {
       console.log(`Barcode detected ${data}`);
-      alert(`Barcode detected`);
   });
 });
