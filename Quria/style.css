@@ -63,9 +63,9 @@
     font-size: 30px;
   }
   
-  
   .place-tag-modal-class, .write-item-id-modal-class,
-  .success-modal-class, .failed-modal-class, .connection-modal-class {
+  .success-modal-class, .failed-modal-class, .connection-modal-class,
+  .check-out-modal-class, .show-patron-modal-class {
       display: none; 
       position: fixed; 
       z-index: 1; 
@@ -80,7 +80,8 @@
     }
     
     .place-tag-modal-content, .write-item-id-modal-content,
-    .failed-modal-content, .success-modal-content, .connection-modal-content {
+    .failed-modal-content, .success-modal-content, .connection-modal-content,
+    .check-out-modal-content, .show-patron-modal-content {
       background-color: #fefefe;
       margin: auto;
       padding: 20px;
@@ -89,7 +90,8 @@
     }
     
     #place-tag-close, #write-item-id-close,
-    #success-close, #failed-close, #connection-close{
+    #success-close, #failed-close, #connection-close,
+    #check-out-close, #show-patron-close{
       color: #aaaaaa;
       float: right;
       font-size: 28px;
@@ -100,7 +102,9 @@
     #place-tag-close:focus, #write-item-id-close:focus,
     #success-close:focus, #failed-close:focus,
     #success-close:hover, #failed-close:hover,
-    #connection-close:hover, #connection-close:focus{
+    #connection-close:hover, #connection-close:focus,
+    #check-out-close:hover, #check-out-close:focus,
+    #show-patron-close:hover, #sow-patron-close:focus{
       color: #000;
       text-decoration: none;
       cursor: pointer;
