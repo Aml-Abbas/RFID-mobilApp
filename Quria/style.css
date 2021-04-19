@@ -23,6 +23,7 @@
     margin: 3px;
     font-size: 16px;
   }
+  
   .button_ping , .button-program-chip{
     width: 25%;
     color: white;
@@ -49,6 +50,11 @@
     padding: 2px 16px;
   }
   
+  #camera{
+padding-bottom: 0px;
+margin-bottom: 0px;
+  }
+
   .row{
    display: grid;
     grid-template-areas:
@@ -86,7 +92,7 @@
       margin: auto;
       padding: 20px;
       border: 1px solid #888;
-      width: 80%;
+      width: 90%;
     }
     
     #place-tag-close, #write-item-id-close,

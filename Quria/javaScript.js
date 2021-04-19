@@ -17,6 +17,7 @@ var show_patron_close = document.getElementById("show-patron-close");
 var success_text = document.getElementById("success-text"); 
 var failed_text = document.getElementById("failed-text"); 
 var patron_text = document.getElementById("patron"); 
+var use_patron_text = document.getElementById("use-patron"); 
 
 var itemIdP = document.getElementById("book_id"); 
 var book_image = document.getElementById("book_pic");
@@ -91,6 +92,7 @@ failed_close.onclick = function() {
 
 check_out_close.onclick = function() {
   check_out_modal.style.display = "none";
+  patron_text.innerHTML="";
 }
 
 show_patron_close.onclick = function() {
@@ -129,6 +131,11 @@ function write_item_id() {
 
     write_item_id_modal.style.display = "block";
     }
+    }
+
+    function use_patron(){
+      show_patron_modal.style.display= "none";
+      use_patron_text.innerHTML="";
     }
 
   function do_check_in(value) {
@@ -187,6 +194,8 @@ function write_item_id() {
       console.log(event.data);
       var json = JSON.parse(event.data);
       showPlaceTagModal('false');
+      check_out_modal.style.display= "none";
+      patron_text.innerHTML= "";
       if(json.Done.localeCompare("read_item_id")==0){
         showItemId(json.value);
       }else{
@@ -242,12 +251,14 @@ for(let i=0;i<charts_failed.length;i++) {
 
 
 window.addEventListener("load", function () {
-  console.log("Hi");
   Quagga.init({
       inputStream: {
           name: "Live",
           type: "LiveStream",
-          target: document.querySelector('#camera') // Or '#yourElement' (optional)
+          constraints: {
+            height: 200,
+          },
+          target: document.querySelector('#camera')
       },
       decoder: {
          readers: ["code_128_reader",
@@ -275,7 +286,7 @@ window.addEventListener("load", function () {
 
   Quagga.onDetected(function (data) {
     patron_text.innerHTML= data.codeResult.code;
-    show_patron_modal.style.display= "none";
-    });
+    use_patron_text.innerHTML= data.codeResult.code;
+  });
  
 });
