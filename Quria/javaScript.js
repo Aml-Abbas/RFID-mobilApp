@@ -283,3 +283,8 @@ document.getElementById("show-camera").addEventListener("click", function () {
   });
  
 });
+
+
+document.getElementById("use-patron-btn").addEventListener("click", function () {
+  Quagga.stop()
+});
