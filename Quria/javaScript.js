@@ -174,12 +174,6 @@ function write_item_id() {
   ws.onopen = function() {
     isConnected= true;
     document.getElementById("ws-status").innerHTML = "CONNECTED";
-    var doSendPing = confirm('connected! Send ping? Otherwise we will send "bla bla".');
-    if (doSendPing) {
-      ws.send('ping');
-    } else {
-      ws.send('bla bla');
-    }
   };
   ws.onclose = function(event) {
     isConnected= false;
