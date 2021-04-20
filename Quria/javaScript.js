@@ -3,18 +3,25 @@ var write_item_id_modal = document.getElementById("write-item-id-modal");
 var success_modal = document.getElementById("success-modal");
 var failed_modal = document.getElementById("failed-modal");
 var connection_modal = document.getElementById("connection-modal");
+var check_out_modal = document.getElementById("check-out-modal");
+var show_patron_modal = document.getElementById("show-patron-modal");
 
 var place_tag_close = document.getElementById("place-tag-close");
 var write_item_id_close = document.getElementById("write-item-id-close");
 var success_close = document.getElementById("success-close");
 var failed_close = document.getElementById("failed-close");
 var connection_close = document.getElementById("connection-close");
+var check_out_close = document.getElementById("check-out-close");
+var show_patron_close = document.getElementById("show-patron-close");
 
 var success_text = document.getElementById("success-text"); 
 var failed_text = document.getElementById("failed-text"); 
+var patron_text = document.getElementById("patron"); 
+var use_patron_text = document.getElementById("use-patron"); 
 
 var itemIdP = document.getElementById("book_id"); 
 var book_image = document.getElementById("book_pic");
+var camera = document.getElementById("camera");
 
 var isConnected= false;
 
@@ -83,6 +90,15 @@ failed_close.onclick = function() {
   failed_modal.style.display = "none";
 }
 
+check_out_close.onclick = function() {
+  check_out_modal.style.display = "none";
+  patron_text.innerHTML="";
+}
+
+show_patron_close.onclick = function() {
+  show_patron_modal.style.display = "none";
+}
+
 function showSuccessModal(status){
   success_text.innerHTML= status;
   success_modal.style.display = "block";
@@ -93,7 +109,14 @@ function showFailedModal(status){
   failed_modal.style.display = "block";
 }
 
-  
+  function show_camera_modal(){
+    show_patron_modal.style.display= "block";
+  }
+
+  function use_patron(){
+    show_patron_modal.style.display= "none";
+  }
+
 function write_item_id() {
   write_item_id_modal.style.display = "none";
   showPlaceTagModal('true');
@@ -110,12 +133,20 @@ function write_item_id() {
     }
     }
 
+    function use_patron(){
+      show_patron_modal.style.display= "none";
+      use_patron_text.innerHTML="";
+    }
+
   function do_check_in(value) {
     if(!isConnected){
       connection_modal.style.display = "block";
     }else{
-
-    showPlaceTagModal('true');
+      if(value.localeCompare("true")==0){
+        showPlaceTagModal('true');
+      }else{
+        check_out_modal.style.display= "block";
+      }
     ws.send('{"toDo": "doCheckIn", "value": "'+value+'"}');
     }
     }
@@ -124,7 +155,6 @@ function write_item_id() {
     if(!isConnected){
       connection_modal.style.display = "block";
     }else{
-
     showPlaceTagModal('true');
     }
     }
@@ -144,12 +174,6 @@ function write_item_id() {
   ws.onopen = function() {
     isConnected= true;
     document.getElementById("ws-status").innerHTML = "CONNECTED";
-    var doSendPing = confirm('connected! Send ping? Otherwise we will send "bla bla".');
-    if (doSendPing) {
-      ws.send('ping');
-    } else {
-      ws.send('bla bla');
-    }
   };
   ws.onclose = function(event) {
     isConnected= false;
@@ -164,6 +188,8 @@ function write_item_id() {
       console.log(event.data);
       var json = JSON.parse(event.data);
       showPlaceTagModal('false');
+      check_out_modal.style.display= "none";
+      patron_text.innerHTML= "";
       if(json.Done.localeCompare("read_item_id")==0){
         showItemId(json.value);
       }else{
@@ -217,14 +243,15 @@ for(let i=0;i<charts_failed.length;i++) {
   charts_failed[i].innerHTML = createCircleChart(percent, color, size, stroke);
 }
 
-
-window.addEventListener("load", function () {
-  console.log("Hi");
+document.getElementById("show-camera").addEventListener("click", function () {
   Quagga.init({
       inputStream: {
           name: "Live",
           type: "LiveStream",
-          target: document.querySelector('#camera') // Or '#yourElement' (optional)
+          constraints: {
+            height: 200,
+          },
+          target: document.querySelector('#camera')
       },
       decoder: {
          readers: ["code_128_reader",
@@ -251,11 +278,13 @@ window.addEventListener("load", function () {
 
 
   Quagga.onDetected(function (data) {
-         alert("Barcode detected "+
-        " data " +data.codeResult.code+
-        " type "+ data.codeResult.format+
-              " start "+ data.codeResult.start+
-               " end "+ data.codeResult.end);
-    });
+    patron_text.innerHTML= data.codeResult.code;
+    use_patron_text.innerHTML= data.codeResult.code;
+  });
  
+});
+
+
+document.getElementById("use-patron-btn").addEventListener("click", function () {
+  Quagga.stop()
 });

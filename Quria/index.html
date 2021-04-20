@@ -26,8 +26,6 @@
 
   <div class="right">
 
-    <div id="camera"></div>
-
 <div class="card">
   <img id="book_pic" style="width:100%">
   <div class="container">
@@ -58,6 +56,28 @@
     <button class="button-program-chip" onclick="write_item_id()">Program the chip</button>
   </div>
 </div>
+
+<div id="check-out-modal" class="check-out-modal-class">
+  <div class="check-out-modal-content">
+  <span id="check-out-close">&times;</span>
+  <p id="patron"></p>
+ <button id="show-camera" onclick="show_camera_modal()">Read patron</button>
+ <p>Place the smartphone over the item you would like to scan</p>
+    <div id="book-animation"></div>
+    <div id="phone-animation"></div>
+
+  </div>
+</div>
+
+<div id="show-patron-modal" class="show-patron-modal-class">
+  <div class="show-patron-modal-content">
+    <span id="show-patron-close">&times;</span>
+    <p id="camera"></p>
+    <p id="use-patron"></p>
+    <button id="use-patron-btn" onclick="use_patron()">use patron</button>
+  </div>
+</div>
+
 
 <div id="success-modal" class="success-modal-class">
 
