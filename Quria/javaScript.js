@@ -97,6 +97,7 @@ check_out_close.onclick = function() {
 
 show_patron_close.onclick = function() {
   show_patron_modal.style.display = "none";
+  Quagga.stop();
 }
 
 function showSuccessModal(status){

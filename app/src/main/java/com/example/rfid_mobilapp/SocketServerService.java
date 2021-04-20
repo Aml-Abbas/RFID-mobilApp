@@ -19,7 +19,6 @@ public class SocketServerService extends Service {
     NotificationManager notificationManager;
     SocketServer server;
     InetSocketAddress listenAddress;
-   // private Thread serverThread;
     Thread thread;
     private final String host = "localhost";
     private final int port = 8888;
@@ -27,11 +26,6 @@ public class SocketServerService extends Service {
 
     @Override
     public void onCreate() {
-//        serverThread = new Thread(() -> {
-//            InetSocketAddress listenAddress = new InetSocketAddress(host, port);
-//            server = new SocketServer(listenAddress);
-//        });
-//        serverThread.start();
         super.onCreate();
     }
 
@@ -52,14 +46,17 @@ public class SocketServerService extends Service {
                     String status = intent.getExtras().getString("doCheckIn");
                     jsonString= Utilities.createJsonString("check", status);
                     server.broadcast(jsonString);
-                }
+                }else if (intent.getAction().equals("READ")) {
+                String status = intent.getExtras().getString("read_tag");
+                jsonString= Utilities.createJsonString("read_tag", status);
+                server.broadcast(jsonString);
             }
+
+        }
         } else if (MainActivity.isServerOn()){
             createNotificationChannel();
             createNotification();
             thread = new Thread(() -> {
-                String host = "localhost";
-                int port = 8888;
                 try {
                     listenAddress = new InetSocketAddress(host, port);
                     server = new SocketServer(listenAddress);
@@ -80,8 +77,6 @@ public class SocketServerService extends Service {
         notificationManager.cancel(0);
         try {
             server.stop();
-         //   serverThread.interrupt();
-            thread.interrupt();
             thread.join();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
