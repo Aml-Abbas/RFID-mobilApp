@@ -27,11 +27,22 @@ public class SocketServerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        createNotificationChannel();
+        createNotification();
+        thread = new Thread(() -> {
+            try {
+                listenAddress = new InetSocketAddress(host, port);
+                server = new SocketServer(listenAddress);
+                server.run();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (server != null) {
             String jsonString= "";
             if (intent != null && intent.getAction() != null && intent.getExtras() != null) {
                 if (intent.getAction().equals("READ_ITEM_ID")) {
@@ -51,23 +62,7 @@ public class SocketServerService extends Service {
                 jsonString= Utilities.createJsonString("read_tag", status);
                 server.broadcast(jsonString);
             }
-
         }
-        } else if (MainActivity.isServerOn()){
-            createNotificationChannel();
-            createNotification();
-            thread = new Thread(() -> {
-                try {
-                    listenAddress = new InetSocketAddress(host, port);
-                    server = new SocketServer(listenAddress);
-                    server.run();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-            thread.start();
-        }
-
         return super.onStartCommand(intent, flags, startId);
     }
 
