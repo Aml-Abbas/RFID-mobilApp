@@ -243,8 +243,7 @@ for(let i=0;i<charts_failed.length;i++) {
   charts_failed[i].innerHTML = createCircleChart(percent, color, size, stroke);
 }
 
-
-window.addEventListener("load", function () {
+document.getElementById("show-camera").addEventListener("click", function () {
   Quagga.init({
       inputStream: {
           name: "Live",
