@@ -24,4 +24,9 @@
     <string name="socket_server_service">SocketServerService</string>
     <string name="service_running">The service is running</string>
     <string name="back_app">Back to the app</string>
+
+    <string name="quria_on">Quria communication is on, You can use Quria</string>
+    <string name="quria_off">Quria communication is not on, You have to open the communication before using Quria</string>
+
+
 </resources>
