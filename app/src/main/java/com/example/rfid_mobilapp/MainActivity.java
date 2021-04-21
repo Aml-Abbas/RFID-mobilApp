@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     TextView quriaText;
     TextView timer;
     TextView openConnection;
+    CountDownTimer t;
     Intent serviceIntent;
     Locale myLocale;
     private SharedPreferences preferences;
@@ -62,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void showTimer() {
         long maxTimeInMilliseconds = 60000;
-        CountDownTimer t;
         t = new CountDownTimer(maxTimeInMilliseconds, 1000) {
 
             public void onTick(long millisUntilFinished) {
@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "on onDestroy");
+        t.onFinish();
     }
 
     @Override
