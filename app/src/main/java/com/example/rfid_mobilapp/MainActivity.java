@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Locale;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     Spinner spinner;
     static Switch socketServiceSwitch;
+    TextView quriaText;
     Intent serviceIntent;
     Locale myLocale;
     private SharedPreferences preferences;
@@ -41,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
         socketServiceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    quriaText.setText(R.string.quria_on);
                     serviceIntent = new Intent(MainActivity.this, SocketServerService.class);
                     startService(serviceIntent);
                 } else {
+                    quriaText.setText(R.string.quria_off);
                     stopService(serviceIntent);
                 }
             }
@@ -91,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     private void getIds() {
         spinner = findViewById(R.id.spinner);
         socketServiceSwitch = findViewById(R.id.stopSocketServiceButton);
+        quriaText= findViewById(R.id.Quria_text);
     }
 
     public static boolean isServerOn() {
@@ -116,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_main);
         getIds();
+        quriaText.setText(R.string.quria_on);
         setUpSpinner(spinner);
         serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);

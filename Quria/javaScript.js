@@ -97,6 +97,7 @@ check_out_close.onclick = function() {
 
 show_patron_close.onclick = function() {
   show_patron_modal.style.display = "none";
+  Quagga.stop();
 }
 
 function showSuccessModal(status){
@@ -193,10 +194,10 @@ function write_item_id() {
       if(json.Done.localeCompare("read_item_id")==0){
         showItemId(json.value);
       }else{
-        if(json.value.includes('Success')){
-          showSuccessModal(json.value);
-        }else{
+        if(json.value.includes('Failed') || json.value.includes('lyckades inte')){
           showFailedModal(json.value);
+        }else{
+          showSuccessModal(json.value);
         }
       }
     }

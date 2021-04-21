@@ -28,4 +28,7 @@
     <string name="service_running">service kör</string>
     <string name="back_app">Tillaka till appen</string>
 
+    <string name="quria_on">kommunicationen mellan appen och Quria är på, du kan använda Quria nu.</string>
+    <string name="quria_off">kommunicationen mellan appen och Quria är av, du behöver öppna kommunikationen innan använding av Quria.</string>
+
 </resources>

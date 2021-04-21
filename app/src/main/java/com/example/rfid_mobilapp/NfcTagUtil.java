@@ -72,7 +72,10 @@ public class NfcTagUtil {
             }
             nfcV.close();
         } catch (IOException ioException) {
-            Toast.makeText(activity, R.string.failed_read, Toast.LENGTH_LONG).show();
+            serviceIntent = new Intent(activity, SocketServerService.class);
+            serviceIntent.setAction("READ");
+            serviceIntent.putExtra("read_tag", R.string.failed_read);
+            activity.startService(serviceIntent);
         }
         return resultData;
     }

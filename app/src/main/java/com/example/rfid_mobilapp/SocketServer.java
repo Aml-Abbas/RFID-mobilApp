@@ -10,6 +10,7 @@ import java.util.Collection;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
+import org.java_websocket.handshake.HandshakeImpl1Client;
 import org.java_websocket.server.WebSocketServer;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +45,6 @@ public class SocketServer extends WebSocketServer {
     public void onMessage(WebSocket conn, String message) {
         Log.d(TAG, "received message from " + conn.getRemoteSocketAddress() + ": " + message);
         if (message.equals("ping")) {
-            // "command" ping received, sending echo.
             conn.send("echo");
         } else {
             JSONObject jsonObject = Utilities.stringToJson(message);
@@ -78,7 +78,9 @@ public class SocketServer extends WebSocketServer {
 
     @Override
     public void onError(WebSocket conn, Exception ex) {
-        Log.d(TAG, "received ByteBuffer from " + conn.getRemoteSocketAddress());
+        if (conn!=null){
+            Log.d(TAG, "received ByteBuffer from " + conn.getRemoteSocketAddress());
+        }
     }
 
     @Override
