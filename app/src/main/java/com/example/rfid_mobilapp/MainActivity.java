@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinner;
     static Switch socketServiceSwitch;
     TextView quriaText;
+    TextView timer;
+    TextView openConnection;
     Intent serviceIntent;
     Locale myLocale;
     private SharedPreferences preferences;
@@ -48,11 +51,34 @@ public class MainActivity extends AppCompatActivity {
                     startService(serviceIntent);
                 } else {
                     quriaText.setText(R.string.quria_off);
+                    openConnection.setText(R.string.reopen_connection);
+                    showTimer();
+                    socketServiceSwitch.setClickable(false);
                     stopService(serviceIntent);
                 }
             }
         });
     }
+
+    private void showTimer() {
+        long maxTimeInMilliseconds = 60000;
+        CountDownTimer t;
+        t = new CountDownTimer(maxTimeInMilliseconds, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                long remainedSecs = millisUntilFinished / 1000;
+                timer.setText("" + (remainedSecs / 60) + ":" + (remainedSecs % 60));// manage it accordign to you
+            }
+
+            public void onFinish() {
+                openConnection.setText("");
+                timer.setText("");
+                socketServiceSwitch.setClickable(true);
+                cancel();
+            }
+        }.start();
+    }
+
 
     @Override
     protected void onStop() {
@@ -96,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spinner);
         socketServiceSwitch = findViewById(R.id.stopSocketServiceButton);
         quriaText= findViewById(R.id.Quria_text);
+        openConnection= findViewById(R.id.open_connectin);
+        timer= findViewById(R.id.timer);
+
     }
 
     public static boolean isServerOn() {
@@ -115,13 +144,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onCreateHelper() {
-        preferences = getSharedPreferences("langpref", MODE_PRIVATE);
+        preferences = getSharedPreferences(LANG_PREF_KEY, MODE_PRIVATE);
         if (preferences != null) {
             setLocale(preferences.getString(LANG_PREF_KEY, LANGUAGE_ENGLISH));
         }
         setContentView(R.layout.activity_main);
         getIds();
         quriaText.setText(R.string.quria_on);
+        openConnection.setText("");
+        timer.setText("");
         setUpSpinner(spinner);
         serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);

@@ -24,7 +24,6 @@ public class SocketServer extends WebSocketServer {
         super(address);
         this.connections = new ArrayList<>();
         Log.d(TAG, " the constructor ");
-
     }
 
     @Override

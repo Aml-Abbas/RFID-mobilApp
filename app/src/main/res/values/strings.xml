@@ -28,5 +28,7 @@
     <string name="quria_on">Quria communication is on, You can use Quria</string>
     <string name="quria_off">Quria communication is not on, You have to open the communication before using Quria</string>
 
+    <string name="reopen_connection">wait before opening the connection again</string>
+
 
 </resources>
