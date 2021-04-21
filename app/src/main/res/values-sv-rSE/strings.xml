@@ -30,5 +30,6 @@
 
     <string name="quria_on">kommunicationen mellan appen och Quria är på, du kan använda Quria nu.</string>
     <string name="quria_off">kommunicationen mellan appen och Quria är av, du behöver öppna kommunikationen innan använding av Quria.</string>
+    <string name="reopen_connection">vänta innan ni öppnar kommunikationen igen</string>
 
 </resources>
