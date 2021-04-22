@@ -51,17 +51,16 @@ var books= [
    
   
  function showItemId(itemId) {
-
   for (var i = 0; i < books.length; i++) {
     var book_id=  books[i].item_id
     var bookItemId = itemId.toString().trim();
 
     if(bookItemId.localeCompare(book_id)== 0){
-      itemIdP.innerHTML  = 'item id: '+book_id;
       book_image.src = 'pic/books/'+books[i].picture;
     break;
     }
   }
+  itemIdP.innerHTML  = 'item id: '+book_id;
 }
 
 function showPlaceTagModal(status){
