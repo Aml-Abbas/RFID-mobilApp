@@ -193,7 +193,7 @@ function write_item_id() {
       if(json.Done.localeCompare("read_item_id")==0){
         showItemId(json.value);
       }else{
-        if(json.value.includes('Failed') || json.value.includes('lyckades inte')){
+        if(json.value.includes('Failed') || json.value.includes('Misslyckades')){
           showFailedModal(json.value);
         }else{
           showSuccessModal(json.value);

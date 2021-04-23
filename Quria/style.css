@@ -49,11 +49,6 @@
   .container {
     padding: 2px 16px;
   }
-  
-  #camera{
-padding-bottom: 0px;
-margin-bottom: 0px;
-  }
 
   .row{
    display: grid;
@@ -177,8 +172,11 @@ margin-bottom: 0px;
 @media (min-width: 768px) {
   .place-tag-modal-content, .write-item-id-modal-content,
   .failed-modal-content, .success-modal-content, .connection-modal-content,
-  .check-out-modal-content, .show-patron-modal-content {
+  .check-out-modal-content{
     width: 60%;
+  }
+  .show-patron-modal-content {
+    width: 70%;
   }
 
     button {
