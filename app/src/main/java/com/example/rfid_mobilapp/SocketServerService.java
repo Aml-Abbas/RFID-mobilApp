@@ -71,7 +71,9 @@ public class SocketServerService extends Service {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
         try {
-            server.stop();
+            if(server!=null){
+                server.stop();
+            }
             thread.join();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
