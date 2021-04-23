@@ -25,7 +25,7 @@
   }
   
   .button_ping , .button-program-chip{
-    width: 25%;
+    width: 30%;
     color: white;
     padding: 10px;
     font-size: 15px;
@@ -92,7 +92,7 @@ margin-bottom: 0px;
       margin: auto;
       padding: 20px;
       border: 1px solid #888;
-      width: 90%;
+      width: 80%;
     }
     
     #place-tag-close, #write-item-id-close,
@@ -173,3 +173,15 @@ margin-bottom: 0px;
       width: 0px;
       height: 0px;
     }
+
+@media (min-width: 768px) {
+  .place-tag-modal-content, .write-item-id-modal-content,
+  .failed-modal-content, .success-modal-content, .connection-modal-content,
+  .check-out-modal-content, .show-patron-modal-content {
+    width: 60%;
+  }
+
+    button {
+      width: 51%;
+    }
+}
