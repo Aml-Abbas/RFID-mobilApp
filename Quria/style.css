@@ -180,37 +180,3 @@
       width: 51%;
     }
 }
-
-@media screen and (min-width: 600px) {
-   .place-tag-modal-content, .write-item-id-modal-content,
-  .failed-modal-content, .success-modal-content, .connection-modal-content,
-  .check-out-modal-content{
-    width: 60%;
-  }
-  .show-patron-modal-content {
-    width: 75%;
-  }
-   
-  .stage{
- width:100%;
-  height: 250px;
-  position:relative;
-  overflow:hidden;
-}
-video{
-  width:100%;
-  height:250px;
-  position:absolute;
-  top:0;
-  left:0;
-  -moz-transform:rotate(90deg);
-  -webkit-transform:rotate(90deg);
-  -o-transform:rotate(90deg);
-  -ms-transform:rotate(90deg);
-  transform:rotate(90deg);
-}
-
-    button {
-      width: 51%;
-    }
-}
