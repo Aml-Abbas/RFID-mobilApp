@@ -92,7 +92,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "on onDestroy");
-        t.onFinish();
+        if (t!=null){
+            t.onFinish();
+        }
     }
 
     @Override
