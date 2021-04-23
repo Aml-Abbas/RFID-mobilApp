@@ -53,7 +53,7 @@ public class NfcActivity extends AppCompatActivity {
     }
 
     public static void setItemId(String itemId) {
-        Log.d(TAG, "1. item id is now" + itemId);
+        Log.d(TAG, "1. item id is now " + itemId);
         newItemId = itemId;
     }
 
