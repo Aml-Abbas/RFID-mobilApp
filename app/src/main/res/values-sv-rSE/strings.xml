@@ -2,34 +2,34 @@
 
 
 <resources>
-    <string name="app_name">RFID-mobilApp</string>
+    <string name="app_name">RFID mobilApp</string>
 
-    <string name="success_write">lyckades skriva till taggen.</string>
-    <string name="failed_write">misslyckades skriva till taggen.</string>
+    <string name="success_write">Lyckades skriva till taggen.</string>
+    <string name="failed_write">Misslyckades skriva till taggen.</string>
     <string name="place_tag">Vänligen placera mobilens yta framför taggen</string>
-    <string name="ok">okj</string>
+    <string name="ok">Ok</string>
     <string name="welcome">Välkomna</string>
-    <string name="no_id">ingen id</string>
-    <string name="failed_read">misslyckades läsa taggen.</string>
-    <string name="failed_checkin">misslyckades checka in.</string>
-    <string name="success_checkin">lyckades checka in.</string>
-    <string name="failed_checkout">misslyckades checka out.</string>
-    <string name="success_checkout">lyckades checka out.</string>
-    <string name="open_site">Öppna web sida för item:</string>
-    <string name="same_language">Språket är redan valt.</string>
+    <string name="no_id">Ingen id</string>
+    <string name="failed_read">Avläsning misslyckades</string>
+    <string name="failed_checkin">Incheckning misslyckades</string>
+    <string name="success_checkin">Incheckning lyckades</string>
+    <string name="failed_checkout">Utcheckning misslyckades</string>
+    <string name="success_checkout">Utcheckning lyckades</string>
+    <string name="open_site">Öppna webbsida för item:</string>
+    <string name="same_language">Språket är redan valt</string>
     <string name="cancel">Tillbaka</string>
     <string name="turn_off_rfid_service">Stäng av RFID service</string>
-    <string name="select_language">välj språk</string>
-    <string name="english">engelska</string>
-    <string name="swedish">svenska</string>
+    <string name="select_language">Välj språk</string>
+    <string name="english">Engelska</string>
+    <string name="swedish">Svenska</string>
     <string name="Quria_integration">Quria integration</string>
 
     <string name="socket_server_service">SocketServerService</string>
-    <string name="service_running">service kör</string>
-    <string name="back_app">Tillaka till appen</string>
+    <string name="service_running">Service kör</string>
+    <string name="back_app">Tillbaka till appen</string>
 
-    <string name="quria_on">kommunicationen mellan appen och Quria är på, du kan använda Quria nu.</string>
-    <string name="quria_off">kommunicationen mellan appen och Quria är av, du behöver öppna kommunikationen innan använding av Quria.</string>
-    <string name="reopen_connection">vänta innan ni öppnar kommunikationen igen</string>
+    <string name="quria_on">Kommunikationen mellan RFID mobilapp och Quria är på, du kan använda Quria nu.</string>
+    <string name="quria_off">Kommunikationen mellan RFID mobilapp och Quria är avstängd, du behöver öppna kommunikationen innan använding av Quria.</string>
+    <string name="reopen_connection">Vänta innan du öppnar kommunikationen igen</string>
 
 </resources>

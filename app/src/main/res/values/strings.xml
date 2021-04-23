@@ -1,34 +1,34 @@
 <resources>
     <string name="app_name">RFID-mobileApp</string>
 
-    <string name="success_write">Success to write to the tag.</string>
-    <string name="failed_write">Failed to write to the tag.</string>
+    <string name="success_write">Success to write to the tag</string>
+    <string name="failed_write">Failed to write to the tag</string>
     <string name="place_tag">Place the smartphone over the item you would like to scan</string>
-    <string name="ok">ok</string>
+    <string name="ok">Ok</string>
     <string name="welcome">Welcome</string>
     <string name="no_id">No Id</string>
-    <string name="failed_read">Failed to read the tag.</string>
-    <string name="failed_checkin">Failed to check in.</string>
-    <string name="success_checkin">Success to check in.</string>
-    <string name="failed_checkout">Failed to check out.</string>
-    <string name="success_checkout">Success to check out.</string>
-    <string name="open_site">Open website for item:</string>
-    <string name="same_language">Language already selected!</string>
+    <string name="failed_read">Failed to read the tag</string>
+    <string name="failed_checkin">Failed to check in</string>
+    <string name="success_checkin">Success to check in</string>
+    <string name="failed_checkout">Failed to check out</string>
+    <string name="success_checkout">Success to check out</string>
+    <string name="open_site">Open website for item: </string>
+    <string name="same_language">Language already selected</string>
     <string name="cancel">Back</string>
     <string name="turn_off_rfid_service">Turn off RFID service</string>
-    <string name="select_language">"select language "</string>
-    <string name="english">english</string>
-    <string name="swedish">swedish</string>
+    <string name="select_language">"Select language "</string>
+    <string name="english">English</string>
+    <string name="swedish">Swedish</string>
     <string name="Quria_integration">Quria integration</string>
 
     <string name="socket_server_service">SocketServerService</string>
     <string name="service_running">The service is running</string>
     <string name="back_app">Back to the app</string>
 
-    <string name="quria_on">Quria communication is on, You can use Quria</string>
-    <string name="quria_off">Quria communication is not on, You have to open the communication before using Quria</string>
+    <string name="quria_on">Quria communication is on, you can use Quria now</string>
+    <string name="quria_off">Quria communication is off, you need to open the communication before using Quria</string>
 
-    <string name="reopen_connection">wait before opening the connection again</string>
+    <string name="reopen_connection">Wait before opening the connection again</string>
 
 
 </resources>
