@@ -1,13 +1,12 @@
 package com.example.rfid_mobilapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +17,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,11 +24,14 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinner;
     static Switch socketServiceSwitch;
     TextView quriaText;
-    TextView timer;
-    TextView openConnection;
-    CountDownTimer t;
     Intent serviceIntent;
     Locale myLocale;
+    NfcAdapter mNfcAdapter;
+    static String newItemId;
+    static String doCheckIn;
+    private static final boolean checkIn = true;
+    private static final boolean checkOut = false;
+
     private SharedPreferences preferences;
     private final String LANG_PREF_KEY = "language";
     private final String LANGUAGE_SWEDISH = "sv";
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, " on create");
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         onCreateHelper();
     }
 
@@ -52,50 +54,58 @@ public class MainActivity extends AppCompatActivity {
                     startService(serviceIntent);
                 } else {
                     quriaText.setText(R.string.quria_off);
-                    openConnection.setText(R.string.reopen_connection);
-                    showTimer();
-                    socketServiceSwitch.setClickable(false);
                     stopService(serviceIntent);
                 }
             }
         });
     }
 
-    private void showTimer() {
-        long maxTimeInMilliseconds = 60000;
-        t = new CountDownTimer(maxTimeInMilliseconds, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                long remainedSecs = millisUntilFinished / 1000;
-                timer.setText("" + (remainedSecs / 60) + ":" + (remainedSecs % 60));// manage it accordign to you
-            }
-
-            public void onFinish() {
-                openConnection.setText("");
-                timer.setText("");
-                socketServiceSwitch.setClickable(true);
-                cancel();
-            }
-        }.start();
-    }
-
-
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "on Stop");
-        Intent intent = new Intent(this, NfcActivity.class);
-        startActivity(intent);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "on onDestroy");
-        if (t!=null){
-            t.onFinish();
-        }
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.d(TAG, "new intent");
+        if (doCheckIn != null) {
+            Log.d(TAG, "will do check");
+            if (doCheckIn.equals("false")) {
+                NfcTagUtil.check(intent, this, checkOut);
+                Log.d(TAG, "out");
+            } else {
+                NfcTagUtil.check(intent, this, checkIn);
+                Log.d(TAG, "in");
+            }
+            doCheckIn = null;
+            newItemId = "";
+        } else if (newItemId != null && !newItemId.isEmpty()) {
+            NfcTagUtil.writeNewItemId(newItemId, intent, this);
+            newItemId = "";
+        } else {
+            NfcTagUtil.getItemId(intent, this);
+        }
+        moveTaskToBack(true);
+    }
+
+    public static void setItemId(String itemId) {
+        Log.d(TAG, "1. item id is now " + itemId);
+        newItemId = itemId;
+    }
+
+    public static void setDoCheckIn(String value) {
+        Log.d(TAG, "value now is " + value);
+        doCheckIn = value;
+    }
+
 
     @Override
     protected void onRestart() {
@@ -106,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        NfcTagUtil.enableNFCInForeground(mNfcAdapter, this, getClass());
         Log.d(TAG, "on Resume");
     }
 
@@ -118,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        NfcTagUtil.disableNFCInForeground(mNfcAdapter, this);
         Log.d(TAG, "on pause");
     }
 
@@ -125,16 +137,6 @@ public class MainActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spinner);
         socketServiceSwitch = findViewById(R.id.stopSocketServiceButton);
         quriaText= findViewById(R.id.Quria_text);
-        openConnection= findViewById(R.id.open_connectin);
-        timer= findViewById(R.id.timer);
-
-    }
-
-    public static boolean isServerOn() {
-        if (socketServiceSwitch != null) {
-            return socketServiceSwitch.isChecked();
-        }
-        return false;
     }
 
     public void setLocale(String localeName) {
@@ -154,8 +156,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getIds();
         quriaText.setText(R.string.quria_on);
-        openConnection.setText("");
-        timer.setText("");
         setUpSpinner(spinner);
         serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);
