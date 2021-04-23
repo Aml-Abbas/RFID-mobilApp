@@ -60,7 +60,7 @@ var books= [
     break;
     }
   }
-  itemIdP.innerHTML  = 'item id: '+book_id;
+  itemIdP.innerHTML  = 'item id: '+itemId;
 }
 
 function showPlaceTagModal(status){
