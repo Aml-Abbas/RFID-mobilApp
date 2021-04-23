@@ -75,23 +75,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.d(TAG, "new intent");
-        if (doCheckIn != null) {
-            Log.d(TAG, "will do check");
-            if (doCheckIn.equals("false")) {
-                NfcTagUtil.check(intent, this, checkOut);
-                Log.d(TAG, "out");
+        if (socketServiceSwitch.isChecked()){
+            Log.d(TAG, "new intent");
+            if (doCheckIn != null) {
+                Log.d(TAG, "will do check");
+                if (doCheckIn.equals("false")) {
+                    NfcTagUtil.check(intent, this, checkOut);
+                    Log.d(TAG, "out");
+                } else {
+                    NfcTagUtil.check(intent, this, checkIn);
+                    Log.d(TAG, "in");
+                }
+                doCheckIn = null;
+                newItemId = "";
+            } else if (newItemId != null && !newItemId.isEmpty()) {
+                NfcTagUtil.writeNewItemId(newItemId, intent, this);
+                newItemId = "";
             } else {
-                NfcTagUtil.check(intent, this, checkIn);
-                Log.d(TAG, "in");
+                NfcTagUtil.getItemId(intent, this);
             }
-            doCheckIn = null;
-            newItemId = "";
-        } else if (newItemId != null && !newItemId.isEmpty()) {
-            NfcTagUtil.writeNewItemId(newItemId, intent, this);
-            newItemId = "";
-        } else {
-            NfcTagUtil.getItemId(intent, this);
         }
         moveTaskToBack(true);
     }
