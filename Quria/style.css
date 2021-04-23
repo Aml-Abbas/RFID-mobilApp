@@ -178,6 +178,23 @@
   .show-patron-modal-content {
     width: 75%;
   }
+   
+  .stage{
+ width:400px;
+  height:300px;
+  position:relative;
+  overflow:hidden;
+}
+video{
+  position:absolute;
+  top:0;
+  left:0;
+  -moz-transform:rotate(90deg);
+  -webkit-transform:rotate(90deg);
+  -o-transform:rotate(90deg);
+  -ms-transform:rotate(90deg);
+  transform:rotate(90deg);
+}
 
     button {
       width: 51%;
