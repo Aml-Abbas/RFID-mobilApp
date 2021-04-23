@@ -172,8 +172,12 @@
 @media (min-width: 768px) {
   .place-tag-modal-content, .write-item-id-modal-content,
   .failed-modal-content, .success-modal-content, .connection-modal-content,
-  .check-out-modal-content,.show-patron-modal-content{
+  .check-out-modal-content{
     width: 60%;
+  }
+  
+  .show-patron-modal-content{
+        width: 75%;
   }
 
     button {
