@@ -172,6 +172,18 @@
 @media (min-width: 768px) {
   .place-tag-modal-content, .write-item-id-modal-content,
   .failed-modal-content, .success-modal-content, .connection-modal-content,
+  .check-out-modal-content,.show-patron-modal-content{
+    width: 60%;
+  }
+
+    button {
+      width: 51%;
+    }
+}
+
+@media screen and (min-width: 600px) {
+   .place-tag-modal-content, .write-item-id-modal-content,
+  .failed-modal-content, .success-modal-content, .connection-modal-content,
   .check-out-modal-content{
     width: 60%;
   }
