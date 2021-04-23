@@ -176,6 +176,10 @@
     width: 60%;
   }
   .show-patron-modal-content {
+    width: 75%;
+  }
+
+  #camera{
     width: 70%;
   }
 
