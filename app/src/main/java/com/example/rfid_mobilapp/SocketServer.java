@@ -59,10 +59,10 @@ public class SocketServer extends WebSocketServer {
                 }
                 switch (toDo) {
                     case "write":
-                        NfcActivity.setItemId(value);
+                        MainActivity.setItemId(value);
                         break;
                     case "doCheckIn":
-                        NfcActivity.setDoCheckIn(value);
+                        MainActivity.setDoCheckIn(value);
                         Log.d(TAG, "set docheck in " + value);
                         break;
                 }
