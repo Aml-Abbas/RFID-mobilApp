@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "on onDestroy");
+        stopService(serviceIntent);
     }
 
     @Override
