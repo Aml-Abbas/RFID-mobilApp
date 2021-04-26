@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Spinner;
 
 public class NfcActivity extends AppCompatActivity {
     private static final String TAG = NfcActivity.class.getSimpleName();
-
+    Button setting_button;
     NfcAdapter mNfcAdapter;
     static String newItemId;
     static String doCheckIn;
@@ -21,6 +24,9 @@ public class NfcActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        setting_button= findViewById(R.id.setting_button);
+        setUpSettingButton();
+
         Intent startIntent= getIntent();
         Intent tagIntent= startIntent.getParcelableExtra(Intent.EXTRA_INTENT);
         newItemId= startIntent.getStringExtra("newItemId");
@@ -28,8 +34,16 @@ public class NfcActivity extends AppCompatActivity {
         handleTag(tagIntent);
     }
 
+    private void setUpSettingButton() {
+        setting_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
-    private void handleTag(Intent intent){
+    }
+
+        private void handleTag(Intent intent){
         if (doCheckIn != null) {
             Log.d(TAG, "will do check");
             if (doCheckIn.equals("false")) {

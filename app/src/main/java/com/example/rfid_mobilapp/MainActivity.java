@@ -80,9 +80,9 @@ public class MainActivity extends AppCompatActivity {
             startNfcActivityIntent.putExtra("newItemId", newItemId);
             startNfcActivityIntent.putExtra("doCheckIn", doCheckIn);
             startActivity(startNfcActivityIntent);
+            doCheckIn = null;
+            newItemId = "";
         }
-        doCheckIn = null;
-        newItemId = "";
     }
 
     public static void setItemId(String itemId) {
@@ -143,13 +143,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getIds();
         quriaText.setText(R.string.quria_on);
-        setUpSpinner(spinner);
+        setUpSpinner();
         serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);
         setUpSocketServiceSwitch();
     }
 
-    private void setUpSpinner(Spinner spinner) {
+    private void setUpSpinner() {
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.languages, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
