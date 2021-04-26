@@ -5,7 +5,7 @@
     <string name="app_name">RFID mobilApp</string>
 
     <string name="success_write">Lyckades skriva till taggen.</string>
-    <string name="failed_write">Misslyckades skriva till taggen.</string>
+    <string name="failed_write">Att skriva till taggen misslyckades.</string>
     <string name="place_tag">Vänligen placera mobilens yta framför taggen</string>
     <string name="ok">Ok</string>
     <string name="welcome">Välkomna</string>
