@@ -26,11 +26,8 @@ public class MainActivity extends AppCompatActivity {
     TextView quriaText;
     Intent serviceIntent;
     Locale myLocale;
-    NfcAdapter mNfcAdapter;
     static String newItemId;
     static String doCheckIn;
-    private static final boolean checkIn = true;
-    private static final boolean checkOut = false;
 
     private SharedPreferences preferences;
     private final String LANG_PREF_KEY = "language";
@@ -41,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, " on create");
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         onCreateHelper();
     }
 
@@ -76,27 +72,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        Log.d(TAG, "new intent");
         if (socketServiceSwitch.isChecked()){
-            Log.d(TAG, "new intent");
-            if (doCheckIn != null) {
-                Log.d(TAG, "will do check");
-                if (doCheckIn.equals("false")) {
-                    NfcTagUtil.check(intent, this, checkOut);
-                    Log.d(TAG, "out");
-                } else {
-                    NfcTagUtil.check(intent, this, checkIn);
-                    Log.d(TAG, "in");
-                }
-                doCheckIn = null;
-                newItemId = "";
-            } else if (newItemId != null && !newItemId.isEmpty()) {
-                NfcTagUtil.writeNewItemId(newItemId, intent, this);
-                newItemId = "";
-            } else {
-                NfcTagUtil.getItemId(intent, this);
-            }
+            Log.d(TAG, "is checked");
+            Intent startNfcActivityIntent= new Intent(this, NfcActivity.class);
+            startNfcActivityIntent.putExtra(Intent.EXTRA_INTENT, intent);
+            startNfcActivityIntent.putExtra("newItemId", newItemId);
+            startNfcActivityIntent.putExtra("doCheckIn", doCheckIn);
+            startActivity(startNfcActivityIntent);
         }
-        moveTaskToBack(true);
+        doCheckIn = null;
+        newItemId = "";
     }
 
     public static void setItemId(String itemId) {
@@ -119,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        NfcTagUtil.enableNFCInForeground(mNfcAdapter, this, getClass());
         Log.d(TAG, "on Resume");
     }
 
@@ -132,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        NfcTagUtil.disableNFCInForeground(mNfcAdapter, this);
         Log.d(TAG, "on pause");
     }
 
