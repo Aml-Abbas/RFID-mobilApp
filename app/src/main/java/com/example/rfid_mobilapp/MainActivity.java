@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "on Stop");
-        startActivity(serviceIntent);
     }
 
     @Override
