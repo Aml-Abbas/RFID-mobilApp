@@ -1,34 +1,30 @@
-.welcome{
-  width: 100%;
+*{
   align-content:center;
   text-align: center;
+}
+
+h1{
+font-size: 40px;
+}
+
+p{
+font-size: 30px;
+}
+
+.welcome{
+  width: 100%;
   padding: 15 px;
   margin-bottom:10%;
   }
-  
-  .left{
-  grid-area: menu;
-  }
-  
-  .right{
-  grid-area: side;
-  }
-  
+    
   button {
     background-color: #9e2a36;
     border-radius: 30px;
     width: 60%;
     color: white;
-    padding: 15px;
+    padding: 20px;
     margin: 3px;
-    font-size: 16px;
-  }
-  
-  .button_ping , .button-program-chip{
-    width: 30%;
-    color: white;
-    padding: 10px;
-    font-size: 15px;
+    font-size: 2em;
   }
   
   button:hover {
@@ -39,8 +35,12 @@
   .card {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    width: 35%;
-  }
+    width: 55%;
+    padding: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 2em;
+    }
   
   .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
@@ -49,21 +49,7 @@
   .container {
     padding: 2px 16px;
   }
-
-  .row{
-   display: grid;
-    grid-template-areas:
-      'menu side side side side side side side side side';
-    grid-gap: 10px;
-    padding: 10px;
-  }
-  
-   .row> div {
-    text-align: center;
-    padding: 20px 0;
-    font-size: 30px;
-  }
-  
+    
   .place-tag-modal-class, .write-item-id-modal-class,
   .success-modal-class, .failed-modal-class, .connection-modal-class,
   .check-out-modal-class, .show-patron-modal-class {
@@ -118,6 +104,7 @@
       border: 1px solid #ccc;
       border-radius: 4px;
       box-sizing: border-box;
+      font-size: 2em;
     }
 
 
@@ -128,11 +115,12 @@
       position: relative;
       animation: left_right 5s infinite;
       display:inline;
+      margin: 1em;
     }
     
     @keyframes left_right {
-      from {left: 0px;}
-      to {left: 42%;}
+      from {left: -30%;}
+      to {left: 20%;}
     }
 
     #book-animation{
@@ -142,11 +130,12 @@
       position: relative;
       animation: right_left 5s infinite;
       display:inline;
+      margin: 1em;
     }
 
     @keyframes right_left {
-      from {left: 50%;}
-      to {left: 50%;}
+      from {left: 40%;}
+      to {left: 40%;}
     }
 
     .mkc_circle { animation: mck_progress 1000ms ease-in-out; }
