@@ -14,8 +14,9 @@ public class NfcActivity extends AppCompatActivity {
     private static final String TAG = NfcActivity.class.getSimpleName();
     Button setting_button;
     NfcAdapter mNfcAdapter;
-    static String newItemId;
-    static String doCheckIn;
+    String newItemId;
+    String doCheckIn;
+    String doReadTagInfo;
     private static final boolean checkIn = true;
     private static final boolean checkOut = false;
 
@@ -24,13 +25,14 @@ public class NfcActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        setting_button= findViewById(R.id.setting_button);
+        setting_button = findViewById(R.id.setting_button);
         setUpSettingButton();
 
-        Intent startIntent= getIntent();
-        Intent tagIntent= startIntent.getParcelableExtra(Intent.EXTRA_INTENT);
-        newItemId= startIntent.getStringExtra("newItemId");
-        doCheckIn= startIntent.getStringExtra("doCheckIn");
+        Intent startIntent = getIntent();
+        Intent tagIntent = startIntent.getParcelableExtra(Intent.EXTRA_INTENT);
+        newItemId = startIntent.getStringExtra("newItemId");
+        doCheckIn = startIntent.getStringExtra("doCheckIn");
+        doReadTagInfo = startIntent.getStringExtra("doReadTagInfo");
         handleTag(tagIntent);
     }
 
@@ -43,7 +45,7 @@ public class NfcActivity extends AppCompatActivity {
 
     }
 
-        private void handleTag(Intent intent){
+    private void handleTag(Intent intent) {
         if (doCheckIn != null) {
             Log.d(TAG, "will do check");
             if (doCheckIn.equals("false")) {
@@ -55,7 +57,7 @@ public class NfcActivity extends AppCompatActivity {
             }
         } else if (newItemId != null && !newItemId.isEmpty()) {
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
-        } else {
+        } else if(doReadTagInfo.equals("true")){
             NfcTagUtil.getItemId(intent, this);
         }
         moveTaskToBack(true);
