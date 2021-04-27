@@ -156,6 +156,7 @@ function write_item_id() {
       connection_modal.style.display = "block";
     }else{
     showPlaceTagModal('true');
+    ws.send('{"toDo": "doReadTagInfo", "value": "true"}');
     }
     }
 

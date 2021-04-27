@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     Locale myLocale;
     static String newItemId;
     static String doCheckIn;
+    static String doReadTagInfo;
 
     private SharedPreferences preferences;
     private final String LANG_PREF_KEY = "language";
@@ -79,20 +80,33 @@ public class MainActivity extends AppCompatActivity {
             startNfcActivityIntent.putExtra(Intent.EXTRA_INTENT, intent);
             startNfcActivityIntent.putExtra("newItemId", newItemId);
             startNfcActivityIntent.putExtra("doCheckIn", doCheckIn);
+            startNfcActivityIntent.putExtra("doReadTagInfo", doReadTagInfo);
             startActivity(startNfcActivityIntent);
         }
         doCheckIn = null;
+        doReadTagInfo= null;
         newItemId = "";
     }
 
     public static void setItemId(String itemId) {
         Log.d(TAG, "1. item id is now " + itemId);
         newItemId = itemId;
+        doCheckIn = null;
+        doReadTagInfo= null;
     }
 
     public static void setDoCheckIn(String value) {
-        Log.d(TAG, "value now is " + value);
+        Log.d(TAG, "check in now is " + value);
         doCheckIn = value;
+        doReadTagInfo= null;
+        newItemId = "";
+    }
+
+    public static void setDoReadTagInfo(String value) {
+        Log.d(TAG, "read to  the tag now is " + value);
+        doReadTagInfo = value;
+        newItemId = "";
+        doCheckIn = null;
     }
 
 
@@ -143,13 +157,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getIds();
         quriaText.setText(R.string.quria_on);
-        setUpSpinner(spinner);
+        setUpSpinner();
         serviceIntent = new Intent(this, SocketServerService.class);
         startService(serviceIntent);
         setUpSocketServiceSwitch();
     }
 
-    private void setUpSpinner(Spinner spinner) {
+    private void setUpSpinner() {
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.languages, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);

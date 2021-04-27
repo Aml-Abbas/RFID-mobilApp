@@ -65,6 +65,10 @@ public class SocketServer extends WebSocketServer {
                         MainActivity.setDoCheckIn(value);
                         Log.d(TAG, "set docheck in " + value);
                         break;
+                    case "doReadTagInfo":
+                        MainActivity.setDoReadTagInfo(value);
+                        Log.d(TAG, "set doReadTagInfo in " + value);
+                        break;
                 }
             }
         }

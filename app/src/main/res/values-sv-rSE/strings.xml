@@ -30,6 +30,7 @@
 
     <string name="quria_on">Kommunikationen mellan RFID mobilapp och Quria är på, du kan använda Quria nu.</string>
     <string name="quria_off">Kommunikationen mellan RFID mobilapp och Quria är avstängd, du behöver öppna kommunikationen innan använding av Quria.</string>
-    <string name="reopen_connection">Vänta innan du öppnar kommunikationen igen</string>
+
+    <string name="setting">Settings</string>
 
 </resources>
