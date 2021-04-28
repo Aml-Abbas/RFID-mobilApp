@@ -57,8 +57,8 @@ public class NfcActivity extends AppCompatActivity {
             }
         } else if (newItemId != null && !newItemId.isEmpty()) {
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
-        } else if(doReadTagInfo.equals("true")){
-            NfcTagUtil.getItemId(intent, this);
+        } else if(doReadTagInfo != null && doReadTagInfo.equals("true")){
+                NfcTagUtil.getItemId(intent, this);
         }
         moveTaskToBack(true);
     }
