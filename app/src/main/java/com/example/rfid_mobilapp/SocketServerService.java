@@ -89,7 +89,9 @@ public class SocketServerService extends Service {
 
     private void createNotification() {
         Intent openAppIntent = new Intent(this, MainActivity.class);
-        openAppIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        openAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
         PendingIntent openAppPendingIntent =
                 PendingIntent.getActivity(this, 0, openAppIntent, 0);
         NotificationCompat.Builder SocketServerServiceNotification = new NotificationCompat.Builder(this, channelId)
