@@ -173,23 +173,18 @@ function write_item_id() {
     }
   }
 
-window.onclick = function(event) {
-  if (event.target == success_modal) {
-    success_modal.style.display = "none";
-   }else if (event.target == failed_modal) {
-    failed_modal.style.display = "none";
-   }else if(event.target == connection_modal){
-    connection_modal.style.display = "none";
-   }else if(event.target == place_tag_close){
+   document.addEventListener(
+  "click",
+  function(event) {
+    if (
+      event.target.matches("#place_tag_close") ||
+      !event.target.closest("#place_tag_modal")
+    ) {
     place_tag_modal.style.display = "none";
-   }else if(event.target == write_item_id_close){
-    write_item_id_modal.style.display = "none";
-   }else if(event.target == check_out_close){
-    check_out_modal.style.display = "none";
-   }else if(event.target == show_patron_close){
-    show_patron_modal.style.display = "none";
-   }
-}
+    }
+  },
+  false
+)
   
   var ip = "localhost";
   var port = "8888";
