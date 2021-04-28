@@ -184,6 +184,10 @@ window.onclick = function(event) {
     write_item_id_modal.style.display = "none";
   }else if (event.target === show_patron_modal) {
     show_patron_modal.style.display = "none";
+  }else if (event.target === success_modal) {
+    success_modal.style.display = "none";
+  }else if (event.target === failed_modal) {
+    failed_modal.style.display = "none";
   }
 }
   
