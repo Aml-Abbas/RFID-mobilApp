@@ -173,18 +173,19 @@ function write_item_id() {
     }
   }
 
-   document.addEventListener(
-  "click",
-  function(event) {
-    if (
-      event.target.matches("#place_tag_close") ||
-      !event.target.closest("#place_tag_modal")
-    ) {
+window.onclick = function(event) {
+  if (event.target === place_tag_modal) {
     place_tag_modal.style.display = "none";
-    }
-  },
-  false
-)
+  }else if (event.target === check_out_modal) {
+    check_out_modal.style.display = "none";
+  }else if (event.target === connection_modal) {
+    connection_modal.style.display = "none";
+  }else if (event.target === write_item_id_modal) {
+    write_item_id_modal.style.display = "none";
+  }else if (event.target === show_patron_modal) {
+    show_patron_modal.style.display = "none";
+  }
+}
   
   var ip = "localhost";
   var port = "8888";
