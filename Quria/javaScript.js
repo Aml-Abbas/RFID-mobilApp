@@ -172,6 +172,16 @@ function write_item_id() {
       ws.send('ping');
     }
   }
+
+  window.onclick = function(event) {
+     place_tag_modal.style.display = "none";
+     write_item_id_modal.style.display = "none";
+     success_modal.style.display = "none";
+     failed_modal.style.display = "none";
+     connection_modal.style.display = "none";
+     check_out_modal.style.display = "none";
+     show_patron_modal.style.display = "none";
+}
   
   
   var ip = "localhost";
