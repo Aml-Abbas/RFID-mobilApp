@@ -76,16 +76,20 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "new intent");
         if (socketServiceSwitch.isChecked()){
             Log.d(TAG, "is checked");
-            Intent startNfcActivityIntent= new Intent(this, NfcActivity.class);
-            startNfcActivityIntent.putExtra(Intent.EXTRA_INTENT, intent);
-            startNfcActivityIntent.putExtra("newItemId", newItemId);
-            startNfcActivityIntent.putExtra("doCheckIn", doCheckIn);
-            startNfcActivityIntent.putExtra("doReadTagInfo", doReadTagInfo);
-            startActivity(startNfcActivityIntent);
+            if (doCheckIn != null || doReadTagInfo != null || newItemId != null){
+                Intent startNfcActivityIntent= new Intent(this, NfcActivity.class);
+                startNfcActivityIntent.putExtra(Intent.EXTRA_INTENT, intent);
+                startNfcActivityIntent.putExtra("newItemId", newItemId);
+                startNfcActivityIntent.putExtra("doCheckIn", doCheckIn);
+                startNfcActivityIntent.putExtra("doReadTagInfo", doReadTagInfo);
+                startActivity(startNfcActivityIntent);
+            }else {
+                moveTaskToBack(true);
+            }
         }
         doCheckIn = null;
         doReadTagInfo= null;
-        newItemId = "";
+        newItemId = null;
     }
 
     public static void setItemId(String itemId) {
@@ -99,13 +103,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "check in now is " + value);
         doCheckIn = value;
         doReadTagInfo= null;
-        newItemId = "";
+        newItemId = null;
     }
 
     public static void setDoReadTagInfo(String value) {
         Log.d(TAG, "read to  the tag now is " + value);
         doReadTagInfo = value;
-        newItemId = "";
+        newItemId = null;
         doCheckIn = null;
     }
 

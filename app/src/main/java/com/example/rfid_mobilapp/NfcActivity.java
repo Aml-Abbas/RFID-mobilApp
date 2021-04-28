@@ -55,7 +55,7 @@ public class NfcActivity extends AppCompatActivity {
                 NfcTagUtil.check(intent, this, checkIn);
                 Log.d(TAG, "in");
             }
-        } else if (newItemId != null && !newItemId.isEmpty()) {
+        } else if (newItemId != null) {
             NfcTagUtil.writeNewItemId(newItemId, intent, this);
         } else if(doReadTagInfo != null && doReadTagInfo.equals("true")){
                 NfcTagUtil.getItemId(intent, this);
