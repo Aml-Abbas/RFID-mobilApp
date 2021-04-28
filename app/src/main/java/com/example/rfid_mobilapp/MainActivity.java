@@ -74,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Log.d(TAG, "new intent");
-        if (socketServiceSwitch.isChecked() && (intent.getAction() == NfcAdapter.ACTION_TAG_DISCOVERED||
+        if (socketServiceSwitch.isChecked() && intent.getAction() !=null &&
+                (intent.getAction() == NfcAdapter.ACTION_TAG_DISCOVERED||
                 intent.getAction() == NfcAdapter.ACTION_TECH_DISCOVERED)) {
                 Log.d(TAG, "is checked");
                 Intent startNfcActivityIntent = new Intent(this, NfcActivity.class);
