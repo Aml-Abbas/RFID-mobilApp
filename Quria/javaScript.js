@@ -51,14 +51,19 @@ var books= [
    
   
  function showItemId(itemId) {
+   var found= false;
   for (var i = 0; i < books.length; i++) {
     var book_id=  books[i].item_id
     var bookItemId = itemId.toString().trim();
 
     if(bookItemId.localeCompare(book_id)== 0){
       book_image.src = 'pic/books/'+books[i].picture;
+      found= true;
     break;
     }
+  }
+  if(!found){
+    book_image.src = '';
   }
   itemIdP.innerHTML  = 'item id: '+itemId;
 }
@@ -167,6 +172,16 @@ function write_item_id() {
       ws.send('ping');
     }
   }
+
+  window.onclick = function(event) {
+     place_tag_modal.style.display = "none";
+     write_item_id_modal.style.display = "none";
+     success_modal.style.display = "none";
+     failed_modal.style.display = "none";
+     connection_modal.style.display = "none";
+     check_out_modal.style.display = "none";
+     show_patron_modal.style.display = "none";
+}
   
   
   var ip = "localhost";

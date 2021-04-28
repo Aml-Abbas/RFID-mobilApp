@@ -74,19 +74,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Log.d(TAG, "new intent");
-        if (socketServiceSwitch.isChecked()){
-            Log.d(TAG, "is checked");
-            Intent startNfcActivityIntent= new Intent(this, NfcActivity.class);
-            startNfcActivityIntent.putExtra(Intent.EXTRA_INTENT, intent);
-            startNfcActivityIntent.putExtra("newItemId", newItemId);
-            startNfcActivityIntent.putExtra("doCheckIn", doCheckIn);
-            startNfcActivityIntent.putExtra("doReadTagInfo", doReadTagInfo);
-            startActivity(startNfcActivityIntent);
+        if (socketServiceSwitch.isChecked() && intent.getAction() != null) {
+                Log.d(TAG, "is checked");
+                Intent startNfcActivityIntent = new Intent(this, NfcActivity.class);
+                startNfcActivityIntent.putExtra(Intent.EXTRA_INTENT, intent);
+                startNfcActivityIntent.putExtra("newItemId", newItemId);
+                startNfcActivityIntent.putExtra("doCheckIn", doCheckIn);
+                startNfcActivityIntent.putExtra("doReadTagInfo", doReadTagInfo);
+                startActivity(startNfcActivityIntent);
+                doCheckIn = null;
+                doReadTagInfo = null;
+                newItemId = null;
+            }
         }
-        doCheckIn = null;
-        doReadTagInfo= null;
-        newItemId = "";
-    }
 
     public static void setItemId(String itemId) {
         Log.d(TAG, "1. item id is now " + itemId);
@@ -99,13 +99,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "check in now is " + value);
         doCheckIn = value;
         doReadTagInfo= null;
-        newItemId = "";
+        newItemId = null;
     }
 
     public static void setDoReadTagInfo(String value) {
         Log.d(TAG, "read to  the tag now is " + value);
         doReadTagInfo = value;
-        newItemId = "";
+        newItemId = null;
         doCheckIn = null;
     }
 
