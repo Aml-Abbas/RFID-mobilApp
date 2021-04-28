@@ -173,16 +173,23 @@ function write_item_id() {
     }
   }
 
-  window.onclick = function(event) {
-     place_tag_modal.style.display = "none";
-     write_item_id_modal.style.display = "none";
-     success_modal.style.display = "none";
-     failed_modal.style.display = "none";
-     connection_modal.style.display = "none";
-     check_out_modal.style.display = "none";
-     show_patron_modal.style.display = "none";
+window.onclick = function(event) {
+  if (event.target == success_modal) {
+    success_modal.style.display = "none";
+   }else if (event.target == failed_modal) {
+    failed_modal.style.display = "none";
+   }else if(event.target == connection_modal){
+    connection_modal.style.display = "none";
+   }else if(event.target == place_tag_close){
+    place_tag_close.style.display = "none";
+   }else if(event.target == write_item_id_close){
+    write_item_id_close.style.display = "none";
+   }else if(event.target == check_out_close){
+    check_out_close.style.display = "none";
+   }else if(event.target == show_patron_close){
+    show_patron_close.style.display = "none";
+   }
 }
-  
   
   var ip = "localhost";
   var port = "8888";
