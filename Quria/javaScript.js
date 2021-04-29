@@ -4,7 +4,6 @@ var success_modal = document.getElementById("success-modal");
 var failed_modal = document.getElementById("failed-modal");
 var connection_modal = document.getElementById("connection-modal");
 var check_out_modal = document.getElementById("check-out-modal");
-var show_patron_modal = document.getElementById("show-patron-modal");
 var send_ping_modal = document.getElementById("send-ping-modal");
 
 var place_tag_close = document.getElementById("place-tag-close");
@@ -26,6 +25,7 @@ var itemIdP = document.getElementById("book_id");
 var book_image = document.getElementById("book_pic");
 var camera = document.getElementById("camera");
 
+var progress_bar = document.getElementById("progress-bar");
 var isConnected= false;
 use_patron_text.innerHTML="";
 
@@ -136,22 +136,22 @@ check_out_close.onclick = function() {
   check_out_modal.style.display = "none";
   patron_text.innerHTML="";
   use_patron_text.innerHTML= "";
+  progress_bar.style.display = "block";
+  Quagga.stop();
   ws.send('{"toDo": "doCheckIn", "value": "null"}');
 }
 
 function showSuccessModal(status){
   success_text.innerHTML= status;
   success_modal.style.display = "block";
+  Quagga.stop();
 }
 
 function showFailedModal(status){
   failed_text.innerHTML= status;
   failed_modal.style.display = "block";
+  Quagga.stop();
 }
-
-  function show_camera_modal(){
-    show_patron_modal.style.display= "block";
-  }
 
 function write_item_id() {
   write_item_id_modal.style.display = "none";
@@ -176,14 +176,18 @@ function write_item_id() {
       deleteShowedItemId();
       if(value.localeCompare("true")==0){
         showPlaceTagModal('true', 'Place the smartphone over the item you would like to check in');
+        ws.send('{"toDo": "doCheckIn", "value": "true"}');
       }else{
         check_out_text.innerHTML= 'Place the smartphone over the item you would like to check out';
         check_out_modal.style.display= "block";
       }
-    ws.send('{"toDo": "doCheckIn", "value": "'+value+'"}');
     }
     }
   
+    function send_check_out(){
+      ws.send('{"toDo": "doCheckIn", "value": "false"}');
+    }
+
   function show_item(){
     if(!isConnected){
       connection_modal.style.display = "block";
@@ -212,13 +216,13 @@ window.onclick = function(event) {
     check_out_modal.style.display = "none";
     patron_text.innerHTML="";
     use_patron_text.innerHTML= "";
+    progress_bar.style.display = "block";
+    Quagga.stop();
     ws.send('{"toDo": "doCheckIn", "value": "null"}');
   }else if (event.target === connection_modal) {
     connection_modal.style.display = "none";
   }else if (event.target === write_item_id_modal) {
     write_item_id_modal.style.display = "none";
-  }else if (event.target === show_patron_modal) {
-    show_patron_modal.style.display = "none";
   }else if (event.target === success_modal) {
     success_modal.style.display = "none";
   }else if (event.target === failed_modal) {
@@ -334,7 +338,7 @@ document.getElementById("check-out").addEventListener("click", function () {
           console.log(` Quagaa init error ${err}`);
           return
       }
-      console.log("Initialization finished. Ready to start");
+      progress_bar.style.display = "none";
       Quagga.start();
   });
 
@@ -360,11 +364,6 @@ document.getElementById("check-out").addEventListener("click", function () {
  
 });
 
-document.getElementById("use-patron-btn").addEventListener("click", function () {
-  Quagga.stop()
-});
-
-
 function setUpStepper(){
   var stepper = document.querySelector('.stepper');
   var stepperInstace = new MStepper(stepper, {
@@ -387,3 +386,4 @@ function validationPatronFunction() {
   }
   return true;
 }
+
