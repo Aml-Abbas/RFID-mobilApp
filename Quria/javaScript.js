@@ -196,6 +196,7 @@ function write_item_id() {
       connection_modal.style.display = "block";
     }else{
       ws.send('ping');
+      send_ping_modal.style.display = "none";
     }
   }
 
