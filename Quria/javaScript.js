@@ -51,7 +51,22 @@ var books= [
      "picture":"kungariket.jpg"
   }
  ];
- 
+
+ var patrons= [
+  {
+     "item_id": "06025000003961",
+     "name": "Marcus Lundberg",
+  },
+  {
+     "item_id": "18",
+     "name": "Elissa Edblad",
+  },
+  {
+     "item_id": "any patron else",
+     "name": "Lina Ericsson",
+  }
+ ];
+
    
   
  function showItemId(itemId) {
@@ -335,7 +350,20 @@ document.getElementById("show-camera").addEventListener("click", function () {
 
 
   Quagga.onDetected(function (data) {
-    patron_text.innerHTML= data.codeResult.code;
+    var found= false;
+    for (var i = 0; i < patrons.length; i++) {
+      var patron_id=  patrons[i].item_id;
+      var current_item_id = data.codeResult.code;
+  
+      if(patron_id.localeCompare(current_item_id)== 0){
+        patron_text.innerHTML= 'Patron: '+ patrons[i].name+' id: '+data.codeResult.code;
+        found= true;
+      break;
+      }
+    }
+    if(!found){
+      patron_text.innerHTML= 'Patron: '+ patrons[2].name+' id: '+data.codeResult.code;
+    }
     use_patron_text.innerHTML= data.codeResult.code;
   });
  
