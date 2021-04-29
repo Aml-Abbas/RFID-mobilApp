@@ -18,6 +18,8 @@ var success_text = document.getElementById("success-text");
 var failed_text = document.getElementById("failed-text"); 
 var patron_text = document.getElementById("patron"); 
 var use_patron_text = document.getElementById("use-patron"); 
+var place_tag_text = document.getElementById("place-tag-text"); 
+var check_out_text = document.getElementById("ceck-out-text"); 
 
 var itemIdP = document.getElementById("book_id"); 
 var book_image = document.getElementById("book_pic");
@@ -68,19 +70,27 @@ var books= [
   itemIdP.innerHTML  = 'item id: '+itemId;
 }
 
+function deleteShowedItemId() {
+   book_image.src = '';
+   itemIdP.innerHTML  = '';
+}
+
 function showPlaceTagModal(status){
   if(status.localeCompare('false')==0){
     place_tag_modal.style.display = "none";
   }else{
-    place_tag_modal.style.display = "block"
+    place_tag_text.innerHTML= status;
+    place_tag_modal.style.display = "block";
   }
 }
+
 place_tag_close.onclick = function() {
   showPlaceTagModal('false');
 }
 
 write_item_id_close.onclick = function() {
   write_item_id_modal.style.display = "none";
+  check_out_text.innerHTML= ''
 }
 
 connection_close.onclick = function() {
@@ -124,7 +134,7 @@ function showFailedModal(status){
 
 function write_item_id() {
   write_item_id_modal.style.display = "none";
-  showPlaceTagModal('true');
+  showPlaceTagModal('true', 'Place the smartphone over the item you would like to program');
     var itemId = document.getElementById("item-id-input").value;
     ws.send('{"toDo": "write", "value": "'+itemId+'"}');
   }
@@ -133,7 +143,7 @@ function write_item_id() {
     if(!isConnected){
       connection_modal.style.display = "block";
     }else{
-
+    deleteShowedItemId();
     write_item_id_modal.style.display = "block";
     }
     }
@@ -147,9 +157,11 @@ function write_item_id() {
     if(!isConnected){
       connection_modal.style.display = "block";
     }else{
+      deleteShowedItemId();
       if(value.localeCompare("true")==0){
-        showPlaceTagModal('true');
+        showPlaceTagModal('true', 'Place the smartphone over the item you would like to check in');
       }else{
+        check_out_text.innerHTML= 'Place the smartphone over the item you would like to check out';
         check_out_modal.style.display= "block";
       }
     ws.send('{"toDo": "doCheckIn", "value": "'+value+'"}');
@@ -160,7 +172,7 @@ function write_item_id() {
     if(!isConnected){
       connection_modal.style.display = "block";
     }else{
-    showPlaceTagModal('true');
+    showPlaceTagModal('true', 'Place the smartphone over the item you would like to show');
     ws.send('{"toDo": "doReadTagInfo", "value": "true"}');
     }
     }
