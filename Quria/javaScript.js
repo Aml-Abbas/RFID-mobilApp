@@ -77,11 +77,11 @@ function deleteShowedItemId() {
    itemIdP.innerHTML  = '';
 }
 
-function showPlaceTagModal(status){
+function showPlaceTagModal(status, msg){
   if(status.localeCompare('false')==0){
     place_tag_modal.style.display = "none";
   }else{
-    place_tag_text.innerHTML= status;
+    place_tag_text.innerHTML= msg;
     place_tag_modal.style.display = "block";
   }
 }
@@ -91,7 +91,7 @@ function show_status(){
 }
 
 place_tag_close.onclick = function() {
-  showPlaceTagModal('false');
+  showPlaceTagModal('false', '');
   ws.send('{"toDo": "doCheckIn", "value": "null"}');
   ws.send('{"toDo": "doReadTagInfo", "value": "null"}');
   ws.send('{"toDo": "write", "value": "null"}');
@@ -243,7 +243,7 @@ window.onclick = function(event) {
     }else{
       console.log(event.data);
       var json = JSON.parse(event.data);
-      showPlaceTagModal('false');
+      showPlaceTagModal('false', '');
       check_out_modal.style.display= "none";
       patron_text.innerHTML= "";
       if(json.Done.localeCompare("read_item_id")==0){
