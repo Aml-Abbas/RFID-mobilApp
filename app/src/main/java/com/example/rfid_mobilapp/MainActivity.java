@@ -97,22 +97,31 @@ public class MainActivity extends AppCompatActivity {
         }
 
     public static void setItemId(String itemId) {
-        Log.d(TAG, "1. item id is now " + itemId);
-        newItemId = itemId;
+        if (itemId.equals("null")){
+            newItemId= null;
+        }else {
+            newItemId = itemId;
+        }
         doCheckIn = null;
         doReadTagInfo= null;
     }
 
     public static void setDoCheckIn(String value) {
-        Log.d(TAG, "check in now is " + value);
-        doCheckIn = value;
+        if (value.equals("null")){
+            doCheckIn= null;
+        }else {
+            doCheckIn = value;
+        }
         doReadTagInfo= null;
         newItemId = null;
     }
 
     public static void setDoReadTagInfo(String value) {
-        Log.d(TAG, "read to  the tag now is " + value);
-        doReadTagInfo = value;
+        if (value.equals("null")){
+            doReadTagInfo= null;
+        }else {
+            doReadTagInfo = value;
+        }
         newItemId = null;
         doCheckIn = null;
     }

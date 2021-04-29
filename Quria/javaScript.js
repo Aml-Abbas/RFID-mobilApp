@@ -92,11 +92,13 @@ function show_status(){
 
 place_tag_close.onclick = function() {
   showPlaceTagModal('false');
+  ws.send('{"toDo": "doCheckIn", "value": "null"}');
+  ws.send('{"toDo": "doReadTagInfo", "value": "null"}');
+  ws.send('{"toDo": "write", "value": "null"}');
 }
 
 write_item_id_close.onclick = function() {
   write_item_id_modal.style.display = "none";
-  check_out_text.innerHTML= ''
 }
 
 connection_close.onclick = function() {
@@ -110,6 +112,7 @@ send_ping_close.onclick = function() {
 success_close.onclick = function() {
   success_modal.style.display = "none";
 }
+
 failed_close.onclick = function() {
   failed_modal.style.display = "none";
 }
@@ -117,6 +120,7 @@ failed_close.onclick = function() {
 check_out_close.onclick = function() {
   check_out_modal.style.display = "none";
   patron_text.innerHTML="";
+  ws.send('{"toDo": "doCheckIn", "value": "null"}');
 }
 
 show_patron_close.onclick = function() {
@@ -198,8 +202,13 @@ function write_item_id() {
 window.onclick = function(event) {
   if (event.target === place_tag_modal) {
     place_tag_modal.style.display = "none";
+    ws.send('{"toDo": "doCheckIn", "value": "null"}');
+    ws.send('{"toDo": "doReadTagInfo", "value": "null"}');
+    ws.send('{"toDo": "write", "value": "null"}');  
   }else if (event.target === check_out_modal) {
     check_out_modal.style.display = "none";
+    patron_text.innerHTML="";
+    ws.send('{"toDo": "doCheckIn", "value": "null"}');
   }else if (event.target === connection_modal) {
     connection_modal.style.display = "none";
   }else if (event.target === write_item_id_modal) {
