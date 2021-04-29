@@ -5,6 +5,7 @@ var failed_modal = document.getElementById("failed-modal");
 var connection_modal = document.getElementById("connection-modal");
 var check_out_modal = document.getElementById("check-out-modal");
 var show_patron_modal = document.getElementById("show-patron-modal");
+var send_ping_modal = document.getElementById("send-ping-modal");
 
 var place_tag_close = document.getElementById("place-tag-close");
 var write_item_id_close = document.getElementById("write-item-id-close");
@@ -13,11 +14,14 @@ var failed_close = document.getElementById("failed-close");
 var connection_close = document.getElementById("connection-close");
 var check_out_close = document.getElementById("check-out-close");
 var show_patron_close = document.getElementById("show-patron-close");
+var send_ping_close = document.getElementById("send-ping-close");
 
 var success_text = document.getElementById("success-text"); 
 var failed_text = document.getElementById("failed-text"); 
 var patron_text = document.getElementById("patron"); 
 var use_patron_text = document.getElementById("use-patron"); 
+var place_tag_text = document.getElementById("place-tag-text"); 
+var check_out_text = document.getElementById("ceck-out-text"); 
 
 var itemIdP = document.getElementById("book_id"); 
 var book_image = document.getElementById("book_pic");
@@ -68,15 +72,29 @@ var books= [
   itemIdP.innerHTML  = 'item id: '+itemId;
 }
 
+function deleteShowedItemId() {
+   book_image.src = '';
+   itemIdP.innerHTML  = '';
+}
+
 function showPlaceTagModal(status){
   if(status.localeCompare('false')==0){
     place_tag_modal.style.display = "none";
   }else{
-    place_tag_modal.style.display = "block"
+    place_tag_text.innerHTML= status;
+    place_tag_modal.style.display = "block";
   }
 }
+
+function show_status(){
+  send_ping_modal.style.display = "block";
+}
+
 place_tag_close.onclick = function() {
   showPlaceTagModal('false');
+  ws.send('{"toDo": "doCheckIn", "value": "null"}');
+  ws.send('{"toDo": "doReadTagInfo", "value": "null"}');
+  ws.send('{"toDo": "write", "value": "null"}');
 }
 
 write_item_id_close.onclick = function() {
@@ -87,9 +105,14 @@ connection_close.onclick = function() {
   connection_modal.style.display = "none";
 }
 
+send_ping_close.onclick = function() {
+  send_ping_modal.style.display = "none";
+}
+
 success_close.onclick = function() {
   success_modal.style.display = "none";
 }
+
 failed_close.onclick = function() {
   failed_modal.style.display = "none";
 }
@@ -97,6 +120,7 @@ failed_close.onclick = function() {
 check_out_close.onclick = function() {
   check_out_modal.style.display = "none";
   patron_text.innerHTML="";
+  ws.send('{"toDo": "doCheckIn", "value": "null"}');
 }
 
 show_patron_close.onclick = function() {
@@ -124,7 +148,7 @@ function showFailedModal(status){
 
 function write_item_id() {
   write_item_id_modal.style.display = "none";
-  showPlaceTagModal('true');
+  showPlaceTagModal('true', 'Place the smartphone over the item you would like to program');
     var itemId = document.getElementById("item-id-input").value;
     ws.send('{"toDo": "write", "value": "'+itemId+'"}');
   }
@@ -133,7 +157,7 @@ function write_item_id() {
     if(!isConnected){
       connection_modal.style.display = "block";
     }else{
-
+    deleteShowedItemId();
     write_item_id_modal.style.display = "block";
     }
     }
@@ -147,9 +171,11 @@ function write_item_id() {
     if(!isConnected){
       connection_modal.style.display = "block";
     }else{
+      deleteShowedItemId();
       if(value.localeCompare("true")==0){
-        showPlaceTagModal('true');
+        showPlaceTagModal('true', 'Place the smartphone over the item you would like to check in');
       }else{
+        check_out_text.innerHTML= 'Place the smartphone over the item you would like to check out';
         check_out_modal.style.display= "block";
       }
     ws.send('{"toDo": "doCheckIn", "value": "'+value+'"}');
@@ -160,7 +186,7 @@ function write_item_id() {
     if(!isConnected){
       connection_modal.style.display = "block";
     }else{
-    showPlaceTagModal('true');
+    showPlaceTagModal('true', 'Place the smartphone over the item you would like to show');
     ws.send('{"toDo": "doReadTagInfo", "value": "true"}');
     }
     }
@@ -176,8 +202,13 @@ function write_item_id() {
 window.onclick = function(event) {
   if (event.target === place_tag_modal) {
     place_tag_modal.style.display = "none";
+    ws.send('{"toDo": "doCheckIn", "value": "null"}');
+    ws.send('{"toDo": "doReadTagInfo", "value": "null"}');
+    ws.send('{"toDo": "write", "value": "null"}');  
   }else if (event.target === check_out_modal) {
     check_out_modal.style.display = "none";
+    patron_text.innerHTML="";
+    ws.send('{"toDo": "doCheckIn", "value": "null"}');
   }else if (event.target === connection_modal) {
     connection_modal.style.display = "none";
   }else if (event.target === write_item_id_modal) {
@@ -188,6 +219,8 @@ window.onclick = function(event) {
     success_modal.style.display = "none";
   }else if (event.target === failed_modal) {
     failed_modal.style.display = "none";
+  }else if (event.target === send_ping_modal) {
+    send_ping_modal.style.display = "none";
   }
 }
   
