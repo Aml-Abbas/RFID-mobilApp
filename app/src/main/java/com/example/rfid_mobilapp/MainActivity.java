@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     static String newItemId;
     static String doCheckIn;
     static String doReadTagInfo;
+    private boolean isActivityVisible;
 
     private SharedPreferences preferences;
     private final String LANG_PREF_KEY = "language";
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "on Stop");
+        isActivityVisible= false;
     }
 
     @Override
@@ -82,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "new intent");
         if (socketServiceSwitch.isChecked() && intent.getAction() !=null &&
                 (intent.getAction() == NfcAdapter.ACTION_TAG_DISCOVERED||
-                intent.getAction() == NfcAdapter.ACTION_TECH_DISCOVERED)) {
+                intent.getAction() == NfcAdapter.ACTION_TECH_DISCOVERED) &&
+                !isActivityVisible) {
                 Log.d(TAG, "is checked");
                 Intent startNfcActivityIntent = new Intent(this, NfcActivity.class);
                 startNfcActivityIntent.putExtra(Intent.EXTRA_INTENT, intent);
@@ -90,11 +93,11 @@ public class MainActivity extends AppCompatActivity {
                 startNfcActivityIntent.putExtra("doCheckIn", doCheckIn);
                 startNfcActivityIntent.putExtra("doReadTagInfo", doReadTagInfo);
                 startActivity(startNfcActivityIntent);
-                doCheckIn = null;
-                doReadTagInfo = null;
-                newItemId = null;
             }
-        }
+        doCheckIn = null;
+        doReadTagInfo = null;
+        newItemId = null;
+    }
 
     public static void setItemId(String itemId) {
         if (itemId.equals("null")){
@@ -137,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "on Resume");
+        isActivityVisible= true;
     }
 
     @Override
