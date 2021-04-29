@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         if (socketServiceSwitch.isChecked()){
             stopService(serviceIntent);
         }
-        preferences.edit().putBoolean(SWITCH_STATE, false).apply();
     }
 
     @Override
