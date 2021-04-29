@@ -1,7 +1,10 @@
 package com.example.rfid_mobilapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -158,10 +161,8 @@ public class MainActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_main);
         getIds();
-        quriaText.setText(R.string.quria_on);
         setUpSpinner();
-        serviceIntent = new Intent(this, SocketServerService.class);
-        startService(serviceIntent);
+        quriaText.setText(R.string.quria_off);
         setUpSocketServiceSwitch();
     }
 
