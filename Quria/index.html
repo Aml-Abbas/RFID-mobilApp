@@ -7,10 +7,9 @@
 
 
 <div class="welcome">
-    <h1>Welcome</h1>
-    <div><p>WebSocket status: <span id="ws-status"></span></p></div>
-    <button class="button_ping" onclick="sendPing()">Send
-        ping
+    <h1>Library Management System</h1>
+    <button class="button_ping" onclick="show_status()">
+        show status
     </button>
 </div>
 
@@ -36,7 +35,7 @@
 
     <div class="place-tag-modal-content">
         <span id="place-tag-close">&times;</span>
-        <p>Place the smartphone over the item you would like to scan</p>
+        <p id="place-tag-text"></p>
         <div id="book-animation"></div>
         <div id="phone-animation"></div>
     </div>
@@ -56,7 +55,7 @@
         <span id="check-out-close">&times;</span>
         <p id="patron"></p>
         <button id="show-camera" onclick="show_camera_modal()">Read patron</button>
-        <p>Place the smartphone over the item you would like to scan</p>
+        <p id="check-out-text"></p>
         <div id="book-animation"></div>
         <div id="phone-animation"></div>
 
@@ -97,11 +96,22 @@
 </div>
 
 <div id="connection-modal" class="connection-modal-class">
-
     <div class="connection-modal-content">
         <span id="connection-close">&times;</span>
         <p>Open the connection in the RFID-mobilApp first and refresha the page in order to
             reconnect.</p>
+    </div>
+</div>
+</div>
+
+<div id="send-ping-modal" class="send-ping-modal-class">
+
+    <div class="send-ping-modal-content">
+        <span id="send-ping-close">&times;</span>
+        <div><p>WebSocket status: <span id="ws-status"></span></p></div>
+        <button class="button_ping" onclick="sendPing()">Send
+            ping
+        </button>
     </div>
 </div>
 </div>

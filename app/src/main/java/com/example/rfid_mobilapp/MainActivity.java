@@ -1,7 +1,10 @@
 package com.example.rfid_mobilapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -29,11 +32,14 @@ public class MainActivity extends AppCompatActivity {
     static String newItemId;
     static String doCheckIn;
     static String doReadTagInfo;
+    private boolean isActivityVisible;
 
     private SharedPreferences preferences;
     private final String LANG_PREF_KEY = "language";
     private final String LANGUAGE_SWEDISH = "sv";
     private final String LANGUAGE_ENGLISH = "en";
+
+    private final String SWITCH_STATE = "switchState";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpSocketServiceSwitch() {
         socketServiceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                preferences.edit().putBoolean(SWITCH_STATE, isChecked).apply();
                 if (isChecked) {
                     quriaText.setText(R.string.quria_on);
                     serviceIntent = new Intent(MainActivity.this, SocketServerService.class);
@@ -61,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "on Stop");
+        isActivityVisible= false;
     }
 
     @Override
@@ -76,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "new intent");
         if (socketServiceSwitch.isChecked() && intent.getAction() !=null &&
                 (intent.getAction() == NfcAdapter.ACTION_TAG_DISCOVERED||
-                intent.getAction() == NfcAdapter.ACTION_TECH_DISCOVERED)) {
+                intent.getAction() == NfcAdapter.ACTION_TECH_DISCOVERED) &&
+                !isActivityVisible) {
                 Log.d(TAG, "is checked");
                 Intent startNfcActivityIntent = new Intent(this, NfcActivity.class);
                 startNfcActivityIntent.putExtra(Intent.EXTRA_INTENT, intent);
@@ -84,29 +93,38 @@ public class MainActivity extends AppCompatActivity {
                 startNfcActivityIntent.putExtra("doCheckIn", doCheckIn);
                 startNfcActivityIntent.putExtra("doReadTagInfo", doReadTagInfo);
                 startActivity(startNfcActivityIntent);
-                doCheckIn = null;
-                doReadTagInfo = null;
-                newItemId = null;
             }
-        }
+        doCheckIn = null;
+        doReadTagInfo = null;
+        newItemId = null;
+    }
 
     public static void setItemId(String itemId) {
-        Log.d(TAG, "1. item id is now " + itemId);
-        newItemId = itemId;
+        if (itemId.equals("null")){
+            newItemId= null;
+        }else {
+            newItemId = itemId;
+        }
         doCheckIn = null;
         doReadTagInfo= null;
     }
 
     public static void setDoCheckIn(String value) {
-        Log.d(TAG, "check in now is " + value);
-        doCheckIn = value;
+        if (value.equals("null")){
+            doCheckIn= null;
+        }else {
+            doCheckIn = value;
+        }
         doReadTagInfo= null;
         newItemId = null;
     }
 
     public static void setDoReadTagInfo(String value) {
-        Log.d(TAG, "read to  the tag now is " + value);
-        doReadTagInfo = value;
+        if (value.equals("null")){
+            doReadTagInfo= null;
+        }else {
+            doReadTagInfo = value;
+        }
         newItemId = null;
         doCheckIn = null;
     }
@@ -122,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "on Resume");
+        isActivityVisible= true;
     }
 
     @Override
@@ -158,10 +177,18 @@ public class MainActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_main);
         getIds();
-        quriaText.setText(R.string.quria_on);
         setUpSpinner();
-        serviceIntent = new Intent(this, SocketServerService.class);
-        startService(serviceIntent);
+        quriaText.setText(R.string.quria_off);
+        preferences = getSharedPreferences(SWITCH_STATE, MODE_PRIVATE);
+        if (preferences != null){
+           boolean previousState= preferences.getBoolean(SWITCH_STATE, false);
+           if (previousState){
+               quriaText.setText(R.string.quria_on);
+               socketServiceSwitch.setChecked(true);
+               serviceIntent = new Intent(this, SocketServerService.class);
+               startService(serviceIntent);
+           }
+        }
         setUpSocketServiceSwitch();
     }
 
