@@ -21,7 +21,7 @@ var failed_text = document.getElementById("failed-text");
 var patron_text = document.getElementById("patron"); 
 var use_patron_text = document.getElementById("use-patron"); 
 var place_tag_text = document.getElementById("place-tag-text"); 
-var check_out_text = document.getElementById("ceck-out-text"); 
+var check_out_text = document.getElementById("check-out-text"); 
 
 var itemIdP = document.getElementById("book_id"); 
 var book_image = document.getElementById("book_pic");
@@ -196,6 +196,7 @@ function write_item_id() {
       connection_modal.style.display = "block";
     }else{
       ws.send('ping');
+      send_ping_modal.style.display = "none";
     }
   }
 
