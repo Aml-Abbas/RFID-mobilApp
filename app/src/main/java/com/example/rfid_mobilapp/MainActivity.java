@@ -75,7 +75,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "on onDestroy");
-        stopService(serviceIntent);
+        if (socketServiceSwitch.isChecked()){
+            stopService(serviceIntent);
+        }
+        preferences.edit().putBoolean(SWITCH_STATE, false).apply();
     }
 
     @Override
