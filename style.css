@@ -201,8 +201,7 @@ input[type=text] {
 }
 
 video{
-width:100%;
-heigth:200px;
+width:60%;
 }
 
 @media (min-width: 768px) {
