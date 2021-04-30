@@ -4,7 +4,6 @@ var success_modal = document.getElementById("success-modal");
 var failed_modal = document.getElementById("failed-modal");
 var connection_modal = document.getElementById("connection-modal");
 var check_out_modal = document.getElementById("check-out-modal");
-var show_patron_modal = document.getElementById("show-patron-modal");
 var send_ping_modal = document.getElementById("send-ping-modal");
 
 var place_tag_close = document.getElementById("place-tag-close");
@@ -13,7 +12,6 @@ var success_close = document.getElementById("success-close");
 var failed_close = document.getElementById("failed-close");
 var connection_close = document.getElementById("connection-close");
 var check_out_close = document.getElementById("check-out-close");
-var show_patron_close = document.getElementById("show-patron-close");
 var send_ping_close = document.getElementById("send-ping-close");
 
 var success_text = document.getElementById("success-text"); 
@@ -27,7 +25,9 @@ var itemIdP = document.getElementById("book_id");
 var book_image = document.getElementById("book_pic");
 var camera = document.getElementById("camera");
 
+var progress_bar = document.getElementById("progress-bar");
 var isConnected= false;
+use_patron_text.innerHTML="";
 
 var books= [
   {
@@ -51,7 +51,22 @@ var books= [
      "picture":"kungariket.jpg"
   }
  ];
- 
+
+ var patrons= [
+  {
+     "item_id": "06025000003961",
+     "name": "Marcus Lundberg",
+  },
+  {
+     "item_id": "06038100002654",
+     "name": "Elissa Edblad",
+  },
+  {
+     "item_id": "any patron else",
+     "name": "Lina Ericsson",
+  }
+ ];
+
    
   
  function showItemId(itemId) {
@@ -120,31 +135,23 @@ failed_close.onclick = function() {
 check_out_close.onclick = function() {
   check_out_modal.style.display = "none";
   patron_text.innerHTML="";
-  ws.send('{"toDo": "doCheckIn", "value": "null"}');
-}
-
-show_patron_close.onclick = function() {
-  show_patron_modal.style.display = "none";
+  use_patron_text.innerHTML= "";
+  progress_bar.style.display = "block";
   Quagga.stop();
+  ws.send('{"toDo": "doCheckIn", "value": "null"}');
 }
 
 function showSuccessModal(status){
   success_text.innerHTML= status;
   success_modal.style.display = "block";
+  Quagga.stop();
 }
 
 function showFailedModal(status){
   failed_text.innerHTML= status;
   failed_modal.style.display = "block";
+  Quagga.stop();
 }
-
-  function show_camera_modal(){
-    show_patron_modal.style.display= "block";
-  }
-
-  function use_patron(){
-    show_patron_modal.style.display= "none";
-  }
 
 function write_item_id() {
   write_item_id_modal.style.display = "none";
@@ -162,11 +169,6 @@ function write_item_id() {
     }
     }
 
-    function use_patron(){
-      show_patron_modal.style.display= "none";
-      use_patron_text.innerHTML="";
-    }
-
   function do_check_in(value) {
     if(!isConnected){
       connection_modal.style.display = "block";
@@ -174,14 +176,18 @@ function write_item_id() {
       deleteShowedItemId();
       if(value.localeCompare("true")==0){
         showPlaceTagModal('true', 'Place the smartphone over the item you would like to check in');
+        ws.send('{"toDo": "doCheckIn", "value": "true"}');
       }else{
         check_out_text.innerHTML= 'Place the smartphone over the item you would like to check out';
         check_out_modal.style.display= "block";
       }
-    ws.send('{"toDo": "doCheckIn", "value": "'+value+'"}');
     }
     }
   
+    function send_check_out(){
+      ws.send('{"toDo": "doCheckIn", "value": "false"}');
+    }
+
   function show_item(){
     if(!isConnected){
       connection_modal.style.display = "block";
@@ -209,13 +215,14 @@ window.onclick = function(event) {
   }else if (event.target === check_out_modal) {
     check_out_modal.style.display = "none";
     patron_text.innerHTML="";
+    use_patron_text.innerHTML= "";
+    progress_bar.style.display = "block";
+    Quagga.stop();
     ws.send('{"toDo": "doCheckIn", "value": "null"}');
   }else if (event.target === connection_modal) {
     connection_modal.style.display = "none";
   }else if (event.target === write_item_id_modal) {
     write_item_id_modal.style.display = "none";
-  }else if (event.target === show_patron_modal) {
-    show_patron_modal.style.display = "none";
   }else if (event.target === success_modal) {
     success_modal.style.display = "none";
   }else if (event.target === failed_modal) {
@@ -246,8 +253,9 @@ window.onclick = function(event) {
       var json = JSON.parse(event.data);
       showPlaceTagModal('false', '');
       check_out_modal.style.display= "none";
-      patron_text.innerHTML= "";
-      if(json.Done.localeCompare("read_item_id")==0){
+      patron_text.innerHTML="";
+      use_patron_text.innerHTML= "";
+          if(json.Done.localeCompare("read_item_id")==0){
         showItemId(json.value);
       }else{
         if(json.value.includes('Failed') || json.value.includes('misslyckades')){
@@ -300,7 +308,8 @@ for(let i=0;i<charts_failed.length;i++) {
   charts_failed[i].innerHTML = createCircleChart(percent, color, size, stroke);
 }
 
-document.getElementById("show-camera").addEventListener("click", function () {
+document.getElementById("check-out").addEventListener("click", function () {
+  setUpStepper();
   Quagga.init({
       inputStream: {
           name: "Live",
@@ -329,19 +338,52 @@ document.getElementById("show-camera").addEventListener("click", function () {
           console.log(` Quagaa init error ${err}`);
           return
       }
-      console.log("Initialization finished. Ready to start");
+      progress_bar.style.display = "none";
       Quagga.start();
   });
 
 
   Quagga.onDetected(function (data) {
-    patron_text.innerHTML= data.codeResult.code;
-    use_patron_text.innerHTML= data.codeResult.code;
+    var found= false;
+    for (var i = 0; i < patrons.length; i++) {
+      var patron_id=  patrons[i].item_id;
+      var current_item_id = data.codeResult.code;
+
+      if(patron_id.localeCompare(current_item_id)=== 0){
+        patron_text.innerHTML= 'Patron: '+ patrons[i].name+' id: '+data.codeResult.code;
+        use_patron_text.innerHTML= 'Patron: '+ patrons[i].name+'<br> id: '+data.codeResult.code;
+        found= true;
+      break;
+      }
+    }
+    if(!found){
+      patron_text.innerHTML= 'Patron: '+ patrons[2].name+'<br> id: '+data.codeResult.code;
+      use_patron_text.innerHTML= 'Patron: '+ patrons[2].name+'<br> id: '+data.codeResult.code;
+    }
   });
  
 });
 
+function setUpStepper(){
+  var stepper = document.querySelector('.stepper');
+  var stepperInstace = new MStepper(stepper, {
+     firstActive: 0,
+     linearStepsNavigation: true,
+     autoFocusInput: false,
+     showFeedbackPreloader: true,
+     validationFunction: validationPatronFunction,
+     autoFormCreation: true,
+     stepTitleNavigation: true,
+  })
+}
 
-document.getElementById("use-patron-btn").addEventListener("click", function () {
-  Quagga.stop()
-});
+function validationPatronFunction() {
+  var patron= use_patron_text.innerText;
+  if(patron.localeCompare("")== 0 || 
+  patron.localeCompare("scan a patron to continue check out")== 0){
+    use_patron_text.innerHTML="scan a patron to continue check out";
+    return false;
+  }
+  return true;
+}
+
