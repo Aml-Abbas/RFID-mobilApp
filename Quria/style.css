@@ -52,7 +52,7 @@ font-size: 30px;
     
   .place-tag-modal-class, .write-item-id-modal-class,
   .success-modal-class, .failed-modal-class, .connection-modal-class,
-  .check-out-modal-class, .show-patron-modal-class, .send-ping-modal-class {
+  .check-out-modal-class, .send-ping-modal-class {
       display: none; 
       position: fixed; 
       z-index: 1; 
@@ -68,7 +68,7 @@ font-size: 30px;
     
     .place-tag-modal-content, .write-item-id-modal-content,
     .failed-modal-content, .success-modal-content, .connection-modal-content,
-    .check-out-modal-content, .show-patron-modal-content, .send-ping-modal-content {
+    .check-out-modal-content, .send-ping-modal-content {
       background-color: #fefefe;
       margin: auto;
       padding: 20px;
@@ -78,7 +78,7 @@ font-size: 30px;
     
     #place-tag-close, #write-item-id-close,
     #success-close, #failed-close, #connection-close,
-    #check-out-close, #show-patron-close, #send-ping-close{
+    #check-out-close, #send-ping-close{
       color: #aaaaaa;
       float: right;
       font-size: 28px;
@@ -91,7 +91,6 @@ font-size: 30px;
     #success-close:hover, #failed-close:hover,
     #connection-close:hover, #connection-close:focus,
     #check-out-close:hover, #check-out-close:focus,
-    #show-patron-close:hover, #show-patron-close:focus,
     #send-ping-close:hover, #send-ping-close:focus{
       color: #000;
       text-decoration: none;
@@ -99,7 +98,7 @@ font-size: 30px;
     }
 
     input[type=text]{
-      width: 60%;
+      width: 50%;
       padding: 12px 20px;
       margin: 8px 0;
       border: 1px solid #ccc;
@@ -165,11 +164,6 @@ font-size: 30px;
   .check-out-modal-content, .send-ping-modal-content{
     width: 60%;
   }
-  
-  .show-patron-modal-content{
-        width: 70%;
-  }
-
     button {
       width: 51%;
     }

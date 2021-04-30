@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <title>Quria</title>
+<link rel="stylesheet" href="https://unpkg.com/materialize-stepper@3.1.0/dist/css/mstepper.min.css">
 <link rel="stylesheet" href="style.css">
 
 <body>
@@ -18,7 +19,7 @@
 
     <button class="button" onclick="show_write_modal()">Program</button>
     <button class="button" onclick="do_check_in('true')">Check in</button>
-    <button class="button" onclick="do_check_in('false')">Check out</button>
+    <button class="button" id="check-out" onclick="do_check_in('false')">Check out</button>
     <button class="button" onclick="show_item()">Show book</button>
 
 </div>
@@ -32,7 +33,6 @@
 </div>
 
 <div id="place-tag-modal" class="place-tag-modal-class">
-
     <div class="place-tag-modal-content">
         <span id="place-tag-close">&times;</span>
         <p id="place-tag-text"></p>
@@ -50,27 +50,42 @@
     </div>
 </div>
 
+
+
 <div id="check-out-modal" class="check-out-modal-class">
     <div class="check-out-modal-content">
         <span id="check-out-close">&times;</span>
+<ul class="stepper linear">
+    <li class="step active">
+       <div class="step-title waves-effect">Read Patron</div>
+       <div class="step-content">
+        <p>Place the camera over the barcode you would like to scan</p>
+        <p id="camera"></p>
+        <div id="progress-bar" class="success-div" data-percent="60" data-color="#4CAF50" data-size="125" data-stroke="3"></div>
+        <p id="use-patron"></p>
+          <div class="step-actions">
+             <button onclick="send_check_out()" class="waves-effect waves-dark btn next-step">CONTINUE</button>
+          </div>
+       </div>
+    </li>
+
+    <li class="step">
+    <div class="step-title waves-effect waves-dark">check out</div>
+    <div class="step-content">
         <p id="patron"></p>
-        <button id="show-camera" onclick="show_camera_modal()">Read patron</button>
         <p id="check-out-text"></p>
         <div id="book-animation"></div>
         <div id="phone-animation"></div>
 
-    </div>
+    <div class="step-actions">
+    <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
 </div>
-
-<div id="show-patron-modal" class="show-patron-modal-class">
-    <div class="show-patron-modal-content">
-        <span id="show-patron-close">&times;</span>
-        <p id="camera"></p>
-        <p id="use-patron"></p>
-        <button id="use-patron-btn" onclick="use_patron()">use patron</button>
-    </div>
 </div>
+</li>
 
+ </ul>
+</div>
+</div>
 
 <div id="success-modal" class="success-modal-class">
 
@@ -118,6 +133,7 @@
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.js"></script>
+<script src="https://unpkg.com/materialize-stepper@3.1.0/dist/js/mstepper.min.js"></script>
 <script src="javaScript.js"></script>
 </body>
 
