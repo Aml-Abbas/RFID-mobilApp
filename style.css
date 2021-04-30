@@ -200,10 +200,6 @@ input[type=text] {
   margin: 0;
 }
 
-video{
-width:60%;
-}
-
 @media (min-width: 768px) {
 
   .place-tag-modal-content,
