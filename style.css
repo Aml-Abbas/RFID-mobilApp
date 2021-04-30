@@ -1,170 +1,218 @@
-*{
-  align-content:center;
+* {
+  align-content: center;
   text-align: center;
 }
 
-h1{
-font-size: 40px;
+h1 {
+  font-size: 40px;
 }
 
-p{
-font-size: 30px;
+p {
+  font-size: 30px;
 }
 
-.welcome{
+.welcome {
   width: 100%;
   padding: 15 px;
-  margin-bottom:10%;
-  }
-    
-  button {
-    background-color: #9e2a36;
-    border-radius: 30px;
-    width: 60%;
-    color: white;
-    padding: 20px;
-    margin: 3px;
-    font-size: 2em;
-  }
-  
-  button:hover {
+  margin-bottom: 10%;
+}
+
+button {
+  background-color: #9e2a36;
+  border-radius: 30px;
+  width: 60%;
+  color: white;
+  padding: 20px;
+  margin: 3px;
+  font-size: 2em;
+}
+
+button:hover {
   background: #eee;
   color: #9e2a36;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  width: 55%;
+  padding: 10px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 2em;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.container {
+  padding: 2px 16px;
+}
+
+.place-tag-modal-class,
+.write-item-id-modal-class,
+.success-modal-class,
+.failed-modal-class,
+.connection-modal-class,
+.check-out-modal-class,
+.send-ping-modal-class {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.place-tag-modal-content,
+.write-item-id-modal-content,
+.failed-modal-content,
+.success-modal-content,
+.connection-modal-content,
+.check-out-modal-content,
+.send-ping-modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+#place-tag-close,
+#write-item-id-close,
+#success-close,
+#failed-close,
+#connection-close,
+#check-out-close,
+#send-ping-close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+#place-tag-close:hover,
+#write-item-id-close:hover,
+#place-tag-close:focus,
+#write-item-id-close:focus,
+#success-close:focus,
+#failed-close:focus,
+#success-close:hover,
+#failed-close:hover,
+#connection-close:hover,
+#connection-close:focus,
+#check-out-close:hover,
+#check-out-close:focus,
+#send-ping-close:hover,
+#send-ping-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+input[type=text] {
+  width: 50%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 2em;
+}
+
+
+#phone-animation {
+  width: 50px;
+  height: 50px;
+  content: url(pic/phone_new.jpg);
+  position: relative;
+  animation: left_right 5s infinite;
+  display: inline;
+  margin: 1em;
+}
+
+@keyframes left_right {
+  from {
+    left: -30%;
   }
-  
-  .card {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-    width: 55%;
-    padding: 10px;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 2em;
-    }
-  
-  .card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+
+  to {
+    left: 20%;
   }
-  
-  .container {
-    padding: 2px 16px;
+}
+
+#book-animation {
+  width: 100px;
+  height: 100px;
+  content: url(pic/book_per.png);
+  position: relative;
+  animation: right_left 5s infinite;
+  display: inline;
+  margin: 1em;
+}
+
+@keyframes right_left {
+  from {
+    left: 40%;
   }
-    
-  .place-tag-modal-class, .write-item-id-modal-class,
-  .success-modal-class, .failed-modal-class, .connection-modal-class,
-  .check-out-modal-class, .send-ping-modal-class {
-      display: none; 
-      position: fixed; 
-      z-index: 1; 
-      padding-top: 100px;
-      left: 0;
-      top: 0;
-      width: 100%; 
-      height: 100%;
-      overflow: auto;
-      background-color: rgb(0,0,0);
-      background-color: rgba(0,0,0,0.4);
-    }
-    
-    .place-tag-modal-content, .write-item-id-modal-content,
-    .failed-modal-content, .success-modal-content, .connection-modal-content,
-    .check-out-modal-content, .send-ping-modal-content {
-      background-color: #fefefe;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-    }
-    
-    #place-tag-close, #write-item-id-close,
-    #success-close, #failed-close, #connection-close,
-    #check-out-close, #send-ping-close{
-      color: #aaaaaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-    
-    #place-tag-close:hover, #write-item-id-close:hover,
-    #place-tag-close:focus, #write-item-id-close:focus,
-    #success-close:focus, #failed-close:focus,
-    #success-close:hover, #failed-close:hover,
-    #connection-close:hover, #connection-close:focus,
-    #check-out-close:hover, #check-out-close:focus,
-    #send-ping-close:hover, #send-ping-close:focus{
-      color: #000;
-      text-decoration: none;
-      cursor: pointer;
-    }
 
-    input[type=text]{
-      width: 50%;
-      padding: 12px 20px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-      font-size: 2em;
-    }
+  to {
+    left: 40%;
+  }
+}
+
+.mkc_circle {
+  animation: mck_progress 1000ms ease-in-out;
+}
+
+@keyframes mck_progress {
+  0% {
+    stroke-dasharray: 0, 100;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
+  grid-template-columns: repeat(1, 1fr);
+}
+
+@media (min-width: 31em) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
 
 
-    #phone-animation {
-      width: 50px;
-      height: 50px;
-      content:url(pic/phone_new.jpg);
-      position: relative;
-      animation: left_right 5s infinite;
-      display:inline;
-      margin: 1em;
-    }
-    
-    @keyframes left_right {
-      from {left: -30%;}
-      to {left: 20%;}
-    }
-
-    #book-animation{
-      width: 100px;
-      height: 100px;
-      content:url(pic/book_per.png);
-      position: relative;
-      animation: right_left 5s infinite;
-      display:inline;
-      margin: 1em;
-    }
-
-    @keyframes right_left {
-      from {left: 40%;}
-      to {left: 40%;}
-    }
-
-    .mkc_circle { animation: mck_progress 1000ms ease-in-out; }
-    @keyframes mck_progress { 0% { stroke-dasharray: 0, 100; }}
-    
-    .grid {
-        display: grid;
-        grid-column-gap: 1em;
-        grid-row-gap: 1em;
-        grid-template-columns: repeat(1, 1fr);
-    }
-    
-    @media (min-width: 31em) {
-        .grid { grid-template-columns: repeat(4, 1fr);}
-    }
-
-
-    .drawingBuffer{
-      width: 0px;
-      height: 0px;
-    }
+.drawingBuffer {
+  width: 0px;
+  height: 0px;
+}
+.setp-content {
+  padding: 0;
+  margin: 0;
+}
 
 @media (min-width: 768px) {
-  .place-tag-modal-content, .write-item-id-modal-content,
-  .failed-modal-content, .success-modal-content, .connection-modal-content,
-  .check-out-modal-content, .send-ping-modal-content{
-    width: 60%;
+
+  .place-tag-modal-content,
+  .write-item-id-modal-content,
+  .failed-modal-content,
+  .success-modal-content,
+  .connection-modal-content,
+  .check-out-modal-content,
+  .send-ping-modal-content {
+    width: 90%;
   }
-    button {
-      width: 51%;
-    }
+
+  button {
+    width: 51%;
+  }
 }
