@@ -312,9 +312,6 @@ document.getElementById("check-out").addEventListener("click", function () {
     inputStream: {
       name: "Live",
       type: "LiveStream",
-      constraints: {
-        height: 200,
-      },
       target: document.querySelector('#camera')
     },
     decoder: {
