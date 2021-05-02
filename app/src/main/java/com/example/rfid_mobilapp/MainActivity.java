@@ -2,9 +2,7 @@ package com.example.rfid_mobilapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -34,12 +32,13 @@ public class MainActivity extends AppCompatActivity {
     static String doReadTagInfo;
     private boolean isActivityVisible;
 
-    private SharedPreferences preferences;
+    private SharedPreferences langPreferences;
     private final String LANG_PREF_KEY = "language";
     private final String LANGUAGE_SWEDISH = "sv";
     private final String LANGUAGE_ENGLISH = "en";
 
-    //private final String SWITCH_STATE = "switchState";
+    private SharedPreferences switchPreferences;
+    private final String SWITCH_STATE = "switchState";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpSocketServiceSwitch() {
         socketServiceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-               // preferences.edit().putBoolean(SWITCH_STATE, isChecked).apply();
+                switchPreferences.edit().putBoolean(SWITCH_STATE, isChecked).apply();
                 if (isChecked) {
                     quriaText.setText(R.string.quria_on);
                     serviceIntent = new Intent(MainActivity.this, SocketServerService.class);
@@ -173,10 +172,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onCreateHelper() {
-/*
-        preferences = getSharedPreferences(SWITCH_STATE, MODE_PRIVATE);
-        if (preferences != null){
-            boolean previousState= preferences.getBoolean(SWITCH_STATE, false);
+        langPreferences = getSharedPreferences(LANG_PREF_KEY, MODE_PRIVATE);
+        if (langPreferences != null) {
+            setLocale(langPreferences.getString(LANG_PREF_KEY, LANGUAGE_ENGLISH));
+        }
+        setContentView(R.layout.activity_main);
+        getIds();
+        setUpSpinner();
+        quriaText.setText(R.string.quria_off);
+        switchPreferences = getSharedPreferences(SWITCH_STATE, MODE_PRIVATE);
+        if (switchPreferences != null){
+            boolean previousState= switchPreferences.getBoolean(SWITCH_STATE, false);
             if (previousState){
                 quriaText.setText(R.string.quria_on);
                 socketServiceSwitch.setChecked(true);
@@ -184,15 +190,6 @@ public class MainActivity extends AppCompatActivity {
                 startService(serviceIntent);
             }
         }
-*/
-        preferences = getSharedPreferences(LANG_PREF_KEY, MODE_PRIVATE);
-        if (preferences != null) {
-            setLocale(preferences.getString(LANG_PREF_KEY, LANGUAGE_ENGLISH));
-        }
-        setContentView(R.layout.activity_main);
-        getIds();
-        setUpSpinner();
-        quriaText.setText(R.string.quria_off);
         setUpSocketServiceSwitch();
     }
 
@@ -210,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                         if (getResources().getConfiguration().getLocales().get(0).getLanguage().equals(LANGUAGE_ENGLISH))
                             Toast.makeText(MainActivity.this, R.string.same_language, Toast.LENGTH_SHORT).show();
                         else {
-                            preferences.edit().putString(LANG_PREF_KEY, LANGUAGE_ENGLISH).apply();
+                            langPreferences.edit().putString(LANG_PREF_KEY, LANGUAGE_ENGLISH).apply();
                             onCreateHelper();
                         }
                         break;
@@ -218,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                         if (getResources().getConfiguration().getLocales().get(0).getLanguage().equals(LANGUAGE_SWEDISH))
                             Toast.makeText(MainActivity.this, R.string.same_language, Toast.LENGTH_SHORT).show();
                         else {
-                            preferences.edit().putString(LANG_PREF_KEY, LANGUAGE_SWEDISH).apply();
+                            langPreferences.edit().putString(LANG_PREF_KEY, LANGUAGE_SWEDISH).apply();
                             onCreateHelper();
                         }
                         break;
