@@ -43,23 +43,25 @@ public class SocketServerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-            String jsonString= "";
-            if (intent != null && intent.getAction() != null && intent.getExtras() != null) {
-                if (intent.getAction().equals("READ_ITEM_ID")) {
-                    String itemId = intent.getExtras().getString("itemId");
-                    jsonString= Utilities.createJsonString("read_item_id", itemId);
-                    server.broadcast(jsonString);
-                } else if (intent.getAction().equals("WRITE_ITEM_ID")) {
-                    String status = intent.getExtras().getString("itemId");
-                    jsonString= Utilities.createJsonString("write_item_id", status);
-                    server.broadcast(jsonString);
-                } else if (intent.getAction().equals("CHECK")) {
-                    String status = intent.getExtras().getString("doCheckIn");
-                    jsonString= Utilities.createJsonString("check", status);
-                    server.broadcast(jsonString);
-                }else if (intent.getAction().equals("READ")) {
+        String jsonString = "";
+        if (intent != null && intent.getAction() != null && intent.getExtras() != null) {
+            if (intent.getAction().equals("READ_ITEM_ID")) {
+                String itemId = intent.getExtras().getString("itemId");
+                jsonString = Utilities.createJsonString("read_item_id", itemId);
+            } else if (intent.getAction().equals("WRITE_ITEM_ID")) {
+                String status = intent.getExtras().getString("itemId");
+                jsonString = Utilities.createJsonString("write_item_id", status);
+            } else if (intent.getAction().equals("CHECK")) {
+                String status = intent.getExtras().getString("doCheckIn");
+                jsonString = Utilities.createJsonString("check", status);
+            } else if (intent.getAction().equals("READ")) {
                 String status = intent.getExtras().getString("read_tag");
-                jsonString= Utilities.createJsonString("read_tag", status);
+                if (status == null){
+                    status= getResources().getString(R.string.failed_read);
+                }
+                jsonString = Utilities.createJsonString("read_tag", status);
+            }
+            if (jsonString != null) {
                 server.broadcast(jsonString);
             }
         }
@@ -71,7 +73,7 @@ public class SocketServerService extends Service {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
         try {
-            if(server!=null){
+            if (server != null) {
                 server.stop();
             }
             thread.join();
