@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private final String LANGUAGE_SWEDISH = "sv";
     private final String LANGUAGE_ENGLISH = "en";
 
-    private final String SWITCH_STATE = "switchState";
+    //private final String SWITCH_STATE = "switchState";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpSocketServiceSwitch() {
         socketServiceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                preferences.edit().putBoolean(SWITCH_STATE, isChecked).apply();
+               // preferences.edit().putBoolean(SWITCH_STATE, isChecked).apply();
                 if (isChecked) {
                     quriaText.setText(R.string.quria_on);
                     serviceIntent = new Intent(MainActivity.this, SocketServerService.class);
@@ -173,6 +173,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onCreateHelper() {
+/*
+        preferences = getSharedPreferences(SWITCH_STATE, MODE_PRIVATE);
+        if (preferences != null){
+            boolean previousState= preferences.getBoolean(SWITCH_STATE, false);
+            if (previousState){
+                quriaText.setText(R.string.quria_on);
+                socketServiceSwitch.setChecked(true);
+                serviceIntent = new Intent(this, SocketServerService.class);
+                startService(serviceIntent);
+            }
+        }
+*/
         preferences = getSharedPreferences(LANG_PREF_KEY, MODE_PRIVATE);
         if (preferences != null) {
             setLocale(preferences.getString(LANG_PREF_KEY, LANGUAGE_ENGLISH));
@@ -181,16 +193,6 @@ public class MainActivity extends AppCompatActivity {
         getIds();
         setUpSpinner();
         quriaText.setText(R.string.quria_off);
-        preferences = getSharedPreferences(SWITCH_STATE, MODE_PRIVATE);
-        if (preferences != null){
-           boolean previousState= preferences.getBoolean(SWITCH_STATE, false);
-           if (previousState){
-               quriaText.setText(R.string.quria_on);
-               socketServiceSwitch.setChecked(true);
-               serviceIntent = new Intent(this, SocketServerService.class);
-               startService(serviceIntent);
-           }
-        }
         setUpSocketServiceSwitch();
     }
 
