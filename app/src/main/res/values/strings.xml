@@ -8,8 +8,8 @@
     <string name="welcome">Welcome</string>
     <string name="no_id">No Id</string>
     <string name="failed_read">Failed to read the tag</string>
-    <string name="failed_checkin">Failed to check in</string>
-    <string name="success_checkin">Success to check in</string>
+    <string name="failed_checkin">Failed returning the book</string>
+    <string name="success_checkin">Success returning the book</string>
     <string name="failed_checkout">Failed to check out</string>
     <string name="success_checkout">Success to check out</string>
     <string name="open_site">Open website for item: </string>

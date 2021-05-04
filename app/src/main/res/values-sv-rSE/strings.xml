@@ -11,10 +11,10 @@
     <string name="welcome">Välkomna</string>
     <string name="no_id">Ingen id</string>
     <string name="failed_read">Avläsning misslyckades</string>
-    <string name="failed_checkin">Incheckning misslyckades</string>
-    <string name="success_checkin">Incheckning lyckades</string>
-    <string name="failed_checkout">Utcheckning misslyckades</string>
-    <string name="success_checkout">Utcheckning lyckades</string>
+    <string name="failed_checkin">Återlämning misslyckades</string>
+    <string name="success_checkin">Återlämning lyckades</string>
+    <string name="failed_checkout">Utlåning misslyckades</string>
+    <string name="success_checkout">Utlåning  lyckades</string>
     <string name="open_site">Öppna webbsida för item:</string>
     <string name="same_language">Språket är redan valt</string>
     <string name="cancel">Tillbaka</string>
