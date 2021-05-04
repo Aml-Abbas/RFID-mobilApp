@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private final String LANGUAGE_SWEDISH = "sv";
     private final String LANGUAGE_ENGLISH = "en";
 
-    private SharedPreferences switchPreferences;
-    private final String SWITCH_STATE = "switchState";
+   // private SharedPreferences switchPreferences;
+   // private final String SWITCH_STATE = "switchState";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpSocketServiceSwitch() {
         socketServiceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                switchPreferences.edit().putBoolean(SWITCH_STATE, isChecked).apply();
+               // switchPreferences.edit().putBoolean(SWITCH_STATE, isChecked).apply();
                 if (isChecked) {
                     quriaText.setText(R.string.quria_on);
                     serviceIntent = new Intent(MainActivity.this, SocketServerService.class);
@@ -72,11 +72,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         Log.d(TAG, "on onDestroy");
         if (socketServiceSwitch.isChecked()){
-            stopService(serviceIntent);
+            Log.d(TAG, "stop server on destroy");
+            socketServiceSwitch.setChecked(false);
         }
+        super.onDestroy();
     }
 
     @Override
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         getIds();
         setUpSpinner();
         quriaText.setText(R.string.quria_off);
-        switchPreferences = getSharedPreferences(SWITCH_STATE, MODE_PRIVATE);
+       /* switchPreferences = getSharedPreferences(SWITCH_STATE, MODE_PRIVATE);
         if (switchPreferences != null){
             boolean previousState= switchPreferences.getBoolean(SWITCH_STATE, false);
             if (previousState){
@@ -189,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 serviceIntent = new Intent(this, SocketServerService.class);
                 startService(serviceIntent);
             }
-        }
+        }*/
         setUpSocketServiceSwitch();
     }
 
