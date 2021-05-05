@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private final String LANGUAGE_SWEDISH = "sv";
     private final String LANGUAGE_ENGLISH = "en";
 
-   // private SharedPreferences switchPreferences;
-   // private final String SWITCH_STATE = "switchState";
+    private SharedPreferences switchPreferences;
+    private final String SWITCH_STATE = "switchState";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +77,19 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "stop server on destroy");
             socketServiceSwitch.setChecked(false);
             stopService(serviceIntent);
+            switchPreferences.edit().putBoolean(SWITCH_STATE, true).apply();
         }
         super.onDestroy();
+    }
+
+    public void onBackPressed() {
+        if (!getFragmentManager().popBackStackImmediate()) {
+            finish();
+        }
+        socketServiceSwitch.setChecked(false);
+        stopService(serviceIntent);
+        switchPreferences.edit().putBoolean(SWITCH_STATE, false).apply();
+        Log.d(TAG, "pre false");
     }
 
     @Override
@@ -182,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         getIds();
         setUpSpinner();
         quriaText.setText(R.string.quria_off);
-       /* switchPreferences = getSharedPreferences(SWITCH_STATE, MODE_PRIVATE);
+        switchPreferences = getSharedPreferences(SWITCH_STATE, MODE_PRIVATE);
         if (switchPreferences != null){
             boolean previousState= switchPreferences.getBoolean(SWITCH_STATE, false);
             if (previousState){
@@ -191,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 serviceIntent = new Intent(this, SocketServerService.class);
                 startService(serviceIntent);
             }
-        }*/
+        }
         setUpSocketServiceSwitch();
     }
 
