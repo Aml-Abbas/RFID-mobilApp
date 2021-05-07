@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpSocketServiceSwitch() {
         socketServiceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                switchPreferences.edit().putBoolean(SWITCH_STATE, isChecked).apply();
+               // switchPreferences.edit().putBoolean(SWITCH_STATE, isChecked).apply();
                 if (isChecked) {
                     quriaText.setText(R.string.quria_on);
                     serviceIntent = new Intent(MainActivity.this, SocketServerService.class);
@@ -72,11 +72,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         Log.d(TAG, "on onDestroy");
         if (socketServiceSwitch.isChecked()){
+            Log.d(TAG, "stop server on destroy");
+            socketServiceSwitch.setChecked(false);
             stopService(serviceIntent);
+            switchPreferences.edit().putBoolean(SWITCH_STATE, true).apply();
         }
+        super.onDestroy();
+    }
+
+    public void onBackPressed() {
+        if (!getFragmentManager().popBackStackImmediate()) {
+            finish();
+        }
+        socketServiceSwitch.setChecked(false);
+        stopService(serviceIntent);
+        switchPreferences.edit().putBoolean(SWITCH_STATE, false).apply();
+        Log.d(TAG, "pre false");
     }
 
     @Override
