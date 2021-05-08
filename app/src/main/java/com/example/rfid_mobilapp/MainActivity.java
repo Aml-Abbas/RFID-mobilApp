@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpSocketServiceSwitch() {
         socketServiceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-               // switchPreferences.edit().putBoolean(SWITCH_STATE, isChecked).apply();
+                switchPreferences.edit().putBoolean(SWITCH_STATE, isChecked).apply();
                 if (isChecked) {
                     quriaText.setText(R.string.quria_on);
                     serviceIntent = new Intent(MainActivity.this, SocketServerService.class);
