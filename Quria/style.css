@@ -200,6 +200,10 @@ input[type=text] {
   margin: 0;
 }
 
+.waves-dark{
+margin-left: 20%;
+}
+
 .tooltip {
   position: relative;
   display: inline-block;
