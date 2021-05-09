@@ -138,11 +138,11 @@ input[type=text] {
 
 @keyframes left_right {
   from {
-    left: -30%;
+    left: -10%;
   }
 
   to {
-    left: 20%;
+    left: 25%;
   }
 }
 
