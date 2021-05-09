@@ -14,7 +14,7 @@ p {
 .welcome {
   width: 100%;
   padding: 15 px;
-  margin-bottom: 10%;
+  margin-bottom: 2%;
 }
 
 button {
@@ -55,8 +55,7 @@ button:hover {
 .success-modal-class,
 .failed-modal-class,
 .connection-modal-class,
-.check-out-modal-class,
-.send-ping-modal-class {
+.check-out-modal-class {
   display: none;
   position: fixed;
   z-index: 1;
@@ -75,8 +74,7 @@ button:hover {
 .failed-modal-content,
 .success-modal-content,
 .connection-modal-content,
-.check-out-modal-content,
-.send-ping-modal-content {
+.check-out-modal-content {
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
@@ -89,8 +87,7 @@ button:hover {
 #success-close,
 #failed-close,
 #connection-close,
-#check-out-close,
-#send-ping-close {
+#check-out-close {
   color: #aaaaaa;
   float: right;
   font-size: 28px;
@@ -108,9 +105,7 @@ button:hover {
 #connection-close:hover,
 #connection-close:focus,
 #check-out-close:hover,
-#check-out-close:focus,
-#send-ping-close:hover,
-#send-ping-close:focus {
+#check-out-close:focus{
   color: #000;
   text-decoration: none;
   cursor: pointer;
@@ -200,6 +195,28 @@ input[type=text] {
   margin: 0;
 }
 
+.tooltip {
+  position: relative;
+  display: inline-block;
+  padding: 15 px;
+  margin-bottom:10%;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  position: absolute;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  background-color:#ccc;
+}
+
+
 @media (min-width: 768px) {
 
   .place-tag-modal-content,
@@ -207,8 +224,7 @@ input[type=text] {
   .failed-modal-content,
   .success-modal-content,
   .connection-modal-content,
-  .check-out-modal-content,
-  .send-ping-modal-content {
+  .check-out-modal-content {
     width: 90%;
   }
 

@@ -4,7 +4,6 @@ var success_modal = document.getElementById("success-modal");
 var failed_modal = document.getElementById("failed-modal");
 var connection_modal = document.getElementById("connection-modal");
 var check_out_modal = document.getElementById("check-out-modal");
-var send_ping_modal = document.getElementById("send-ping-modal");
 
 var place_tag_close = document.getElementById("place-tag-close");
 var write_item_id_close = document.getElementById("write-item-id-close");
@@ -12,7 +11,6 @@ var success_close = document.getElementById("success-close");
 var failed_close = document.getElementById("failed-close");
 var connection_close = document.getElementById("connection-close");
 var check_out_close = document.getElementById("check-out-close");
-var send_ping_close = document.getElementById("send-ping-close");
 
 var success_text = document.getElementById("success-text");
 var failed_text = document.getElementById("failed-text");
@@ -99,10 +97,6 @@ function showPlaceTagModal(status, msg) {
   }
 }
 
-function show_status() {
-  send_ping_modal.style.display = "block";
-}
-
 place_tag_close.onclick = function () {
   showPlaceTagModal('false', '');
   ws.send('{"toDo": "doCheckIn", "value": "null"}');
@@ -116,10 +110,6 @@ write_item_id_close.onclick = function () {
 
 connection_close.onclick = function () {
   connection_modal.style.display = "none";
-}
-
-send_ping_close.onclick = function () {
-  send_ping_modal.style.display = "none";
 }
 
 success_close.onclick = function () {
@@ -200,7 +190,6 @@ function sendPing() {
     connection_modal.style.display = "block";
   } else {
     ws.send('ping');
-    send_ping_modal.style.display = "none";
   }
 }
 
@@ -225,8 +214,6 @@ window.onclick = function (event) {
     success_modal.style.display = "none";
   } else if (event.target === failed_modal) {
     failed_modal.style.display = "none";
-  } else if (event.target === send_ping_modal) {
-    send_ping_modal.style.display = "none";
   }
 }
 
