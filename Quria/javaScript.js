@@ -126,6 +126,8 @@ check_out_close.onclick = function () {
   use_patron_text.innerHTML = "";
   progress_bar.style.display = "block";
   Quagga.stop();
+  document.getElementById('green-button1').style.background = '#9e2a36';
+  document.getElementById('green-button2').style.background = '#9e2a36';
   ws.send('{"toDo": "doCheckIn", "value": "null"}');
 }
 
@@ -133,12 +135,16 @@ function showSuccessModal(status) {
   success_text.innerHTML = status;
   success_modal.style.display = "block";
   Quagga.stop();
+  document.getElementById('green-button1').style.background = '#9e2a36';
+  document.getElementById('green-button2').style.background = '#9e2a36';
 }
 
 function showFailedModal(status) {
   failed_text.innerHTML = status;
   failed_modal.style.display = "block";
   Quagga.stop();
+  document.getElementById('green-button1').style.background = '#9e2a36';
+  document.getElementById('green-button2').style.background = '#9e2a36';
 }
 
 function write_item_id() {
@@ -205,6 +211,8 @@ window.onclick = function (event) {
     use_patron_text.innerHTML = "";
     progress_bar.style.display = "block";
     Quagga.stop();
+    document.getElementById('green-button1').style.background = '#9e2a36';
+    document.getElementById('green-button2').style.background = '#9e2a36';
     ws.send('{"toDo": "doCheckIn", "value": "null"}');
   } else if (event.target === connection_modal) {
     connection_modal.style.display = "none";
@@ -336,12 +344,16 @@ document.getElementById("check-out").addEventListener("click", function () {
         patron_text.innerHTML = 'Patron: ' + patrons[i].name + ' id: ' + data.codeResult.code;
         use_patron_text.innerHTML = 'Patron: ' + patrons[i].name + '<br> id: ' + data.codeResult.code;
         found = true;
+        document.getElementById('green-button1').style.background = '#009900';
+        document.getElementById('green-button2').style.background = '#009900';
         break;
       }
     }
     if (!found) {
       patron_text.innerHTML = 'Patron: ' + patrons[2].name + '<br> id: ' + data.codeResult.code;
       use_patron_text.innerHTML = 'Patron: ' + patrons[2].name + '<br> id: ' + data.codeResult.code;
+      document.getElementById('green-button1').style.background = '#009900';
+      document.getElementById('green-button2').style.background = '#009900';
     }
   });
 
