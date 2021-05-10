@@ -4,7 +4,6 @@ var success_modal = document.getElementById("success-modal");
 var failed_modal = document.getElementById("failed-modal");
 var connection_modal = document.getElementById("connection-modal");
 var check_out_modal = document.getElementById("check-out-modal");
-var send_ping_modal = document.getElementById("send-ping-modal");
 
 var place_tag_close = document.getElementById("place-tag-close");
 var write_item_id_close = document.getElementById("write-item-id-close");
@@ -12,7 +11,6 @@ var success_close = document.getElementById("success-close");
 var failed_close = document.getElementById("failed-close");
 var connection_close = document.getElementById("connection-close");
 var check_out_close = document.getElementById("check-out-close");
-var send_ping_close = document.getElementById("send-ping-close");
 
 var success_text = document.getElementById("success-text");
 var failed_text = document.getElementById("failed-text");
@@ -99,10 +97,6 @@ function showPlaceTagModal(status, msg) {
   }
 }
 
-function show_status() {
-  send_ping_modal.style.display = "block";
-}
-
 place_tag_close.onclick = function () {
   showPlaceTagModal('false', '');
   ws.send('{"toDo": "doCheckIn", "value": "null"}');
@@ -116,10 +110,6 @@ write_item_id_close.onclick = function () {
 
 connection_close.onclick = function () {
   connection_modal.style.display = "none";
-}
-
-send_ping_close.onclick = function () {
-  send_ping_modal.style.display = "none";
 }
 
 success_close.onclick = function () {
@@ -136,6 +126,8 @@ check_out_close.onclick = function () {
   use_patron_text.innerHTML = "";
   progress_bar.style.display = "block";
   Quagga.stop();
+  document.getElementById('green-button1').style.background = '#9e2a36';
+  document.getElementById('green-button2').style.background = '#9e2a36';
   ws.send('{"toDo": "doCheckIn", "value": "null"}');
 }
 
@@ -143,12 +135,16 @@ function showSuccessModal(status) {
   success_text.innerHTML = status;
   success_modal.style.display = "block";
   Quagga.stop();
+  document.getElementById('green-button1').style.background = '#9e2a36';
+  document.getElementById('green-button2').style.background = '#9e2a36';
 }
 
 function showFailedModal(status) {
   failed_text.innerHTML = status;
   failed_modal.style.display = "block";
   Quagga.stop();
+  document.getElementById('green-button1').style.background = '#9e2a36';
+  document.getElementById('green-button2').style.background = '#9e2a36';
 }
 
 function write_item_id() {
@@ -200,7 +196,6 @@ function sendPing() {
     connection_modal.style.display = "block";
   } else {
     ws.send('ping');
-    send_ping_modal.style.display = "none";
   }
 }
 
@@ -216,6 +211,8 @@ window.onclick = function (event) {
     use_patron_text.innerHTML = "";
     progress_bar.style.display = "block";
     Quagga.stop();
+    document.getElementById('green-button1').style.background = '#9e2a36';
+    document.getElementById('green-button2').style.background = '#9e2a36';
     ws.send('{"toDo": "doCheckIn", "value": "null"}');
   } else if (event.target === connection_modal) {
     connection_modal.style.display = "none";
@@ -225,8 +222,6 @@ window.onclick = function (event) {
     success_modal.style.display = "none";
   } else if (event.target === failed_modal) {
     failed_modal.style.display = "none";
-  } else if (event.target === send_ping_modal) {
-    send_ping_modal.style.display = "none";
   }
 }
 
@@ -349,12 +344,16 @@ document.getElementById("check-out").addEventListener("click", function () {
         patron_text.innerHTML = 'Patron: ' + patrons[i].name + ' id: ' + data.codeResult.code;
         use_patron_text.innerHTML = 'Patron: ' + patrons[i].name + '<br> id: ' + data.codeResult.code;
         found = true;
+        document.getElementById('green-button1').style.background = '#009900';
+        document.getElementById('green-button2').style.background = '#009900';
         break;
       }
     }
     if (!found) {
       patron_text.innerHTML = 'Patron: ' + patrons[2].name + '<br> id: ' + data.codeResult.code;
       use_patron_text.innerHTML = 'Patron: ' + patrons[2].name + '<br> id: ' + data.codeResult.code;
+      document.getElementById('green-button1').style.background = '#009900';
+      document.getElementById('green-button2').style.background = '#009900';
     }
   });
 
