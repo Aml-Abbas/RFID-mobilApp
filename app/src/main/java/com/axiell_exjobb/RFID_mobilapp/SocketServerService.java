@@ -1,15 +1,16 @@
 package com.axiell_exjobb.RFID_mobilapp;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import java.io.IOException;
@@ -23,12 +24,13 @@ public class SocketServerService extends Service {
     private final String host = "localhost";
     private final int port = 8888;
     private final String channelId = "channel";
+    Notification notification;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        createNotificationChannel();
         createNotification();
+        startForeground(110, notification);
         thread = new Thread(() -> {
             try {
                 listenAddress = new InetSocketAddress(host, port);
@@ -56,8 +58,8 @@ public class SocketServerService extends Service {
                 jsonString = Utilities.createJsonString("check", status);
             } else if (intent.getAction().equals("READ")) {
                 String status = intent.getExtras().getString("read_tag");
-                if (status == null){
-                    status= getResources().getString(R.string.failed_read);
+                if (status == null) {
+                    status = getResources().getString(R.string.failed_read);
                 }
                 jsonString = Utilities.createJsonString("read_tag", status);
             }
@@ -70,8 +72,7 @@ public class SocketServerService extends Service {
 
     @Override
     public void onDestroy() {
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(0);
+        stopForeground(true);
         try {
             if (server != null) {
                 server.stop();
@@ -96,24 +97,28 @@ public class SocketServerService extends Service {
 
         PendingIntent openAppPendingIntent =
                 PendingIntent.getActivity(this, 0, openAppIntent, 0);
-        NotificationCompat.Builder SocketServerServiceNotification = new NotificationCompat.Builder(this, channelId)
+
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        String channelId = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? getNotificationChannel(notificationManager) : "";
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
+        notification = notificationBuilder.setOngoing(true)
                 .setSmallIcon(R.drawable.message_24)
                 .setContentTitle(getResources().getString(R.string.socket_server_service))
                 .setContentText(getResources().getString(R.string.service_running))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .addAction(R.drawable.back_24, getResources().getString(R.string.back_app), openAppPendingIntent)
-                .setOngoing(true);
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, SocketServerServiceNotification.build());
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .build();
     }
 
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(channelId, "channelName", importance);
-            channel.setDescription("My channel");
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private String getNotificationChannel(NotificationManager notificationManager) {
+        String channelName = getResources().getString(R.string.app_name);
+        NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+        channel.setImportance(NotificationManager.IMPORTANCE_NONE);
+        channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        notificationManager.createNotificationChannel(channel);
+        return channelId;
     }
+
 }
