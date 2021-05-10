@@ -1,4 +1,4 @@
-package com.example.rfid_mobilapp;
+package com.axiell_exjobb.RFID_mobilapp;
 
 import android.content.Context;
 

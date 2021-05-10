@@ -1,4 +1,4 @@
-package com.example.rfid_mobilapp;
+package com.axiell_exjobb.RFID_mobilapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Spinner;
 
 public class NfcActivity extends AppCompatActivity {
     private static final String TAG = NfcActivity.class.getSimpleName();
