@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.rfid_mobilapp">
+    package="com.axiell_exjobb.RFID_mobilapp">
 
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,9 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RFIDmobilApp">
-        <activity android:name=".NfcActivity"></activity>
+        <activity android:name="com.axiell_exjobb.RFID_mobilapp.NfcActivity"></activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.axiell_exjobb.RFID_mobilapp.MainActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".SocketServerService" />
+        <service android:name="com.axiell_exjobb.RFID_mobilapp.SocketServerService" />
     </application>
 
 </manifest>

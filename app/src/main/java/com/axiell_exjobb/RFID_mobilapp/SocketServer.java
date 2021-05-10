@@ -1,4 +1,4 @@
-package com.example.rfid_mobilapp;
+package com.axiell_exjobb.RFID_mobilapp;
 
 import android.util.Log;
 
@@ -10,7 +10,6 @@ import java.util.Collection;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
-import org.java_websocket.handshake.HandshakeImpl1Client;
 import org.java_websocket.server.WebSocketServer;
 import org.json.JSONException;
 import org.json.JSONObject;

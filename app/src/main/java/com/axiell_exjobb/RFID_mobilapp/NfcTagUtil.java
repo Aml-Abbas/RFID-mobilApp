@@ -1,4 +1,4 @@
-package com.example.rfid_mobilapp;
+package com.axiell_exjobb.RFID_mobilapp;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcV;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
