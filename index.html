@@ -8,19 +8,22 @@
 
 
 <div class="welcome">
-    <h1>Library Management System</h1>
-    <button class="button_ping" onclick="show_status()">
-        show status
-    </button>
-</div>
+    <h1>Library Management System</h1>      
+    </div>
 
+    <div class="tooltip">show status
+        <span class="tooltiptext">
+            <div><p>WebSocket status: <span id="ws-status"></span></p></div>
+            <button class="button_ping" onclick="sendPing()">Send ping </button>
+        </span>
+      </div>
 
 <div class="buttons">
 
     <button class="button" onclick="show_write_modal()">Program</button>
     <button class="button" onclick="do_check_in('true')">Check in</button>
     <button class="button" id="check-out" onclick="do_check_in('false')">Check out</button>
-    <button class="button" onclick="show_item()">Show book</button>
+    <button class="button" onclick="show_item()">Scan item</button>
 
 </div>
 
@@ -64,7 +67,7 @@
         <div id="progress-bar" class="success-div" data-percent="60" data-color="#4CAF50" data-size="125" data-stroke="3"></div>
         <p id="use-patron"></p>
           <div class="step-actions">
-             <button onclick="send_check_out()" class="waves-effect waves-dark btn next-step">CONTINUE</button>
+             <button onclick="send_check_out()" id="green-button1" class="waves-effect waves-dark btn next-step">CONTINUE</button>
           </div>
        </div>
     </li>
@@ -78,7 +81,7 @@
         <div id="phone-animation"></div>
 
     <div class="step-actions">
-    <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
+    <button id="green-button2" class="waves-effect waves-dark btn-flat previous-step">BACK</button>
 </div>
 </div>
 </li>
@@ -119,16 +122,6 @@
 </div>
 </div>
 
-<div id="send-ping-modal" class="send-ping-modal-class">
-
-    <div class="send-ping-modal-content">
-        <span id="send-ping-close">&times;</span>
-        <div><p>WebSocket status: <span id="ws-status"></span></p></div>
-        <button class="button_ping" onclick="sendPing()">Send
-            ping
-        </button>
-    </div>
-</div>
 </div>
 
 </body>

@@ -1,7 +1,3 @@
-* {
-  align-content: center;
-  text-align: center;
-}
 
 h1 {
   font-size: 40px;
@@ -14,7 +10,15 @@ p {
 .welcome {
   width: 100%;
   padding: 15 px;
-  margin-bottom: 10%;
+  margin-bottom: 2%;
+  align-content: center;
+  text-align: center;
+}
+
+.buttons{
+  align-content: center;
+  text-align: center;
+
 }
 
 button {
@@ -55,8 +59,7 @@ button:hover {
 .success-modal-class,
 .failed-modal-class,
 .connection-modal-class,
-.check-out-modal-class,
-.send-ping-modal-class {
+.check-out-modal-class {
   display: none;
   position: fixed;
   z-index: 1;
@@ -75,8 +78,7 @@ button:hover {
 .failed-modal-content,
 .success-modal-content,
 .connection-modal-content,
-.check-out-modal-content,
-.send-ping-modal-content {
+.check-out-modal-content {
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
@@ -89,8 +91,7 @@ button:hover {
 #success-close,
 #failed-close,
 #connection-close,
-#check-out-close,
-#send-ping-close {
+#check-out-close {
   color: #aaaaaa;
   float: right;
   font-size: 28px;
@@ -108,9 +109,7 @@ button:hover {
 #connection-close:hover,
 #connection-close:focus,
 #check-out-close:hover,
-#check-out-close:focus,
-#send-ping-close:hover,
-#send-ping-close:focus {
+#check-out-close:focus{
   color: #000;
   text-decoration: none;
   cursor: pointer;
@@ -139,11 +138,11 @@ input[type=text] {
 
 @keyframes left_right {
   from {
-    left: -30%;
+    left: -10%;
   }
 
   to {
-    left: 20%;
+    left: 25%;
   }
 }
 
@@ -195,9 +194,34 @@ input[type=text] {
   width: 0px;
   height: 0px;
 }
+
 .setp-content {
   padding: 0;
   margin: 0;
+}
+
+.waves-dark{
+margin-left: 20%;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  padding: 15 px;
+  margin-bottom:10%;
+  margin-left: 45%;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  background-color:#ccc;
 }
 
 @media (min-width: 768px) {
@@ -207,8 +231,7 @@ input[type=text] {
   .failed-modal-content,
   .success-modal-content,
   .connection-modal-content,
-  .check-out-modal-content,
-  .send-ping-modal-content {
+  .check-out-modal-content {
     width: 90%;
   }
 
