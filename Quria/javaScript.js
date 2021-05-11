@@ -381,3 +381,12 @@ function validationPatronFunction() {
   }
   return true;
 }
+
+
+document.getElementById("green-button1").addEventListener("click", function () {
+  Quagga.stop();
+});
+
+document.getElementById("green-button2").addEventListener("click", function () {
+  Quagga.start();
+});
