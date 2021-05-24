@@ -27,7 +27,7 @@ var progress_bar = document.getElementById("progress-bar");
 var isConnected = false;
 var stepper_back = document.getElementById("green-button2");
 var stepper_continue = document.getElementById("green-button1");
-
+var item_Id = document.getElementById("item-id-input");
 
 var books = [{
     "item_id": "28",
@@ -153,7 +153,7 @@ function showFailedModal(status) {
 function write_item_id() {
   write_item_id_modal.style.display = "none";
   showPlaceTagModal('true', 'Place the smartphone over the item you would like to program');
-  var itemId = document.getElementById("item-id-input").value;
+  var itemId = item_Id.value;
   ws.send('{"toDo": "write", "value": "' + itemId + '"}');
 }
 
