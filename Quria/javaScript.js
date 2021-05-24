@@ -25,7 +25,14 @@ var camera = document.getElementById("camera");
 
 var progress_bar = document.getElementById("progress-bar");
 var isConnected = false;
-use_patron_text.innerHTML = "";
+var stepper_back = document.getElementById("stepper-back");
+var stepper_continue = document.getElementById("stepper-continue");
+var item_Id = document.getElementById("item-id-input");
+var ws_status = document.getElementById("ws-status");
+var check_out = document.getElementById("check-out");
+
+const charts_success = document.getElementsByClassName('success-div');
+const charts_failed = document.getElementsByClassName('failed-div');
 
 var books = [{
     "item_id": "28",
@@ -97,11 +104,15 @@ function showPlaceTagModal(status, msg) {
   }
 }
 
-place_tag_close.onclick = function () {
-  showPlaceTagModal('false', '');
+function resetValues() {
   ws.send('{"toDo": "doCheckIn", "value": "null"}');
   ws.send('{"toDo": "doReadTagInfo", "value": "null"}');
   ws.send('{"toDo": "write", "value": "null"}');
+}
+
+place_tag_close.onclick = function () {
+  showPlaceTagModal('false', '');
+  resetValues();
 }
 
 write_item_id_close.onclick = function () {
@@ -126,31 +137,28 @@ check_out_close.onclick = function () {
   use_patron_text.innerHTML = "";
   progress_bar.style.display = "block";
   Quagga.stop();
-  document.getElementById('green-button1').style.background = '#9e2a36';
-  document.getElementById('green-button2').style.background = '#9e2a36';
+  setRedButtons();
   ws.send('{"toDo": "doCheckIn", "value": "null"}');
 }
 
-function showSuccessModal(status) {
-  success_text.innerHTML = status;
+function showSuccessModal(doShow) {
+  success_text.innerHTML = doShow;
   success_modal.style.display = "block";
   Quagga.stop();
-  document.getElementById('green-button1').style.background = '#9e2a36';
-  document.getElementById('green-button2').style.background = '#9e2a36';
+  setRedButtons();
 }
 
 function showFailedModal(status) {
   failed_text.innerHTML = status;
   failed_modal.style.display = "block";
   Quagga.stop();
-  document.getElementById('green-button1').style.background = '#9e2a36';
-  document.getElementById('green-button2').style.background = '#9e2a36';
+  setRedButtons();
 }
 
 function write_item_id() {
   write_item_id_modal.style.display = "none";
   showPlaceTagModal('true', 'Place the smartphone over the item you would like to program');
-  var itemId = document.getElementById("item-id-input").value;
+  var itemId = item_Id.value;
   ws.send('{"toDo": "write", "value": "' + itemId + '"}');
 }
 
@@ -202,17 +210,14 @@ function sendPing() {
 window.onclick = function (event) {
   if (event.target === place_tag_modal) {
     place_tag_modal.style.display = "none";
-    ws.send('{"toDo": "doCheckIn", "value": "null"}');
-    ws.send('{"toDo": "doReadTagInfo", "value": "null"}');
-    ws.send('{"toDo": "write", "value": "null"}');
+    resetValues();
   } else if (event.target === check_out_modal) {
     check_out_modal.style.display = "none";
     patron_text.innerHTML = "";
     use_patron_text.innerHTML = "";
     progress_bar.style.display = "block";
     Quagga.stop();
-    document.getElementById('green-button1').style.background = '#9e2a36';
-    document.getElementById('green-button2').style.background = '#9e2a36';
+    setRedButtons();
     ws.send('{"toDo": "doCheckIn", "value": "null"}');
   } else if (event.target === connection_modal) {
     connection_modal.style.display = "none";
@@ -230,11 +235,11 @@ var port = "8888";
 var ws = new WebSocket("ws://" + ip + ":" + port);
 ws.onopen = function () {
   isConnected = true;
-  document.getElementById("ws-status").innerHTML = "CONNECTED";
+  ws_status.innerHTML = "CONNECTED";
 };
 ws.onclose = function (event) {
   isConnected = false;
-  document.getElementById("ws-status").innerHTML = "DISCONNECTED";
+  ws_status.innerHTML = "DISCONNECTED";
   console.log("WebSocket is closed now.");
 };
 
@@ -242,7 +247,6 @@ ws.onmessage = function (event) {
   if (event.data === 'echo') {
     alert(event.data);
   } else {
-    console.log(event.data);
     var json = JSON.parse(event.data);
     showPlaceTagModal('false', '');
     check_out_modal.style.display = "none";
@@ -251,17 +255,17 @@ ws.onmessage = function (event) {
     if (json.Done.localeCompare("read_item_id") == 0) {
       showItemId(json.value);
     } else {
-      if (json.value.includes('Failed') || json.value.includes('misslyckades')) {
-        showFailedModal(json.value);
-      } else {
+      if (json.value.includes('Success') || json.value.includes('lyckades')) {
         showSuccessModal(json.value);
+      } else {
+        showFailedModal(json.value);
       }
     }
   }
 }
 
 function onLoad() {
-  document.getElementById("ws-status").innerHTML = "DISCONNECTED";
+  ws_status.innerHTML = "DISCONNECTED";
 }
 window.onload = onLoad;
 
@@ -278,10 +282,6 @@ function createCircleChart(percent, color, size, stroke) {
     </svg>`;
   return svg;
 }
-
-let charts_success = document.getElementsByClassName('success-div');
-let charts_failed = document.getElementsByClassName('failed-div');
-
 
 for (let i = 0; i < charts_success.length; i++) {
   let chart = charts_success[i];
@@ -301,39 +301,11 @@ for (let i = 0; i < charts_failed.length; i++) {
   charts_failed[i].innerHTML = createCircleChart(percent, color, size, stroke);
 }
 
-document.getElementById("check-out").addEventListener("click", function () {
+
+
+check_out.addEventListener("click", function () {
   setUpStepper();
-  Quagga.init({
-    inputStream: {
-      name: "Live",
-      type: "LiveStream",
-      target: document.querySelector('#camera')
-    },
-    decoder: {
-      readers: ["code_128_reader",
-        "ean_reader",
-        "ean_8_reader",
-        "code_39_reader",
-        "code_39_vin_reader",
-        "codabar_reader",
-        "upc_reader",
-        "upc_e_reader",
-        "i2of5_reader",
-        "2of5_reader",
-        "code_93_reader",
-        "code_32_reader"
-      ]
-    }
-  }, function (err) {
-    if (err) {
-      console.log(` Quagaa init error ${err}`);
-      return
-    }
-    progress_bar.style.display = "none";
-    Quagga.start();
-  });
-
-
+  startQuagga();
   Quagga.onDetected(function (data) {
     var found = false;
     for (var i = 0; i < patrons.length; i++) {
@@ -341,19 +313,17 @@ document.getElementById("check-out").addEventListener("click", function () {
       var current_item_id = data.codeResult.code;
 
       if (patron_id.localeCompare(current_item_id) === 0) {
-        patron_text.innerHTML = 'Patron: ' + patrons[i].name + ' id: ' + data.codeResult.code;
+        patron_text.innerHTML = 'Patron: ' + patrons[i].name + '<br> id: ' + data.codeResult.code;
         use_patron_text.innerHTML = 'Patron: ' + patrons[i].name + '<br> id: ' + data.codeResult.code;
         found = true;
-        document.getElementById('green-button1').style.background = '#009900';
-        document.getElementById('green-button2').style.background = '#009900';
+        setGreenButtons();
         break;
       }
     }
     if (!found) {
       patron_text.innerHTML = 'Patron: ' + patrons[2].name + '<br> id: ' + data.codeResult.code;
       use_patron_text.innerHTML = 'Patron: ' + patrons[2].name + '<br> id: ' + data.codeResult.code;
-      document.getElementById('green-button1').style.background = '#009900';
-      document.getElementById('green-button2').style.background = '#009900';
+      setGreenButtons();
     }
   });
 
@@ -366,13 +336,13 @@ function setUpStepper() {
     linearStepsNavigation: true,
     autoFocusInput: false,
     showFeedbackPreloader: true,
-    validationFunction: validationPatronFunction,
+    validationFunction: isPatronChecked,
     autoFormCreation: true,
     stepTitleNavigation: true,
   })
 }
 
-function validationPatronFunction() {
+function isPatronChecked() {
   var patron = use_patron_text.innerText;
   if (patron.localeCompare("") == 0 ||
     patron.localeCompare("scan a patron to continue check out") == 0) {
@@ -383,10 +353,48 @@ function validationPatronFunction() {
 }
 
 
-document.getElementById("green-button1").addEventListener("click", function () {
-  Quagga.stop();
+document.getElementById("stepper-continue").addEventListener("click", function () {
+  if (isPatronChecked()) {
+    Quagga.stop();
+  }
 });
 
-document.getElementById("green-button2").addEventListener("click", function () {
-  Quagga.start();
+document.getElementById("stepper-back").addEventListener("click", function () {
+  startQuagga();
 });
+
+function setGreenButtons() {
+  stepper_continue.style.background = '#009900';
+  stepper_back.style.background = '#009900';
+  stepper_continue.style.color = '#FFFFFF';
+  stepper_back.style.color = '#FFFFFF';
+}
+
+function setRedButtons() {
+  stepper_continue.style.background = '#9e2a36';
+  stepper_back.style.background = '#9e2a36';
+  stepper_continue.style.color = '#FFFFFF';
+  stepper_back.style.color = '#FFFFFF';
+}
+
+function startQuagga() {
+  Quagga.init({
+    inputStream: {
+      name: "Live",
+      type: "LiveStream",
+      target: document.querySelector('#camera')
+    },
+    decoder: {
+      readers: ["code_128_reader",
+        "i2of5_reader"
+      ]
+    }
+  }, function (err) {
+    if (err) {
+      console.log(` Quagaa init error ${err}`);
+      return
+    }
+    progress_bar.style.display = "none";
+    Quagga.start();
+  });
+}

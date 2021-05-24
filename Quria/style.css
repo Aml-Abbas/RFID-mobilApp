@@ -1,4 +1,3 @@
-
 h1 {
   font-size: 40px;
 }
@@ -15,7 +14,7 @@ p {
   text-align: center;
 }
 
-.buttons{
+.buttons {
   align-content: center;
   text-align: center;
 
@@ -109,7 +108,7 @@ button:hover {
 #connection-close:hover,
 #connection-close:focus,
 #check-out-close:hover,
-#check-out-close:focus{
+#check-out-close:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
@@ -200,15 +199,15 @@ input[type=text] {
   margin: 0;
 }
 
-.waves-dark{
-margin-left: 20%;
+.waves-dark {
+  margin-left: 20%;
 }
 
 .tooltip {
   position: relative;
   display: inline-block;
   padding: 15 px;
-  margin-bottom:10%;
+  margin-bottom: 10%;
   margin-left: 45%;
 }
 
@@ -221,7 +220,7 @@ margin-left: 20%;
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
-  background-color:#ccc;
+  background-color: #ccc;
 }
 
 @media (min-width: 768px) {

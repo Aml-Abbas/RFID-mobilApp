@@ -9,7 +9,6 @@ import android.content.res.Resources;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,10 +17,10 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
     Spinner spinner;
     static Switch socketServiceSwitch;
     TextView quriaText;
@@ -43,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, " on create");
         onCreateHelper();
     }
 
@@ -66,15 +64,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(TAG, "on Stop");
-        isActivityVisible= false;
+        isActivityVisible = false;
     }
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG, "on onDestroy");
-        if (socketServiceSwitch.isChecked()){
-            Log.d(TAG, "stop server on destroy");
+        if (socketServiceSwitch.isChecked()) {
             socketServiceSwitch.setChecked(false);
             stopService(serviceIntent);
             switchPreferences.edit().putBoolean(SWITCH_STATE, true).apply();
@@ -89,54 +84,51 @@ public class MainActivity extends AppCompatActivity {
         socketServiceSwitch.setChecked(false);
         stopService(serviceIntent);
         switchPreferences.edit().putBoolean(SWITCH_STATE, false).apply();
-        Log.d(TAG, "pre false");
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.d(TAG, "new intent");
-        if (socketServiceSwitch.isChecked() && intent.getAction() !=null &&
-                (intent.getAction() == NfcAdapter.ACTION_TAG_DISCOVERED||
-                intent.getAction() == NfcAdapter.ACTION_TECH_DISCOVERED) &&
+        if (socketServiceSwitch.isChecked() && intent.getAction() != null &&
+                (intent.getAction() == NfcAdapter.ACTION_TAG_DISCOVERED ||
+                        intent.getAction() == NfcAdapter.ACTION_TECH_DISCOVERED) &&
                 !isActivityVisible) {
-                Log.d(TAG, "is checked");
-                Intent startNfcActivityIntent = new Intent(this, NfcActivity.class);
-                startNfcActivityIntent.putExtra(Intent.EXTRA_INTENT, intent);
-                startNfcActivityIntent.putExtra("newItemId", newItemId);
-                startNfcActivityIntent.putExtra("doCheckIn", doCheckIn);
-                startNfcActivityIntent.putExtra("doReadTagInfo", doReadTagInfo);
-                startActivity(startNfcActivityIntent);
-            }
+            Intent startNfcActivityIntent = new Intent(this, NfcActivity.class);
+            startNfcActivityIntent.putExtra(Intent.EXTRA_INTENT, intent);
+            startNfcActivityIntent.putExtra("newItemId", newItemId);
+            startNfcActivityIntent.putExtra("doCheckIn", doCheckIn);
+            startNfcActivityIntent.putExtra("doReadTagInfo", doReadTagInfo);
+            startActivity(startNfcActivityIntent);
+        }
         doCheckIn = null;
         doReadTagInfo = null;
         newItemId = null;
     }
 
     public static void setItemId(String itemId) {
-        if (itemId.equals("null")){
-            newItemId= null;
-        }else {
+        if (itemId.equals("null")) {
+            newItemId = null;
+        } else {
             newItemId = itemId;
         }
         doCheckIn = null;
-        doReadTagInfo= null;
+        doReadTagInfo = null;
     }
 
     public static void setDoCheckIn(String value) {
-        if (value.equals("null")){
-            doCheckIn= null;
-        }else {
+        if (value.equals("null")) {
+            doCheckIn = null;
+        } else {
             doCheckIn = value;
         }
-        doReadTagInfo= null;
+        doReadTagInfo = null;
         newItemId = null;
     }
 
     public static void setDoReadTagInfo(String value) {
-        if (value.equals("null")){
-            doReadTagInfo= null;
-        }else {
+        if (value.equals("null")) {
+            doReadTagInfo = null;
+        } else {
             doReadTagInfo = value;
         }
         newItemId = null;
@@ -147,32 +139,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.d(TAG, "on onReStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "on Resume");
-        isActivityVisible= true;
+        isActivityVisible = true;
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "on onStart");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "on pause");
     }
 
     private void getIds() {
         spinner = findViewById(R.id.spinner);
         socketServiceSwitch = findViewById(R.id.stopSocketServiceButton);
-        quriaText= findViewById(R.id.Quria_text);
+        quriaText = findViewById(R.id.Quria_text);
     }
 
     public void setLocale(String localeName) {
@@ -194,9 +182,9 @@ public class MainActivity extends AppCompatActivity {
         setUpSpinner();
         quriaText.setText(R.string.quria_off);
         switchPreferences = getSharedPreferences(SWITCH_STATE, MODE_PRIVATE);
-        if (switchPreferences != null){
-            boolean previousState= switchPreferences.getBoolean(SWITCH_STATE, false);
-            if (previousState){
+        if (switchPreferences != null) {
+            boolean previousState = switchPreferences.getBoolean(SWITCH_STATE, false);
+            if (previousState) {
                 quriaText.setText(R.string.quria_on);
                 socketServiceSwitch.setChecked(true);
                 serviceIntent = new Intent(this, SocketServerService.class);

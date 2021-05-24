@@ -7,122 +7,125 @@
 <body>
 
 
-<div class="welcome">
-    <h1>Library Management System</h1>      
+    <div class="welcome">
+        <h1>Library Management System</h1>
     </div>
 
     <div class="tooltip">show status
         <span class="tooltiptext">
-            <div><p>WebSocket status: <span id="ws-status"></span></p></div>
+            <div>
+                <p>WebSocket status: <span id="ws-status"></span></p>
+            </div>
             <button class="button_ping" onclick="sendPing()">Send ping </button>
         </span>
-      </div>
-
-<div class="buttons">
-
-    <button class="button" onclick="show_write_modal()">Program</button>
-    <button class="button" onclick="do_check_in('true')">Check in</button>
-    <button class="button" id="check-out" onclick="do_check_in('false')">Check out</button>
-    <button class="button" onclick="show_item()">Scan item</button>
-
-</div>
-
-
-<div class="card">
-    <img id="book_pic" style="width:100%">
-    <div class="container">
-        <h4 class="item_id" id="book_id"></h4>
     </div>
-</div>
 
-<div id="place-tag-modal" class="place-tag-modal-class">
-    <div class="place-tag-modal-content">
-        <span id="place-tag-close">&times;</span>
-        <p id="place-tag-text"></p>
-        <div id="book-animation"></div>
-        <div id="phone-animation"></div>
+    <div class="buttons">
+
+        <button class="button" onclick="show_write_modal()">Program</button>
+        <button class="button" onclick="do_check_in('true')">Check in</button>
+        <button class="button" id="check-out" onclick="do_check_in('false')">Check out</button>
+        <button class="button" onclick="show_item()">Scan item</button>
+
     </div>
-</div>
-</div>
 
-<div id="write-item-id-modal" class="write-item-id-modal-class">
-    <div class="write-item-id-modal-content">
-        <span id="write-item-id-close">&times;</span>
-        <input type="text" id="item-id-input" placeholder="Write a new item id" name="itemId"><br>
-        <button class="button-program-chip" onclick="write_item_id()">Program the chip</button>
+
+    <div class="card">
+        <img id="book_pic" style="width:100%">
+        <div class="container">
+            <h4 class="item_id" id="book_id"></h4>
+        </div>
     </div>
-</div>
 
-
-
-<div id="check-out-modal" class="check-out-modal-class">
-    <div class="check-out-modal-content">
-        <span id="check-out-close">&times;</span>
-<ul class="stepper linear">
-    <li class="step active">
-       <div class="step-title waves-effect">Read Patron</div>
-       <div class="step-content">
-        <p>Place the camera above the barcode of the patron</p>
-        <div id="camera"></div>
-        <div id="progress-bar" class="success-div" data-percent="60" data-color="#4CAF50" data-size="125" data-stroke="3"></div>
-        <p id="use-patron"></p>
-          <div class="step-actions">
-             <button onclick="send_check_out()" id="green-button1" class="waves-effect waves-dark btn next-step">CONTINUE</button>
-          </div>
-       </div>
-    </li>
-
-    <li class="step">
-    <div class="step-title waves-effect waves-dark">check out</div>
-    <div class="step-content">
-        <p id="patron"></p>
-        <p id="check-out-text"></p>
-        <div id="book-animation"></div>
-        <div id="phone-animation"></div>
-
-    <div class="step-actions">
-    <button id="green-button2" class="waves-effect waves-dark btn-flat previous-step">BACK</button>
-</div>
-</div>
-</li>
-
- </ul>
-</div>
-</div>
-
-<div id="success-modal" class="success-modal-class">
-
-    <div class="success-modal-content">
-        <span id="success-close">&times;</span>
-        <p id="success-text"></p>
-        <div class="success-div" data-percent="100" data-color="#4CAF50" data-size="125"
-             data-stroke="3"></div>
+    <div id="place-tag-modal" class="place-tag-modal-class">
+        <div class="place-tag-modal-content">
+            <span id="place-tag-close">&times;</span>
+            <p id="place-tag-text"></p>
+            <div id="book-animation"></div>
+            <div id="phone-animation"></div>
+        </div>
     </div>
-</div>
-</div>
-</div>
-
-<div id="failed-modal" class="failed-modal-class">
-
-    <div class="failed-modal-content">
-        <span id="failed-close">&times;</span>
-        <p id="failed-text"></p>
-        <div class="failed-div" data-percent="65" data-color="#9e2a36" data-size="125"
-             data-stroke="3"></div>
     </div>
-</div>
-</div>
 
-<div id="connection-modal" class="connection-modal-class">
-    <div class="connection-modal-content">
-        <span id="connection-close">&times;</span>
-        <p>Open the connection in the RFID-mobilApp first and refresha the page in order to
-            reconnect.</p>
+    <div id="write-item-id-modal" class="write-item-id-modal-class">
+        <div class="write-item-id-modal-content">
+            <span id="write-item-id-close">&times;</span>
+            <input type="text" id="item-id-input" placeholder="Write a new item id" name="itemId"><br>
+            <button class="button-program-chip" onclick="write_item_id()">Program the chip</button>
+        </div>
     </div>
-</div>
-</div>
 
-</div>
+
+
+    <div id="check-out-modal" class="check-out-modal-class">
+        <div class="check-out-modal-content">
+            <span id="check-out-close">&times;</span>
+            <ul class="stepper linear">
+                <li class="step active">
+                    <div class="step-title waves-effect">Read Patron</div>
+                    <div class="step-content">
+                        <p>Place the camera above the barcode of the patron</p>
+                        <div id="camera"></div>
+                        <div id="progress-bar" class="success-div" data-percent="60" data-color="#4CAF50"
+                            data-size="125" data-stroke="3"></div>
+                        <p id="use-patron"></p>
+                        <div class="step-actions">
+                            <button onclick="send_check_out()" id="stepper-continue"
+                                class="waves-effect waves-dark btn next-step">CONTINUE</button>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="step">
+                    <div class="step-title waves-effect waves-dark">check out</div>
+                    <div class="step-content">
+                        <p id="patron"></p>
+                        <p id="check-out-text"></p>
+                        <div id="book-animation"></div>
+                        <div id="phone-animation"></div>
+
+                        <div class="step-actions">
+                            <button id="stepper-back"
+                                class="waves-effect waves-dark btn-flat previous-step">BACK</button>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div id="success-modal" class="success-modal-class">
+
+        <div class="success-modal-content">
+            <span id="success-close">&times;</span>
+            <p id="success-text"></p>
+            <div class="success-div" data-percent="100" data-color="#4CAF50" data-size="125" data-stroke="3"></div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <div id="failed-modal" class="failed-modal-class">
+
+        <div class="failed-modal-content">
+            <span id="failed-close">&times;</span>
+            <p id="failed-text"></p>
+            <div class="failed-div" data-percent="65" data-color="#9e2a36" data-size="125" data-stroke="3"></div>
+        </div>
+    </div>
+    </div>
+
+    <div id="connection-modal" class="connection-modal-class">
+        <div class="connection-modal-content">
+            <span id="connection-close">&times;</span>
+            <p>Open the connection in the RFID-mobilApp first and refresha the page in order to
+                reconnect.</p>
+        </div>
+    </div>
+    </div>
+
+    </div>
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.js"></script>
