@@ -28,7 +28,7 @@ var isConnected = false;
 var stepper_back = document.getElementById("green-button2");
 var stepper_continue = document.getElementById("green-button1");
 var item_Id = document.getElementById("item-id-input");
-
+var ws_status = document.getElementById("ws-status");
 var books = [{
     "item_id": "28",
     "name": "Harry Potter",
@@ -230,11 +230,11 @@ var port = "8888";
 var ws = new WebSocket("ws://" + ip + ":" + port);
 ws.onopen = function () {
   isConnected = true;
-  document.getElementById("ws-status").innerHTML = "CONNECTED";
+  ws_status.innerHTML = "CONNECTED";
 };
 ws.onclose = function (event) {
   isConnected = false;
-  document.getElementById("ws-status").innerHTML = "DISCONNECTED";
+  ws_status.innerHTML = "DISCONNECTED";
   console.log("WebSocket is closed now.");
 };
 
@@ -261,7 +261,7 @@ ws.onmessage = function (event) {
 }
 
 function onLoad() {
-  document.getElementById("ws-status").innerHTML = "DISCONNECTED";
+  ws_status.innerHTML = "DISCONNECTED";
 }
 window.onload = onLoad;
 
