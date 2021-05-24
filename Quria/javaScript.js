@@ -25,10 +25,15 @@ var camera = document.getElementById("camera");
 
 var progress_bar = document.getElementById("progress-bar");
 var isConnected = false;
-var stepper_back = document.getElementById("green-button2");
-var stepper_continue = document.getElementById("green-button1");
+var stepper_back = document.getElementById("stepper-back");
+var stepper_continue = document.getElementById("stepper-continue");
 var item_Id = document.getElementById("item-id-input");
 var ws_status = document.getElementById("ws-status");
+var check_out = document.getElementById("check-out");
+
+const charts_success = document.getElementsByClassName('success-div');
+const charts_failed = document.getElementsByClassName('failed-div');
+
 var books = [{
     "item_id": "28",
     "name": "Harry Potter",
@@ -242,7 +247,6 @@ ws.onmessage = function (event) {
   if (event.data === 'echo') {
     alert(event.data);
   } else {
-    console.log(event.data);
     var json = JSON.parse(event.data);
     showPlaceTagModal('false', '');
     check_out_modal.style.display = "none";
@@ -251,10 +255,10 @@ ws.onmessage = function (event) {
     if (json.Done.localeCompare("read_item_id") == 0) {
       showItemId(json.value);
     } else {
-      if (json.value.includes('Failed') || json.value.includes('misslyckades')) {
-        showFailedModal(json.value);
-      } else {
+      if (json.value.includes('Success') || json.value.includes('lyckades')) {
         showSuccessModal(json.value);
+      } else {
+        showFailedModal(json.value);
       }
     }
   }
@@ -279,10 +283,6 @@ function createCircleChart(percent, color, size, stroke) {
   return svg;
 }
 
-let charts_success = document.getElementsByClassName('success-div');
-let charts_failed = document.getElementsByClassName('failed-div');
-
-
 for (let i = 0; i < charts_success.length; i++) {
   let chart = charts_success[i];
   let percent = chart.dataset.percent;
@@ -301,8 +301,83 @@ for (let i = 0; i < charts_failed.length; i++) {
   charts_failed[i].innerHTML = createCircleChart(percent, color, size, stroke);
 }
 
-document.getElementById("check-out").addEventListener("click", function () {
+
+
+check_out.addEventListener("click", function () {
   setUpStepper();
+  startQuagga();
+  Quagga.onDetected(function (data) {
+    var found = false;
+    for (var i = 0; i < patrons.length; i++) {
+      var patron_id = patrons[i].item_id;
+      var current_item_id = data.codeResult.code;
+
+      if (patron_id.localeCompare(current_item_id) === 0) {
+        patron_text.innerHTML = 'Patron: ' + patrons[i].name + '<br> id: ' + data.codeResult.code;
+        use_patron_text.innerHTML = 'Patron: ' + patrons[i].name + '<br> id: ' + data.codeResult.code;
+        found = true;
+        setGreenButtons();
+        break;
+      }
+    }
+    if (!found) {
+      patron_text.innerHTML = 'Patron: ' + patrons[2].name + '<br> id: ' + data.codeResult.code;
+      use_patron_text.innerHTML = 'Patron: ' + patrons[2].name + '<br> id: ' + data.codeResult.code;
+      setGreenButtons();
+    }
+  });
+
+});
+
+function setUpStepper() {
+  var stepper = document.querySelector('.stepper');
+  var stepperInstace = new MStepper(stepper, {
+    firstActive: 0,
+    linearStepsNavigation: true,
+    autoFocusInput: false,
+    showFeedbackPreloader: true,
+    validationFunction: isPatronChecked,
+    autoFormCreation: true,
+    stepTitleNavigation: true,
+  })
+}
+
+function isPatronChecked() {
+  var patron = use_patron_text.innerText;
+  if (patron.localeCompare("") == 0 ||
+    patron.localeCompare("scan a patron to continue check out") == 0) {
+    use_patron_text.innerHTML = "scan a patron to continue check out";
+    return false;
+  }
+  return true;
+}
+
+
+document.getElementById("stepper-continue").addEventListener("click", function () {
+  if (isPatronChecked()) {
+    Quagga.stop();
+  }
+});
+
+document.getElementById("stepper-back").addEventListener("click", function () {
+  startQuagga();
+});
+
+function setGreenButtons() {
+  stepper_continue.style.background = '#009900';
+  stepper_back.style.background = '#009900';
+  stepper_continue.style.color = '#FFFFFF';
+  stepper_back.style.color = '#FFFFFF';
+}
+
+function setRedButtons() {
+  stepper_continue.style.background = '#9e2a36';
+  stepper_back.style.background = '#9e2a36';
+  stepper_continue.style.color = '#FFFFFF';
+  stepper_back.style.color = '#FFFFFF';
+}
+
+function startQuagga() {
   Quagga.init({
     inputStream: {
       name: "Live",
@@ -322,68 +397,4 @@ document.getElementById("check-out").addEventListener("click", function () {
     progress_bar.style.display = "none";
     Quagga.start();
   });
-
-
-  Quagga.onDetected(function (data) {
-    var found = false;
-    for (var i = 0; i < patrons.length; i++) {
-      var patron_id = patrons[i].item_id;
-      var current_item_id = data.codeResult.code;
-
-      if (patron_id.localeCompare(current_item_id) === 0) {
-        patron_text.innerHTML = 'Patron: ' + patrons[i].name + ' id: ' + data.codeResult.code;
-        use_patron_text.innerHTML = 'Patron: ' + patrons[i].name + '<br> id: ' + data.codeResult.code;
-        found = true;
-        break;
-      }
-    }
-    if (!found) {
-      patron_text.innerHTML = 'Patron: ' + patrons[2].name + '<br> id: ' + data.codeResult.code;
-      use_patron_text.innerHTML = 'Patron: ' + patrons[2].name + '<br> id: ' + data.codeResult.code;
-    }
-    setGreenButtons();
-  });
-
-});
-
-function setUpStepper() {
-  var stepper = document.querySelector('.stepper');
-  var stepperInstace = new MStepper(stepper, {
-    firstActive: 0,
-    linearStepsNavigation: true,
-    autoFocusInput: false,
-    showFeedbackPreloader: true,
-    validationFunction: validationPatronFunction,
-    autoFormCreation: true,
-    stepTitleNavigation: true,
-  })
-}
-
-function validationPatronFunction() {
-  var patron = use_patron_text.innerText;
-  if (patron.localeCompare("") == 0 ||
-    patron.localeCompare("scan a patron to continue check out") == 0) {
-    use_patron_text.innerHTML = "scan a patron to continue check out";
-    return false;
-  }
-  return true;
-}
-
-
-stepper_continue.addEventListener("click", function () {
-  Quagga.stop();
-});
-
-stepper_back.addEventListener("click", function () {
-  Quagga.start();
-});
-
-function setGreenButtons() {
-  stepper_continue.style.background = '#009900';
-  stepper_back.style.background = '#009900';
-}
-
-function setRedButtons() {
-  stepper_continue.style.background = '#9e2a36';
-  stepper_back.style.background = '#9e2a36';
 }
