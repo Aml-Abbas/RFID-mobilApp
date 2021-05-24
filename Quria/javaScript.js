@@ -25,7 +25,9 @@ var camera = document.getElementById("camera");
 
 var progress_bar = document.getElementById("progress-bar");
 var isConnected = false;
-use_patron_text.innerHTML = "";
+var stepper_back = document.getElementById("green-button2");
+var stepper_continue = document.getElementById("green-button1");
+
 
 var books = [{
     "item_id": "28",
@@ -126,25 +128,22 @@ check_out_close.onclick = function () {
   use_patron_text.innerHTML = "";
   progress_bar.style.display = "block";
   Quagga.stop();
-  document.getElementById('green-button1').style.background = '#9e2a36';
-  document.getElementById('green-button2').style.background = '#9e2a36';
+  setRedButtons();
   ws.send('{"toDo": "doCheckIn", "value": "null"}');
 }
 
-function showSuccessModal(status) {
-  success_text.innerHTML = status;
+function showSuccessModal(doShow) {
+  success_text.innerHTML = doShow;
   success_modal.style.display = "block";
   Quagga.stop();
-  document.getElementById('green-button1').style.background = '#9e2a36';
-  document.getElementById('green-button2').style.background = '#9e2a36';
+  setRedButtons();
 }
 
 function showFailedModal(status) {
   failed_text.innerHTML = status;
   failed_modal.style.display = "block";
   Quagga.stop();
-  document.getElementById('green-button1').style.background = '#9e2a36';
-  document.getElementById('green-button2').style.background = '#9e2a36';
+  setRedButtons();
 }
 
 function write_item_id() {
@@ -211,8 +210,7 @@ window.onclick = function (event) {
     use_patron_text.innerHTML = "";
     progress_bar.style.display = "block";
     Quagga.stop();
-    document.getElementById('green-button1').style.background = '#9e2a36';
-    document.getElementById('green-button2').style.background = '#9e2a36';
+    setRedButtons();
     ws.send('{"toDo": "doCheckIn", "value": "null"}');
   } else if (event.target === connection_modal) {
     connection_modal.style.display = "none";
@@ -334,17 +332,14 @@ document.getElementById("check-out").addEventListener("click", function () {
         patron_text.innerHTML = 'Patron: ' + patrons[i].name + ' id: ' + data.codeResult.code;
         use_patron_text.innerHTML = 'Patron: ' + patrons[i].name + '<br> id: ' + data.codeResult.code;
         found = true;
-        document.getElementById('green-button1').style.background = '#009900';
-        document.getElementById('green-button2').style.background = '#009900';
         break;
       }
     }
     if (!found) {
       patron_text.innerHTML = 'Patron: ' + patrons[2].name + '<br> id: ' + data.codeResult.code;
       use_patron_text.innerHTML = 'Patron: ' + patrons[2].name + '<br> id: ' + data.codeResult.code;
-      document.getElementById('green-button1').style.background = '#009900';
-      document.getElementById('green-button2').style.background = '#009900';
     }
+    setGreenButtons();
   });
 
 });
@@ -373,10 +368,20 @@ function validationPatronFunction() {
 }
 
 
-document.getElementById("green-button1").addEventListener("click", function () {
+stepper_continue.addEventListener("click", function () {
   Quagga.stop();
 });
 
-document.getElementById("green-button2").addEventListener("click", function () {
+stepper_back.addEventListener("click", function () {
   Quagga.start();
 });
+
+function setGreenButtons() {
+  stepper_continue.style.background = '#009900';
+  stepper_back.style.background = '#009900';
+}
+
+function setRedButtons() {
+  stepper_continue.style.background = '#9e2a36';
+  stepper_back.style.background = '#9e2a36';
+}
