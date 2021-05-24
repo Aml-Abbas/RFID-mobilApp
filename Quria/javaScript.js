@@ -99,11 +99,15 @@ function showPlaceTagModal(status, msg) {
   }
 }
 
-place_tag_close.onclick = function () {
-  showPlaceTagModal('false', '');
+function resetValues() {
   ws.send('{"toDo": "doCheckIn", "value": "null"}');
   ws.send('{"toDo": "doReadTagInfo", "value": "null"}');
   ws.send('{"toDo": "write", "value": "null"}');
+}
+
+place_tag_close.onclick = function () {
+  showPlaceTagModal('false', '');
+  resetValues();
 }
 
 write_item_id_close.onclick = function () {
@@ -201,9 +205,7 @@ function sendPing() {
 window.onclick = function (event) {
   if (event.target === place_tag_modal) {
     place_tag_modal.style.display = "none";
-    ws.send('{"toDo": "doCheckIn", "value": "null"}');
-    ws.send('{"toDo": "doReadTagInfo", "value": "null"}');
-    ws.send('{"toDo": "write", "value": "null"}');
+    resetValues();
   } else if (event.target === check_out_modal) {
     check_out_modal.style.display = "none";
     patron_text.innerHTML = "";
