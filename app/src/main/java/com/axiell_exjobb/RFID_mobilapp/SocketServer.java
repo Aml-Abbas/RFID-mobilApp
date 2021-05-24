@@ -15,14 +15,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SocketServer extends WebSocketServer {
-
     private final String TAG = SocketServer.class.getSimpleName();
     private Collection<WebSocket> connections;
 
     public SocketServer(InetSocketAddress address) {
         super(address);
         this.connections = new ArrayList<>();
-        Log.d(TAG, " the constructor ");
     }
 
     @Override
@@ -62,11 +60,9 @@ public class SocketServer extends WebSocketServer {
                         break;
                     case "doCheckIn":
                         MainActivity.setDoCheckIn(value);
-                        Log.d(TAG, "set docheck in " + value);
                         break;
                     case "doReadTagInfo":
                         MainActivity.setDoReadTagInfo(value);
-                        Log.d(TAG, "set doReadTagInfo in " + value);
                         break;
                 }
             }
@@ -80,7 +76,7 @@ public class SocketServer extends WebSocketServer {
 
     @Override
     public void onError(WebSocket conn, Exception ex) {
-        if (conn!=null){
+        if (conn != null) {
             Log.d(TAG, "received ByteBuffer from " + conn.getRemoteSocketAddress());
         }
     }
