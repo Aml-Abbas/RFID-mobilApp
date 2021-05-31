@@ -255,7 +255,7 @@ ws.onmessage = function (event) {
     if (json.Done.localeCompare("read_item_id") == 0) {
       showItemId(json.value);
     } else {
-      if (json.value.includes('Success') || json.value.includes('Lyckades')) {
+      if (json.value.includes('Success') || json.value.includes('Lyckades')|| json.value.includes('lyckades')) {
         showSuccessModal(json.value);
       } else {
         showFailedModal(json.value);
